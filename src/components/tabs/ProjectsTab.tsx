@@ -479,6 +479,15 @@ export const ProjectsTab: React.FC = () => {
                   </tr>
                 );
               })}
+              {filteredProjects.length === 0 && (
+                <tr>
+                  <td colSpan={9} className="py-12 text-center text-xs text-[#8C93AB]">
+                    <FolderKanban className="w-10 h-10 mx-auto text-[#8C93AB]/40 mb-2 stroke-[2]" />
+                    <p className="font-bold text-[#1E2238] dark:text-white">No Projects Recorded</p>
+                    <p className="mt-1">Fill out the form above to log your first project milestone.</p>
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

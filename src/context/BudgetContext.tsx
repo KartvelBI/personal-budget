@@ -82,12 +82,12 @@ interface BudgetContextType {
 }
 
 const STORAGE_KEYS = {
-  COAGENTS: 'pb_coagents_v1',
-  CATEGORIES: 'pb_categories_v1',
-  PROJECTS: 'pb_projects_v1',
-  INVOICES: 'pb_invoices_v1',
-  TRANSACTIONS: 'pb_transactions_v1',
-  SETTINGS: 'pb_settings_v1',
+  COAGENTS: 'pb_coagents_v2',
+  CATEGORIES: 'pb_categories_v2',
+  PROJECTS: 'pb_projects_v2',
+  INVOICES: 'pb_invoices_v2',
+  TRANSACTIONS: 'pb_transactions_v2',
+  SETTINGS: 'pb_settings_v2',
   THEME: 'pb_theme_v1',
   SIDEBAR: 'pb_sidebar_v1',
 };
@@ -97,6 +97,13 @@ const BudgetContext = createContext<BudgetContextType | undefined>(undefined);
 export const BudgetProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [activeTab, setActiveTab] = useState<ActiveTab>('projects');
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
+
+  // Clean legacy mock data keys if present
+  useEffect(() => {
+    ['pb_coagents_v1', 'pb_categories_v1', 'pb_projects_v1', 'pb_invoices_v1', 'pb_transactions_v1', 'pb_settings_v1'].forEach((k) => {
+      localStorage.removeItem(k);
+    });
+  }, []);
 
   const [coagents, setCoagents] = useState<Coagent[]>(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.COAGENTS);

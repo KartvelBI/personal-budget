@@ -22,6 +22,7 @@ export const Sidebar: React.FC = () => {
     coagents,
     projects,
     invoices,
+    settings,
     isSidebarExpanded,
     toggleSidebar,
   } = useBudget();
@@ -208,17 +209,20 @@ export const Sidebar: React.FC = () => {
 
           <div className="mt-2.5 px-2">
             <div className="flex justify-between text-[10px] font-bold text-[#4E53EE] dark:text-[#7378FF] mb-1">
-              <span>Quota Usage</span>
-              <span className="font-mono">7/10 Users</span>
+              <span>Client Quota</span>
+              <span className="font-mono">{coagents.length}/10 Active</span>
             </div>
             <div className="w-full bg-[#E5E7EB] dark:bg-[#2A3044] rounded-full h-1.5 overflow-hidden">
-              <div className="bg-[#4E53EE] dark:bg-[#7378FF] h-1.5 rounded-full w-[70%]"></div>
+              <div
+                className="bg-[#4E53EE] dark:bg-[#7378FF] h-1.5 rounded-full transition-all duration-300"
+                style={{ width: `${Math.min(100, Math.round((coagents.length / 10) * 100))}%` }}
+              ></div>
             </div>
           </div>
 
           <button
             onClick={() => setActiveTab('options')}
-            className="mt-3 w-full py-2 bg-[#4E53EE] hover:bg-[#4338CA] text-white text-xs font-bold rounded-xl shadow-xs shadow-[#4E53EE]/25 transition"
+            className="mt-3 w-full py-2 bg-[#4E53EE] hover:bg-[#4338CA] text-white text-xs font-bold rounded-xl shadow-xs shadow-[#4E53EE]/25 transition cursor-pointer"
           >
             Upgrade Plan
           </button>
@@ -227,7 +231,7 @@ export const Sidebar: React.FC = () => {
         <div className="p-3 text-center my-2">
           <button
             onClick={() => setActiveTab('options')}
-            className="w-10 h-10 mx-auto rounded-xl bg-[#F8F9FC] dark:bg-[#1C202E] border border-[#E9ECF2] dark:border-[#2A3044] flex items-center justify-center text-[#F59E0B] hover:bg-[#EDEEFD] transition"
+            className="w-10 h-10 mx-auto rounded-xl bg-[#F8F9FC] dark:bg-[#1C202E] border border-[#E9ECF2] dark:border-[#2A3044] flex items-center justify-center text-[#F59E0B] hover:bg-[#EDEEFD] transition cursor-pointer"
             title="Professional Plan"
           >
             <Crown className="w-5 h-5 fill-[#F59E0B]" />
@@ -240,15 +244,15 @@ export const Sidebar: React.FC = () => {
         isSidebarExpanded ? 'justify-between mx-3 mb-3' : 'justify-center my-2'
       }`}>
         <div className="flex items-center gap-2.5">
-          <img
-            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80"
-            alt="John Doe"
-            className="w-8 h-8 rounded-full object-cover ring-2 ring-[#EDEEFD] dark:ring-[#2E3345]"
-          />
+          <div className="w-8 h-8 rounded-full bg-[#4E53EE] text-white flex items-center justify-center font-black text-xs ring-2 ring-[#EDEEFD] dark:ring-[#2E3345]">
+            {(settings.businessName || 'A').charAt(0).toUpperCase()}
+          </div>
           {isSidebarExpanded && (
-            <div className="leading-tight text-left">
-              <span className="block text-xs font-bold text-[#1E2238] dark:text-white">John Doe</span>
-              <span className="block text-[10px] font-medium text-[#8C93AB]">Admin</span>
+            <div className="leading-tight text-left min-w-0 max-w-[120px]">
+              <span className="block text-xs font-bold text-[#1E2238] dark:text-white truncate">
+                {settings.businessName || 'Workspace'}
+              </span>
+              <span className="block text-[10px] font-medium text-[#8C93AB]">Administrator</span>
             </div>
           )}
         </div>

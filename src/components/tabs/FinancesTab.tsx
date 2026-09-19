@@ -31,16 +31,6 @@ import {
   Search,
 } from 'lucide-react';
 
-const SALES_OVERVIEW_DATA = [
-  { date: 'Jun 01', sales: 6000 },
-  { date: 'Jun 05', sales: 11000 },
-  { date: 'Jun 10', sales: 8500 },
-  { date: 'Jun 15', sales: 15500 },
-  { date: 'Jun 20', sales: 12000 },
-  { date: 'Jun 25', sales: 19500 },
-  { date: 'Jun 30', sales: 14000 },
-];
-
 export const FinancesTab: React.FC = () => {
   const {
     transactions,
@@ -50,6 +40,7 @@ export const FinancesTab: React.FC = () => {
     coagents,
     totals,
     projects,
+    invoices,
     settings,
     setActiveTab,
     theme,
@@ -58,6 +49,21 @@ export const FinancesTab: React.FC = () => {
   const [typeFilter, setTypeFilter] = useState<'all' | 'Income' | 'Expense'>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
+  // Real Sales Overview chart data from actual Income transactions
+  const salesByDate: Record<string, number> = {};
+  transactions
+    .filter((t) => t.type === 'Income')
+    .forEach((t) => {
+      salesByDate[t.date] = (salesByDate[t.date] || 0) + t.amount;
+    });
+
+  const chartEntries = Object.entries(salesByDate)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .slice(-7)
+    .map(([date, sales]) => ({ date: date.slice(5), sales }));
+
+  const salesOverviewData = chartEntries.length > 0 ? chartEntries : [{ date: 'Today', sales: 0 }];
 
   // New Transaction Form
   const [formData, setFormData] = useState({
@@ -127,10 +133,10 @@ export const FinancesTab: React.FC = () => {
           <div>
             <span className="block text-xs font-semibold text-[#8C93AB] dark:text-[#7A839E]">Total Revenue</span>
             <div className="text-2xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
-              ${totals.totalIncome > 0 ? totals.totalIncome.toLocaleString() : '18,750'}
+              ${totals.totalIncome.toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </div>
             <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#10B981] mt-0.5 font-mono">
-              ↑ 10.3% <span className="text-[#8C93AB] dark:text-[#7A839E] font-normal font-sans">vs last month</span>
+              {transactions.filter(t => t.type === 'Income').length} income records
             </span>
           </div>
         </div>
@@ -141,12 +147,12 @@ export const FinancesTab: React.FC = () => {
             <ShoppingCart className="w-8 h-8" strokeWidth={2.4} />
           </div>
           <div>
-            <span className="block text-xs font-semibold text-[#8C93AB] dark:text-[#7A839E]">Total Orders</span>
+            <span className="block text-xs font-semibold text-[#8C93AB] dark:text-[#7A839E]">Total Orders / Projects</span>
             <div className="text-2xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
-              {projects.length > 0 ? projects.length : '1,245'}
+              {projects.length.toLocaleString()}
             </div>
             <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#10B981] mt-0.5 font-mono">
-              ↑ 8.2% <span className="text-[#8C93AB] dark:text-[#7A839E] font-normal font-sans">vs last month</span>
+              {projects.filter(p => p.status === 'Pending').length} pending delivery
             </span>
           </div>
         </div>
@@ -159,10 +165,10 @@ export const FinancesTab: React.FC = () => {
           <div>
             <span className="block text-xs font-semibold text-[#8C93AB] dark:text-[#7A839E]">Total Customers</span>
             <div className="text-2xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
-              {coagents.length > 0 ? coagents.length : '2,458'}
+              {coagents.length.toLocaleString()}
             </div>
             <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#10B981] mt-0.5 font-mono">
-              ↑ 11.7% <span className="text-[#8C93AB] dark:text-[#7A839E] font-normal font-sans">vs last month</span>
+              Active directory
             </span>
           </div>
         </div>
@@ -173,12 +179,14 @@ export const FinancesTab: React.FC = () => {
             <TrendingUp className="w-8 h-8" strokeWidth={2.4} />
           </div>
           <div>
-            <span className="block text-xs font-semibold text-[#8C93AB] dark:text-[#7A839E]">Conversion Rate</span>
+            <span className="block text-xs font-semibold text-[#8C93AB] dark:text-[#7A839E]">Fulfillment Rate</span>
             <div className="text-2xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
-              3.24%
+              {projects.length > 0
+                ? `${((projects.filter((p) => p.status === 'Transferred' || p.status === 'Invoiced').length / projects.length) * 100).toFixed(1)}%`
+                : '0.0%'}
             </div>
             <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#10B981] mt-0.5 font-mono">
-              ↑ 5.6% <span className="text-[#8C93AB] dark:text-[#7A839E] font-normal font-sans">vs last month</span>
+              Completed ratio
             </span>
           </div>
         </div>
@@ -202,7 +210,7 @@ export const FinancesTab: React.FC = () => {
 
           <div className="h-56 w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={SALES_OVERVIEW_DATA} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <AreaChart data={salesOverviewData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="salesGrad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#4E53EE" stopOpacity={0.3} />
@@ -248,7 +256,7 @@ export const FinancesTab: React.FC = () => {
             <h2 className="text-sm font-extrabold text-[#1E2238] dark:text-white">Recent Orders</h2>
             <button
               onClick={() => setActiveTab('projects')}
-              className="text-xs font-bold text-[#4E53EE] dark:text-[#7378FF] hover:underline"
+              className="text-xs font-bold text-[#4E53EE] dark:text-[#7378FF] hover:underline cursor-pointer"
             >
               View All
             </button>
@@ -265,24 +273,42 @@ export const FinancesTab: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#F8F9FC] dark:divide-[#1F2330]">
-                {[
-                  { id: '#ORD-001', cust: 'John Smith', amt: '$240.00', status: 'Completed', color: 'bg-[#E6F9F0] dark:bg-[#10B981]/15 text-[#10B981]' },
-                  { id: '#ORD-002', cust: 'Sarah Lee', amt: '$180.00', status: 'Pending', color: 'bg-[#FEF6E7] dark:bg-[#F59E0B]/15 text-[#F59E0B]' },
-                  { id: '#ORD-003', cust: 'Michael Brown', amt: '$150.00', status: 'Completed', color: 'bg-[#E6F9F0] dark:bg-[#10B981]/15 text-[#10B981]' },
-                  { id: '#ORD-004', cust: 'Emily Davis', amt: '$210.00', status: 'Cancelled', color: 'bg-[#FDE8E8] dark:bg-[#EF4444]/15 text-[#EF4444]' },
-                  { id: '#ORD-005', cust: 'David Wilson', amt: '$110.00', status: 'Completed', color: 'bg-[#E6F9F0] dark:bg-[#10B981]/15 text-[#10B981]' },
-                ].map((row) => (
-                  <tr key={row.id} className="hover:bg-[#F8F9FC] dark:hover:bg-[#1F2330] transition">
-                    <td className="py-2.5 font-mono font-bold text-[#1E2238] dark:text-white">{row.id}</td>
-                    <td className="py-2.5 font-medium text-[#5E6482] dark:text-[#949DB2]">{row.cust}</td>
-                    <td className="py-2.5 text-right font-extrabold font-mono text-[#1E2238] dark:text-white">{row.amt}</td>
-                    <td className="py-2.5 text-center">
-                      <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold ${row.color}`}>
-                        {row.status}
-                      </span>
+                {projects.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="py-8 text-center text-xs text-[#8C93AB]">
+                      No orders or project deliverables recorded yet
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  projects.slice(0, 5).map((p) => {
+                    const coagent = coagents.find((c) => c.id === p.coagentId);
+                    const statusColor =
+                      p.status === 'Transferred'
+                        ? 'bg-[#E6F9F0] dark:bg-[#10B981]/15 text-[#10B981]'
+                        : p.status === 'Invoiced'
+                        ? 'bg-[#EDEEFD] dark:bg-[#4E53EE]/15 text-[#4E53EE]'
+                        : 'bg-[#FEF6E7] dark:bg-[#F59E0B]/15 text-[#F59E0B]';
+
+                    return (
+                      <tr key={p.id} className="hover:bg-[#F8F9FC] dark:hover:bg-[#1F2330] transition">
+                        <td className="py-2.5 font-mono font-bold text-[#1E2238] dark:text-white">
+                          #ORD-{p.id.slice(-4).toUpperCase()}
+                        </td>
+                        <td className="py-2.5 font-medium text-[#5E6482] dark:text-[#949DB2]">
+                          {coagent?.company || coagent?.name || 'Client'}
+                        </td>
+                        <td className="py-2.5 text-right font-extrabold font-mono text-[#1E2238] dark:text-white">
+                          ${p.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                        </td>
+                        <td className="py-2.5 text-center">
+                          <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold ${statusColor}`}>
+                            {p.status}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>
@@ -296,39 +322,46 @@ export const FinancesTab: React.FC = () => {
         {/* Top Products */}
         <div className="lg:col-span-6 bg-white dark:bg-[#161922] rounded-2xl p-5.5 border border-[#F0F2F7] dark:border-[#232738] shadow-xs transition-colors">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-extrabold text-[#1E2238] dark:text-white">Top Products</h2>
+            <h2 className="text-sm font-extrabold text-[#1E2238] dark:text-white">Top Deliverables</h2>
             <button
               onClick={() => setActiveTab('projects')}
-              className="text-xs font-bold text-[#4E53EE] dark:text-[#7378FF] hover:underline"
+              className="text-xs font-bold text-[#4E53EE] dark:text-[#7378FF] hover:underline cursor-pointer"
             >
               View All
             </button>
           </div>
 
           <div className="space-y-3.5">
-            {[
-              { icon: Headphones, name: 'Wireless Headphone', sold: '320 Sold', revenue: '$32,000' },
-              { icon: Watch, name: 'Smart Watch', sold: '210 Sold', revenue: '$21,000' },
-              { icon: Speaker, name: 'Bluetooth Speaker', sold: '185 Sold', revenue: '$12,500' },
-              { icon: Smartphone, name: 'Phone Case', sold: '150 Sold', revenue: '$7,500' },
-              { icon: Zap, name: 'Charger Adapter', sold: '120 Sold', revenue: '$5,000' },
-            ].map((p, idx) => {
-              const Icon = p.icon;
-              return (
-                <div key={idx} className="flex items-center justify-between text-xs py-1.5">
-                  <div className="flex items-center gap-3.5">
-                    <div className="w-12 h-12 rounded-2xl bg-[#F8F9FC] dark:bg-[#1F2330] border border-[#F0F2F7] dark:border-[#2A3044] flex items-center justify-center text-[#5E6482] dark:text-[#949DB2] shadow-2xs">
-                      <Icon className="w-6.5 h-6.5" strokeWidth={2.2} />
+            {projects.length === 0 ? (
+              <div className="py-8 text-center text-xs text-[#8C93AB]">
+                No deliverables recorded yet
+              </div>
+            ) : (
+              Object.entries(
+                projects.reduce((acc, p) => {
+                  const key = p.note || 'Service Milestone';
+                  acc[key] = (acc[key] || 0) + p.amount;
+                  return acc;
+                }, {} as Record<string, number>)
+              )
+                .slice(0, 5)
+                .map(([name, revenue], idx) => (
+                  <div key={idx} className="flex items-center justify-between text-xs py-1.5">
+                    <div className="flex items-center gap-3.5">
+                      <div className="w-12 h-12 rounded-2xl bg-[#F8F9FC] dark:bg-[#1F2330] border border-[#F0F2F7] dark:border-[#2A3044] flex items-center justify-center text-[#5E6482] dark:text-[#949DB2] shadow-2xs">
+                        <Package className="w-6.5 h-6.5" strokeWidth={2.2} />
+                      </div>
+                      <div>
+                        <span className="block font-bold text-[#1E2238] dark:text-white text-[13px]">{name}</span>
+                        <span className="block text-[11px] text-[#8C93AB] dark:text-[#7A839E] font-mono mt-0.5">Project Scope</span>
+                      </div>
                     </div>
-                    <div>
-                      <span className="block font-bold text-[#1E2238] dark:text-white text-[13px]">{p.name}</span>
-                      <span className="block text-[11px] text-[#8C93AB] dark:text-[#7A839E] font-mono mt-0.5">{p.sold}</span>
+                    <div className="font-mono font-extrabold text-[#1E2238] dark:text-white text-sm">
+                      ${revenue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </div>
                   </div>
-                  <div className="font-mono font-extrabold text-[#1E2238] dark:text-white text-sm">{p.revenue}</div>
-                </div>
-              );
-            })}
+                ))
+            )}
           </div>
         </div>
 
@@ -345,50 +378,51 @@ export const FinancesTab: React.FC = () => {
           </div>
 
           <div className="space-y-4">
-            {[
-              {
-                icon: ShoppingCart,
-                color: 'bg-[#EDEEFD] dark:bg-[#4E53EE]/15 text-[#4E53EE] dark:text-[#7378FF]',
-                title: 'New order received',
-                desc: 'Order #ORD-001 by John Smith',
-                time: '2 mins ago',
-              },
-              {
-                icon: UserCheck,
-                color: 'bg-[#E6F9F0] dark:bg-[#10B981]/15 text-[#10B981]',
-                title: 'New customer registered',
-                desc: 'Sarah Lee created an account',
-                time: '1 hour ago',
-              },
-              {
-                icon: CreditCard,
-                color: 'bg-[#FEF6E7] dark:bg-[#F59E0B]/15 text-[#F59E0B]',
-                title: 'Payment confirmed',
-                desc: '$240.00 received via Stripe',
-                time: '3 hours ago',
-              },
-              {
-                icon: Package,
-                color: 'bg-[#FDE8E8] dark:bg-[#EF4444]/15 text-[#EF4444]',
-                title: 'Product updated',
-                desc: 'Smart Watch inventory adjusted',
-                time: '5 hours ago',
-              },
-            ].map((act, idx) => {
-              const Icon = act.icon;
-              return (
-                <div key={idx} className="flex items-start gap-3.5 text-xs">
-                  <div className={`w-11 h-11 rounded-2xl ${act.color} flex items-center justify-center shrink-0 shadow-2xs`}>
-                    <Icon className="w-6 h-6" strokeWidth={2.2} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-bold text-[#1E2238] dark:text-white leading-tight text-xs">{act.title}</p>
-                    <p className="text-[11px] text-[#8C93AB] dark:text-[#7A839E] truncate mt-0.5">{act.desc}</p>
-                  </div>
-                  <span className="text-[10px] text-[#8C93AB] dark:text-[#7A839E] shrink-0 font-mono">{act.time}</span>
-                </div>
-              );
-            })}
+            {transactions.length === 0 && projects.length === 0 && invoices.length === 0 ? (
+              <div className="py-8 text-center text-xs text-[#8C93AB]">
+                No recent activity recorded yet
+              </div>
+            ) : (
+              [
+                ...invoices.map((inv) => ({
+                  icon: CreditCard,
+                  color: 'bg-[#EDEEFD] dark:bg-[#4E53EE]/15 text-[#4E53EE] dark:text-[#7378FF]',
+                  title: `Invoice ${inv.invoiceNumber} (${inv.status})`,
+                  desc: `$${inv.amount.toLocaleString()} for client`,
+                  time: inv.issueDate,
+                })),
+                ...projects.map((p) => ({
+                  icon: ShoppingCart,
+                  color: 'bg-[#E6F9F0] dark:bg-[#10B981]/15 text-[#10B981]',
+                  title: `Project: ${p.note || 'Milestone'}`,
+                  desc: `$${p.amount.toLocaleString()} - ${p.status}`,
+                  time: p.date,
+                })),
+                ...transactions.map((t) => ({
+                  icon: t.type === 'Income' ? ArrowUpRight : ArrowDownLeft,
+                  color: t.type === 'Income' ? 'bg-[#E6F9F0] text-[#10B981]' : 'bg-[#FDE8E8] text-[#EF4444]',
+                  title: `${t.type}: ${t.description}`,
+                  desc: `$${t.amount.toLocaleString()} (${t.currency})`,
+                  time: t.date,
+                })),
+              ]
+                .slice(0, 4)
+                .map((act, idx) => {
+                  const Icon = act.icon;
+                  return (
+                    <div key={idx} className="flex items-start gap-3.5 text-xs">
+                      <div className={`w-11 h-11 rounded-2xl ${act.color} flex items-center justify-center shrink-0 shadow-2xs`}>
+                        <Icon className="w-6 h-6" strokeWidth={2.2} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-bold text-[#1E2238] dark:text-white leading-tight text-xs">{act.title}</p>
+                        <p className="text-[11px] text-[#8C93AB] dark:text-[#7A839E] truncate mt-0.5">{act.desc}</p>
+                      </div>
+                      <span className="text-[10px] text-[#8C93AB] dark:text-[#7A839E] shrink-0 font-mono">{act.time}</span>
+                    </div>
+                  );
+                })
+            )}
           </div>
         </div>
       </div>
@@ -529,6 +563,15 @@ export const FinancesTab: React.FC = () => {
                   </tr>
                 );
               })}
+              {filteredTransactions.length === 0 && (
+                <tr>
+                  <td colSpan={7} className="py-12 text-center text-xs text-[#8C93AB]">
+                    <CreditCard className="w-10 h-10 mx-auto text-[#8C93AB]/40 mb-2 stroke-[2]" />
+                    <p className="font-bold text-[#1E2238] dark:text-white">No Financial Transactions</p>
+                    <p className="mt-1">Click "Add Entry" above to record income or expenses.</p>
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

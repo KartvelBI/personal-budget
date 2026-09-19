@@ -114,6 +114,20 @@ export const CoagentsTab: React.FC = () => {
 
       {/* Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {filteredCoagents.length === 0 && (
+          <div className="col-span-full py-16 text-center text-xs text-[#8C93AB] bg-white dark:bg-[#161926] rounded-2xl border border-[#F0F2F7] dark:border-[#232738] p-8">
+            <Users className="w-12 h-12 mx-auto text-[#8C93AB]/40 mb-3 stroke-[2]" />
+            <h3 className="font-extrabold text-[#1E2238] dark:text-white text-sm">No Customers Found</h3>
+            <p className="mt-1">Add your first client or organization to get started.</p>
+            <button
+              onClick={openAddModal}
+              className="mt-4 inline-flex items-center gap-2 bg-[#4E53EE] text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-xs shadow-[#4E53EE]/25 cursor-pointer"
+            >
+              <Plus className="w-4.5 h-4.5 stroke-[2.2]" />
+              Add Customer
+            </button>
+          </div>
+        )}
         {filteredCoagents.map((coagent, idx) => {
           const coagentProjects = projects.filter((p) => p.coagentId === coagent.id);
           const coagentInvoices = invoices.filter((i) => i.coagentId === coagent.id);

@@ -52,9 +52,7 @@ export const ReportingTab: React.FC = () => {
     monthlyChartData.length > 0
       ? monthlyChartData
       : [
-          { month: 'Jul 2026', income: 3800, expenses: 1200 },
-          { month: 'Aug 2026', income: 5200, expenses: 1800 },
-          { month: 'Sep 2026', income: totals.totalIncome, expenses: totals.totalExpenses },
+          { month: 'Current', income: totals.totalIncome, expenses: totals.totalExpenses },
         ];
 
   // 2. Group Expenses by Category for PieChart
@@ -266,24 +264,30 @@ export const ReportingTab: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {projectChartData.map((c) => (
-            <div key={c.name} className="p-4 rounded-xl border border-[#F0F2F7] dark:border-[#232738] bg-[#F8F9FC] dark:bg-[#1C2030]">
-              <span className="text-[11px] font-bold text-[#8C93AB] uppercase tracking-wider block truncate">
-                {c.name}
-              </span>
-              <div className="text-xl font-extrabold font-mono text-[#1E2238] dark:text-white mt-1">
-                ${c.volume.toLocaleString()}
-              </div>
-              <div className="mt-2 w-full bg-slate-200/80 dark:bg-slate-700/60 rounded-full h-1.5 overflow-hidden">
-                <div
-                  className="bg-[#4E53EE] h-1.5 rounded-full"
-                  style={{
-                    width: `${Math.min(100, Math.round((c.volume / (totals.totalIncome || 10000)) * 100))}%`,
-                  }}
-                />
-              </div>
+          {projectChartData.length === 0 ? (
+            <div className="col-span-full py-8 text-center text-xs text-[#8C93AB]">
+              No project deliverables recorded to analyze yet
             </div>
-          ))}
+          ) : (
+            projectChartData.map((c) => (
+              <div key={c.name} className="p-4 rounded-xl border border-[#F0F2F7] dark:border-[#232738] bg-[#F8F9FC] dark:bg-[#1C2030]">
+                <span className="text-[11px] font-bold text-[#8C93AB] uppercase tracking-wider block truncate">
+                  {c.name}
+                </span>
+                <div className="text-xl font-extrabold font-mono text-[#1E2238] dark:text-white mt-1">
+                  ${c.volume.toLocaleString()}
+                </div>
+                <div className="mt-2 w-full bg-slate-200/80 dark:bg-slate-700/60 rounded-full h-1.5 overflow-hidden">
+                  <div
+                    className="bg-[#4E53EE] h-1.5 rounded-full"
+                    style={{
+                      width: `${Math.min(100, Math.round((c.volume / (totals.totalIncome || 10000)) * 100))}%`,
+                    }}
+                  />
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>

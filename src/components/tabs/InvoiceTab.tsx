@@ -232,6 +232,15 @@ export const InvoiceTab: React.FC = () => {
                   </tr>
                 );
               })}
+              {filteredInvoices.length === 0 && (
+                <tr>
+                  <td colSpan={7} className="py-12 text-center text-xs text-[#8C93AB]">
+                    <FileText className="w-10 h-10 mx-auto text-[#8C93AB]/40 mb-2 stroke-[2]" />
+                    <p className="font-bold text-[#1E2238] dark:text-white">No Invoices Found</p>
+                    <p className="mt-1">Submit a project milestone to generate an automated client invoice.</p>
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
