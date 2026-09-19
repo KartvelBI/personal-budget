@@ -46,6 +46,7 @@ interface BudgetContextType {
 
   // Invoice actions
   addInvoice: (invoice: Omit<Invoice, 'id' | 'invoiceNumber'>) => Invoice;
+  updateInvoice: (id: string, updated: Partial<Invoice>) => void;
   updateInvoiceStatus: (id: string, status: InvoiceStatus) => void;
   deleteInvoice: (id: string) => void;
   selectedInvoice: Invoice | null;
@@ -277,6 +278,10 @@ export const BudgetProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     );
   };
 
+  const updateInvoice = (id: string, updated: Partial<Invoice>) => {
+    setInvoices((prev) => prev.map((inv) => (inv.id === id ? { ...inv, ...updated } : inv)));
+  };
+
   const deleteInvoice = (id: string) => {
     setInvoices((prev) => prev.filter((i) => i.id !== id));
     // update any project linked to this invoice
@@ -454,6 +459,7 @@ export const BudgetProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         deleteProject,
         sendAutomatedInvoice,
         addInvoice,
+        updateInvoice,
         updateInvoiceStatus,
         deleteInvoice,
         selectedInvoice,

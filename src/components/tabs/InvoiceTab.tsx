@@ -11,12 +11,101 @@ import {
   Building2,
   CheckCircle,
   AlertCircle,
+  Edit2,
+  X,
+  Calendar,
+  DollarSign,
 } from 'lucide-react';
 
 export const InvoiceTab: React.FC = () => {
-  const { invoices, updateInvoiceStatus, deleteInvoice, setSelectedInvoice, coagents } = useBudget();
+  const {
+    invoices,
+    updateInvoice,
+    updateInvoiceStatus,
+    deleteInvoice,
+    setSelectedInvoice,
+    coagents,
+    updateProject,
+  } = useBudget();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
+
+  // Edit Invoice Modal state
+  const [editingInvoice, setEditingInvoice] = useState<Invoice | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editFormData, setEditFormData] = useState({
+    issueDate: '',
+    dueDate: '',
+    amount: '',
+    currency: 'USD',
+    status: 'Draft' as InvoiceStatus,
+    notes: '',
+  });
+
+  const openEditInvoiceModal = (inv: Invoice) => {
+    setEditingInvoice(inv);
+    setEditFormData({
+      issueDate: inv.issueDate,
+      dueDate: inv.dueDate,
+      amount: String(inv.amount),
+      currency: inv.currency,
+      status: inv.status,
+      notes: inv.notes || '',
+    });
+    setIsEditModalOpen(true);
+  };
+
+  const handleUpdateInvoice = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingInvoice) return;
+    if (!editFormData.amount || Number(editFormData.amount) <= 0) {
+      alert('Please enter a valid amount.');
+      return;
+    }
+
+    const newAmount = parseFloat(editFormData.amount);
+    updateInvoice(editingInvoice.id, {
+      issueDate: editFormData.issueDate,
+      dueDate: editFormData.dueDate,
+      amount: newAmount,
+      currency: editFormData.currency,
+      status: editFormData.status,
+      notes: editFormData.notes,
+      paidAt: editFormData.status === 'Paid' ? (editingInvoice.paidAt || new Date().toISOString()) : editingInvoice.paidAt,
+    });
+
+    if (editFormData.status === 'Paid') {
+      updateInvoiceStatus(editingInvoice.id, 'Paid');
+      if (editingInvoice.projectId) {
+        updateProject(editingInvoice.projectId, { status: 'Paid', amount: newAmount });
+      }
+    }
+
+    setIsEditModalOpen(false);
+  };
+
+  const handleMarkAsPaidInModal = () => {
+    if (!editingInvoice) return;
+    const newAmount = parseFloat(editFormData.amount || String(editingInvoice.amount));
+
+    updateInvoice(editingInvoice.id, {
+      issueDate: editFormData.issueDate,
+      dueDate: editFormData.dueDate,
+      amount: newAmount,
+      currency: editFormData.currency,
+      status: 'Paid',
+      notes: editFormData.notes,
+      paidAt: editingInvoice.paidAt || new Date().toISOString(),
+    });
+
+    updateInvoiceStatus(editingInvoice.id, 'Paid');
+
+    if (editingInvoice.projectId) {
+      updateProject(editingInvoice.projectId, { status: 'Paid', amount: newAmount });
+    }
+
+    setIsEditModalOpen(false);
+  };
 
   const filteredInvoices = invoices.filter((inv) => {
     const coagent = coagents.find((c) => c.id === inv.coagentId);
@@ -217,6 +306,14 @@ export const InvoiceTab: React.FC = () => {
                         )}
 
                         <button
+                          onClick={() => openEditInvoiceModal(inv)}
+                          className="p-1.5 text-slate-300 dark:text-slate-600 hover:text-[#4E53EE] rounded-lg transition hover:bg-[#EDEEFD] dark:hover:bg-[#4E53EE]/10 cursor-pointer"
+                          title="Edit Invoice"
+                        >
+                          <Edit2 className="w-4.5 h-4.5 stroke-[2]" />
+                        </button>
+
+                        <button
                           onClick={() => {
                             if (confirm(`Delete invoice ${inv.invoiceNumber}?`)) {
                               deleteInvoice(inv.id);
@@ -225,7 +322,7 @@ export const InvoiceTab: React.FC = () => {
                           className="p-1.5 text-slate-300 dark:text-slate-600 hover:text-rose-600 rounded-lg transition hover:bg-rose-50 dark:hover:bg-rose-950/30 cursor-pointer"
                           title="Delete Invoice"
                         >
-                          <Trash2 className="w-4.5 h-4.5" strokeWidth={2} />
+                          <Trash2 className="w-4.5 h-4.5 stroke-[2]" />
                         </button>
                       </div>
                     </td>
@@ -245,6 +342,164 @@ export const InvoiceTab: React.FC = () => {
           </table>
         </div>
       </section>
+
+      {/* Edit Invoice Modal */}
+      {isEditModalOpen && editingInvoice && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-[#161926] rounded-3xl border border-[#F0F2F7] dark:border-[#232738] shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-6 border-b border-[#F0F2F7] dark:border-[#232738]">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-[#EDEEFD] dark:bg-[#4E53EE]/20 text-[#4E53EE] flex items-center justify-center">
+                  <Edit2 className="w-5 h-5 stroke-[2.2]" />
+                </div>
+                <div>
+                  <h3 className="text-base font-extrabold text-[#1E2238] dark:text-white flex items-center gap-2">
+                    Edit Invoice
+                    <span className="text-xs px-2 py-0.5 rounded-md font-mono bg-[#EDEEFD] dark:bg-[#4E53EE]/20 text-[#4E53EE] dark:text-[#818CF8]">
+                      {editingInvoice.invoiceNumber}
+                    </span>
+                  </h3>
+                  <p className="text-xs text-[#8C93AB]">
+                    Modify invoice details, status, or quickly mark as paid
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsEditModalOpen(false)}
+                className="p-2 text-[#8C93AB] hover:text-[#1E2238] dark:hover:text-white rounded-xl hover:bg-[#F8F9FC] dark:hover:bg-[#1C2030] transition cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Form */}
+            <form onSubmit={handleUpdateInvoice} className="p-6 overflow-y-auto space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-[#8C93AB] mb-1.5">
+                    Issue Date
+                  </label>
+                  <input
+                    type="date"
+                    value={editFormData.issueDate}
+                    onChange={(e) => setEditFormData({ ...editFormData, issueDate: e.target.value })}
+                    className="w-full px-3 py-2 text-xs font-mono bg-[#F8F9FC] dark:bg-[#10121C] border border-[#F0F2F7] dark:border-[#232738] rounded-xl text-[#1E2238] dark:text-[#EAECEF] focus:outline-none focus:border-[#4E53EE]"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-[#8C93AB] mb-1.5">
+                    Due Date
+                  </label>
+                  <input
+                    type="date"
+                    value={editFormData.dueDate}
+                    onChange={(e) => setEditFormData({ ...editFormData, dueDate: e.target.value })}
+                    className="w-full px-3 py-2 text-xs font-mono bg-[#F8F9FC] dark:bg-[#10121C] border border-[#F0F2F7] dark:border-[#232738] rounded-xl text-[#1E2238] dark:text-[#EAECEF] focus:outline-none focus:border-[#4E53EE]"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-[#8C93AB] mb-1.5">
+                    Amount
+                  </label>
+                  <div className="relative">
+                    <DollarSign className="w-4 h-4 text-[#8C93AB] absolute left-3 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="number"
+                      step="0.01"
+                      placeholder="0.00"
+                      value={editFormData.amount}
+                      onChange={(e) => setEditFormData({ ...editFormData, amount: e.target.value })}
+                      className="w-full pl-8.5 pr-3 py-2 text-xs font-mono font-bold bg-[#F8F9FC] dark:bg-[#10121C] border border-[#F0F2F7] dark:border-[#232738] rounded-xl text-[#1E2238] dark:text-[#EAECEF] focus:outline-none focus:border-[#4E53EE]"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-[#8C93AB] mb-1.5">
+                    Currency
+                  </label>
+                  <select
+                    value={editFormData.currency}
+                    onChange={(e) => setEditFormData({ ...editFormData, currency: e.target.value })}
+                    className="w-full px-3 py-2 text-xs bg-[#F8F9FC] dark:bg-[#10121C] border border-[#F0F2F7] dark:border-[#232738] rounded-xl text-[#1E2238] dark:text-[#EAECEF] focus:outline-none focus:border-[#4E53EE]"
+                  >
+                    <option value="USD">USD ($)</option>
+                    <option value="EUR">EUR (€)</option>
+                    <option value="GEL">GEL (₾)</option>
+                    <option value="GBP">GBP (£)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-[#8C93AB] mb-1.5">
+                  Invoice Status
+                </label>
+                <select
+                  value={editFormData.status}
+                  onChange={(e) => setEditFormData({ ...editFormData, status: e.target.value as InvoiceStatus })}
+                  className="w-full px-3 py-2 text-xs bg-[#F8F9FC] dark:bg-[#10121C] border border-[#F0F2F7] dark:border-[#232738] rounded-xl text-[#1E2238] dark:text-[#EAECEF] focus:outline-none focus:border-[#4E53EE]"
+                >
+                  <option value="Draft">Draft</option>
+                  <option value="Sent">Sent</option>
+                  <option value="Paid">Paid</option>
+                  <option value="Overdue">Overdue</option>
+                  <option value="Cancelled">Cancelled</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-[#8C93AB] mb-1.5">
+                  Invoice Notes & Terms
+                </label>
+                <textarea
+                  rows={3}
+                  value={editFormData.notes}
+                  onChange={(e) => setEditFormData({ ...editFormData, notes: e.target.value })}
+                  placeholder="Terms, bank instructions or memo..."
+                  className="w-full px-3 py-2 text-xs bg-[#F8F9FC] dark:bg-[#10121C] border border-[#F0F2F7] dark:border-[#232738] rounded-xl text-[#1E2238] dark:text-[#EAECEF] focus:outline-none focus:border-[#4E53EE]"
+                />
+              </div>
+
+              {/* Modal Footer Actions */}
+              <div className="pt-4 border-t border-[#F0F2F7] dark:border-[#232738] flex flex-wrap items-center justify-between gap-3">
+                <button
+                  type="button"
+                  onClick={handleMarkAsPaidInModal}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#10B981] hover:bg-[#059669] text-white font-bold text-xs shadow-md shadow-[#10B981]/25 transition cursor-pointer active:scale-95"
+                >
+                  <CheckCircle2 className="w-4.5 h-4.5 stroke-[2.2]" />
+                  Mark as Paid
+                </button>
+
+                <div className="flex items-center gap-2 ml-auto">
+                  <button
+                    type="button"
+                    onClick={() => setIsEditModalOpen(false)}
+                    className="px-4 py-2.5 rounded-xl text-xs font-bold text-[#5E6482] dark:text-[#8C93AB] hover:bg-[#F8F9FC] dark:hover:bg-[#1C2030] transition cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-5 py-2.5 rounded-xl bg-[#4E53EE] hover:bg-[#3D42DF] text-white font-bold text-xs shadow-md shadow-[#4E53EE]/25 transition cursor-pointer active:scale-95"
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

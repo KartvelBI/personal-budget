@@ -15,6 +15,8 @@ import {
   Clock,
   Trash2,
   AlertCircle,
+  Edit2,
+  X,
 } from 'lucide-react';
 
 export const ProjectsTab: React.FC = () => {
@@ -30,6 +32,7 @@ export const ProjectsTab: React.FC = () => {
     setActiveTab,
     invoices,
     setSelectedInvoice,
+    updateInvoiceStatus,
   } = useBudget();
 
   // Form state
@@ -50,6 +53,86 @@ export const ProjectsTab: React.FC = () => {
 
   // Success toast message
   const [successToast, setSuccessToast] = useState<string | null>(null);
+
+  // Edit Project Modal state
+  const [editingProject, setEditingProject] = useState<ProjectEntry | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editFormData, setEditFormData] = useState({
+    date: '',
+    coagentId: '',
+    categoryId: '',
+    transferDate: '',
+    amount: '',
+    currency: 'USD',
+    note: '',
+    status: 'Pending' as ProjectStatus,
+  });
+
+  const openEditModal = (p: ProjectEntry) => {
+    setEditingProject(p);
+    setEditFormData({
+      date: p.date,
+      coagentId: p.coagentId,
+      categoryId: p.categoryId,
+      transferDate: p.transferDate,
+      amount: String(p.amount),
+      currency: p.currency,
+      note: p.note,
+      status: p.status,
+    });
+    setIsEditModalOpen(true);
+  };
+
+  const handleUpdateProject = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingProject) return;
+    if (!editFormData.amount || Number(editFormData.amount) <= 0) {
+      alert('Please enter a valid amount.');
+      return;
+    }
+
+    updateProject(editingProject.id, {
+      date: editFormData.date,
+      coagentId: editFormData.coagentId,
+      categoryId: editFormData.categoryId,
+      transferDate: editFormData.transferDate,
+      amount: parseFloat(editFormData.amount),
+      currency: editFormData.currency,
+      note: editFormData.note,
+      status: editFormData.status,
+    });
+
+    if (editFormData.status === 'Paid' && editingProject.invoiceId) {
+      updateInvoiceStatus(editingProject.invoiceId, 'Paid');
+    }
+
+    setIsEditModalOpen(false);
+    setSuccessToast('Project updated successfully!');
+    setTimeout(() => setSuccessToast(null), 3000);
+  };
+
+  const handleMarkAsPaidInModal = () => {
+    if (!editingProject) return;
+
+    updateProject(editingProject.id, {
+      date: editFormData.date,
+      coagentId: editFormData.coagentId,
+      categoryId: editFormData.categoryId,
+      transferDate: editFormData.transferDate,
+      amount: parseFloat(editFormData.amount || String(editingProject.amount)),
+      currency: editFormData.currency,
+      note: editFormData.note,
+      status: 'Paid',
+    });
+
+    if (editingProject.invoiceId) {
+      updateInvoiceStatus(editingProject.invoiceId, 'Paid');
+    }
+
+    setIsEditModalOpen(false);
+    setSuccessToast('Project marked as Paid! Invoice status updated.');
+    setTimeout(() => setSuccessToast(null), 3500);
+  };
 
   const handleCoagentChange = (newCoagentId: string) => {
     setCoagentId(newCoagentId);
@@ -464,17 +547,26 @@ export const ProjectsTab: React.FC = () => {
                     </td>
 
                     <td className="py-3 px-3 text-center whitespace-nowrap">
-                      <button
-                        onClick={() => {
-                          if (confirm('Delete this project record?')) {
-                            deleteProject(p.id);
-                          }
-                        }}
-                        className="p-1.5 text-slate-400 hover:text-rose-600 rounded-xl transition hover:bg-rose-50 dark:hover:bg-rose-950/20 cursor-pointer"
-                        title="Delete project"
-                      >
-                        <Trash2 className="w-5 h-5 stroke-[2]" />
-                      </button>
+                      <div className="flex items-center justify-center gap-1.5">
+                        <button
+                          onClick={() => openEditModal(p)}
+                          className="p-1.5 text-slate-400 hover:text-[#4E53EE] rounded-xl transition hover:bg-[#EDEEFD] dark:hover:bg-[#4E53EE]/20 cursor-pointer"
+                          title="Edit project"
+                        >
+                          <Edit2 className="w-5 h-5 stroke-[2]" />
+                        </button>
+                        <button
+                          onClick={() => {
+                            if (confirm('Delete this project record?')) {
+                              deleteProject(p.id);
+                            }
+                          }}
+                          className="p-1.5 text-slate-400 hover:text-rose-600 rounded-xl transition hover:bg-rose-50 dark:hover:bg-rose-950/20 cursor-pointer"
+                          title="Delete project"
+                        >
+                          <Trash2 className="w-5 h-5 stroke-[2]" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 );
@@ -492,6 +584,190 @@ export const ProjectsTab: React.FC = () => {
           </table>
         </div>
       </section>
+
+      {/* Edit Project Modal */}
+      {isEditModalOpen && editingProject && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 overflow-y-auto">
+          <div className="relative w-full max-w-lg bg-white dark:bg-[#161922] rounded-2xl shadow-2xl overflow-hidden my-8 border border-[#F0F2F7] dark:border-[#232738]">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-[#F0F2F7] dark:border-[#232738] bg-[#F8F9FC] dark:bg-[#1F2330]">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-[#EDEEFD] dark:bg-[#4E53EE]/20 text-[#4E53EE] dark:text-[#7378FF] flex items-center justify-center shadow-xs">
+                  <Edit2 className="w-4.5 h-4.5 stroke-[2.2]" />
+                </div>
+                <div>
+                  <h2 className="text-sm font-extrabold text-[#1E2238] dark:text-white">
+                    Edit Project Milestone
+                  </h2>
+                  <p className="text-[11px] text-[#8C93AB]">Update project parameters or mark milestone as paid</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsEditModalOpen(false)}
+                className="p-1.5 text-[#8C93AB] hover:text-[#1E2238] dark:hover:text-white rounded-xl hover:bg-slate-200/60 dark:hover:bg-slate-700/50 transition cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleUpdateProject} className="p-6 space-y-4 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5 flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-[#4E53EE] stroke-[2]" />
+                    Date *
+                  </label>
+                  <input
+                    type="date"
+                    required
+                    value={editFormData.date}
+                    onChange={(e) => setEditFormData({ ...editFormData, date: e.target.value })}
+                    className="w-full px-3.5 py-2 border border-[#E5E7EB] dark:border-[#2A3044] bg-white dark:bg-[#1F2330] text-[#1E2238] dark:text-white rounded-xl outline-none focus:ring-2 focus:ring-[#4E53EE]/15 focus:border-[#4E53EE] font-medium"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5 flex items-center gap-2">
+                    <Building2 className="w-4 h-4 text-[#4E53EE] stroke-[2]" />
+                    Coagents (Customer) *
+                  </label>
+                  <select
+                    required
+                    value={editFormData.coagentId}
+                    onChange={(e) => setEditFormData({ ...editFormData, coagentId: e.target.value })}
+                    className="w-full px-3.5 py-2 border border-[#E5E7EB] dark:border-[#2A3044] bg-white dark:bg-[#1F2330] rounded-xl outline-none focus:ring-2 focus:ring-[#4E53EE]/15 focus:border-[#4E53EE] font-semibold text-[#1E2238] dark:text-white"
+                  >
+                    {coagents.map((c) => (
+                      <option key={c.id} value={c.id} className="bg-white dark:bg-[#161922] text-[#1E2238] dark:text-white">
+                        {c.company ? `${c.company} (${c.name})` : c.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5 flex items-center gap-2">
+                    <Tag className="w-4 h-4 text-[#4E53EE] stroke-[2]" />
+                    Category *
+                  </label>
+                  <select
+                    required
+                    value={editFormData.categoryId}
+                    onChange={(e) => setEditFormData({ ...editFormData, categoryId: e.target.value })}
+                    className="w-full px-3.5 py-2 border border-[#E5E7EB] dark:border-[#2A3044] bg-white dark:bg-[#1F2330] rounded-xl outline-none focus:ring-2 focus:ring-[#4E53EE]/15 focus:border-[#4E53EE] font-semibold text-[#1E2238] dark:text-white"
+                  >
+                    {categories.map((cat) => (
+                      <option key={cat.id} value={cat.id} className="bg-white dark:bg-[#161922] text-[#1E2238] dark:text-white">
+                        {cat.name} ({cat.type})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5 flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-[#4E53EE] stroke-[2]" />
+                    Transfer Date *
+                  </label>
+                  <input
+                    type="date"
+                    required
+                    value={editFormData.transferDate}
+                    onChange={(e) => setEditFormData({ ...editFormData, transferDate: e.target.value })}
+                    className="w-full px-3.5 py-2 border border-[#E5E7EB] dark:border-[#2A3044] bg-white dark:bg-[#1F2330] text-[#1E2238] dark:text-white rounded-xl outline-none focus:ring-2 focus:ring-[#4E53EE]/15 focus:border-[#4E53EE] font-medium"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
+                <div className="sm:col-span-5">
+                  <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5 flex items-center gap-2">
+                    <DollarSign className="w-4 h-4 text-[#4E53EE] stroke-[2]" />
+                    Amount *
+                  </label>
+                  <input
+                    type="number"
+                    step="any"
+                    min="0"
+                    required
+                    value={editFormData.amount}
+                    onChange={(e) => setEditFormData({ ...editFormData, amount: e.target.value })}
+                    className="w-full px-3.5 py-2 border border-[#E5E7EB] dark:border-[#2A3044] bg-white dark:bg-[#1F2330] text-[#1E2238] dark:text-white rounded-xl outline-none focus:ring-2 focus:ring-[#4E53EE]/15 focus:border-[#4E53EE] font-mono text-sm font-extrabold"
+                  />
+                </div>
+
+                <div className="sm:col-span-3">
+                  <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5">Currency</label>
+                  <select
+                    value={editFormData.currency}
+                    onChange={(e) => setEditFormData({ ...editFormData, currency: e.target.value })}
+                    className="w-full px-3.5 py-2 border border-[#E5E7EB] dark:border-[#2A3044] bg-white dark:bg-[#1F2330] rounded-xl outline-none focus:border-[#4E53EE] font-mono font-bold text-[#1E2238] dark:text-white"
+                  >
+                    {settings.availableCurrencies.map((c) => (
+                      <option key={c} value={c} className="bg-white dark:bg-[#161922] text-[#1E2238] dark:text-white">
+                        {c}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="sm:col-span-4">
+                  <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5">Status</label>
+                  <select
+                    value={editFormData.status}
+                    onChange={(e) => setEditFormData({ ...editFormData, status: e.target.value as ProjectStatus })}
+                    className="w-full px-3.5 py-2 border border-[#E5E7EB] dark:border-[#2A3044] bg-white dark:bg-[#1F2330] rounded-xl outline-none focus:border-[#4E53EE] font-bold text-[#1E2238] dark:text-white"
+                  >
+                    <option value="Pending" className="bg-white dark:bg-[#161922] text-[#1E2238] dark:text-white">Pending</option>
+                    <option value="Invoiced" className="bg-white dark:bg-[#161922] text-[#1E2238] dark:text-white">Invoiced</option>
+                    <option value="Transferred" className="bg-white dark:bg-[#161922] text-[#1E2238] dark:text-white">Transferred</option>
+                    <option value="Paid" className="bg-white dark:bg-[#161922] text-[#1E2238] dark:text-white">Paid</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5">Note / Deliverable Description</label>
+                <input
+                  type="text"
+                  value={editFormData.note}
+                  onChange={(e) => setEditFormData({ ...editFormData, note: e.target.value })}
+                  className="w-full px-3.5 py-2 border border-[#E5E7EB] dark:border-[#2A3044] bg-white dark:bg-[#1F2330] text-[#1E2238] dark:text-white rounded-xl outline-none focus:ring-2 focus:ring-[#4E53EE]/15 focus:border-[#4E53EE]"
+                />
+              </div>
+
+              {/* ACTION BUTTONS WITH MARK AS PAID INSIDE */}
+              <div className="pt-3 border-t border-[#F0F2F7] dark:border-[#232738] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                <button
+                  type="button"
+                  onClick={handleMarkAsPaidInModal}
+                  className="inline-flex items-center justify-center gap-2 px-4.5 py-2.5 bg-[#10B981] hover:bg-[#059669] text-white rounded-xl text-xs font-bold shadow-xs transition cursor-pointer"
+                >
+                  <CheckCircle2 className="w-4.5 h-4.5 stroke-[2.2]" />
+                  Mark as Paid
+                </button>
+
+                <div className="flex items-center justify-end gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => setIsEditModalOpen(false)}
+                    className="px-4 py-2 font-bold text-[#8C93AB] hover:text-[#1E2238] dark:hover:text-white bg-[#F8F9FC] dark:bg-[#1F2330] rounded-xl transition cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-5 py-2 font-bold text-white bg-[#4E53EE] hover:bg-[#4338CA] rounded-xl shadow-xs transition cursor-pointer"
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

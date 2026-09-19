@@ -20,7 +20,7 @@ export interface Category {
   color: string;
 }
 
-export type ProjectStatus = 'Pending' | 'Transferred' | 'Invoiced';
+export type ProjectStatus = 'Pending' | 'Transferred' | 'Invoiced' | 'Paid';
 
 export interface ProjectEntry {
   id: string;
