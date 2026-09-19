@@ -29,7 +29,49 @@ import {
   Smartphone,
   Zap,
   Search,
+  Calendar,
+  Filter,
 } from 'lucide-react';
+
+type DatePreset = 'all' | 'today' | 'this_week' | 'this_month' | 'this_year' | 'custom';
+
+const getPresetDates = (preset: DatePreset): { start: string; end: string } => {
+  const now = new Date();
+  const todayStr = now.toISOString().split('T')[0];
+
+  switch (preset) {
+    case 'today':
+      return { start: todayStr, end: todayStr };
+    case 'this_week': {
+      const d = new Date(now);
+      const day = d.getDay();
+      const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+      const monday = new Date(d.setDate(diff)).toISOString().split('T')[0];
+      return { start: monday, end: todayStr };
+    }
+    case 'this_month': {
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      return { start: `${y}-${m}-01`, end: todayStr };
+    }
+    case 'this_year': {
+      const y = now.getFullYear();
+      return { start: `${y}-01-01`, end: todayStr };
+    }
+    case 'all':
+    default:
+      return { start: '', end: '' };
+  }
+};
+
+const PRESET_LABELS: Record<DatePreset, string> = {
+  all: 'All Time',
+  today: 'Today',
+  this_week: 'This Week',
+  this_month: 'This Month',
+  this_year: 'This Year',
+  custom: 'Custom Range',
+};
 
 export const FinancesTab: React.FC = () => {
   const {
@@ -38,7 +80,6 @@ export const FinancesTab: React.FC = () => {
     deleteTransaction,
     categories,
     coagents,
-    totals,
     projects,
     invoices,
     settings,
@@ -50,20 +91,109 @@ export const FinancesTab: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  // Real Sales Overview chart data from actual Income transactions
+  // Date Filter State
+  const [datePreset, setDatePreset] = useState<DatePreset>('all');
+  const [startDate, setStartDate] = useState<string>('');
+  const [endDate, setEndDate] = useState<string>('');
+
+  const handlePresetChange = (preset: DatePreset) => {
+    setDatePreset(preset);
+    const { start, end } = getPresetDates(preset);
+    setStartDate(start);
+    setEndDate(end);
+  };
+
+  const isDateInRange = (dateStr: string) => {
+    if (!dateStr) return false;
+    const d = dateStr.slice(0, 10);
+    if (startDate && d < startDate) return false;
+    if (endDate && d > endDate) return false;
+    return true;
+  };
+
+  // Filtered Datasets by Date Range
+  const dateFilteredTransactions = transactions.filter((t) => isDateInRange(t.date));
+  const dateFilteredProjects = projects.filter((p) => isDateInRange(p.date));
+  const dateFilteredInvoices = invoices.filter((inv) => isDateInRange(inv.issueDate));
+
+  // Filtered Metrics
+  const periodIncomeTransactions = dateFilteredTransactions.filter((t) => t.type === 'Income');
+  const periodTotalRevenue = periodIncomeTransactions.reduce((sum, t) => sum + t.amount, 0);
+
+  const periodPendingOrders = dateFilteredProjects.filter((p) => p.status === 'Pending').length;
+  const periodFulfilledCount = dateFilteredProjects.filter(
+    (p) => p.status === 'Transferred' || p.status === 'Invoiced' || p.status === 'Paid'
+  ).length;
+  const periodFulfillmentRate =
+    dateFilteredProjects.length > 0
+      ? ((periodFulfilledCount / dateFilteredProjects.length) * 100).toFixed(1)
+      : '0.0';
+
+  const activeCoagentIds = new Set([
+    ...dateFilteredProjects.map((p) => p.coagentId),
+    ...dateFilteredInvoices.map((i) => i.coagentId),
+    ...dateFilteredTransactions.map((t) => t.coagentId).filter(Boolean),
+  ]);
+  const periodActiveCustomers =
+    datePreset === 'all'
+      ? coagents.length
+      : coagents.filter((c) => activeCoagentIds.has(c.id)).length;
+
+  // Real Sales Overview chart data from actual Income transactions within date range
   const salesByDate: Record<string, number> = {};
-  transactions
-    .filter((t) => t.type === 'Income')
-    .forEach((t) => {
-      salesByDate[t.date] = (salesByDate[t.date] || 0) + t.amount;
-    });
+  periodIncomeTransactions.forEach((t) => {
+    salesByDate[t.date] = (salesByDate[t.date] || 0) + t.amount;
+  });
 
   const chartEntries = Object.entries(salesByDate)
     .sort(([a], [b]) => a.localeCompare(b))
-    .slice(-7)
+    .slice(-14)
     .map(([date, sales]) => ({ date: date.slice(5), sales }));
 
   const salesOverviewData = chartEntries.length > 0 ? chartEntries : [{ date: 'Today', sales: 0 }];
+
+  // Recent Orders (sorted newest first)
+  const recentOrdersList = [...dateFilteredProjects]
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .slice(0, 5);
+
+  // Top Deliverables (sorted by revenue descending)
+  const topDeliverables = Object.entries(
+    dateFilteredProjects.reduce((acc, p) => {
+      const key = p.note || 'Service Milestone';
+      acc[key] = (acc[key] || 0) + p.amount;
+      return acc;
+    }, {} as Record<string, number>)
+  )
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 5);
+
+  // Recent Activity from filtered records
+  const recentActivities = [
+    ...dateFilteredInvoices.map((inv) => ({
+      icon: CreditCard,
+      color: 'bg-[#EDEEFD] dark:bg-[#4E53EE]/15 text-[#4E53EE] dark:text-[#7378FF]',
+      title: `Invoice ${inv.invoiceNumber} (${inv.status})`,
+      desc: `$${inv.amount.toLocaleString()} for client`,
+      time: inv.issueDate,
+    })),
+    ...dateFilteredProjects.map((p) => ({
+      icon: ShoppingCart,
+      color: 'bg-[#E6F9F0] dark:bg-[#10B981]/15 text-[#10B981]',
+      title: `Project: ${p.note || 'Milestone'}`,
+      desc: `$${p.amount.toLocaleString()} - ${p.status}`,
+      time: p.date,
+    })),
+    ...dateFilteredTransactions.map((t) => ({
+      icon: t.type === 'Income' ? ArrowUpRight : ArrowDownLeft,
+      color: t.type === 'Income' ? 'bg-[#E6F9F0] text-[#10B981]' : 'bg-[#FDE8E8] text-[#EF4444]',
+      title: `${t.type}: ${t.description}`,
+      desc: `$${t.amount.toLocaleString()} (${t.currency})`,
+      time: t.date,
+    })),
+  ]
+    .sort((a, b) => b.time.localeCompare(a.time))
+    .slice(0, 4);
 
   // New Transaction Form
   const [formData, setFormData] = useState({
@@ -105,7 +235,7 @@ export const FinancesTab: React.FC = () => {
     });
   };
 
-  const filteredTransactions = transactions.filter((t) => {
+  const filteredTransactions = dateFilteredTransactions.filter((t) => {
     const matchesType = typeFilter === 'all' || t.type === typeFilter;
     const cat = categories.find((c) => c.id === t.categoryId);
     const coagent = coagents.find((c) => c.id === t.coagentId);
@@ -122,6 +252,102 @@ export const FinancesTab: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* ======================================================== */}
+      {/* ROW 0: DATE FILTER CONTROLS BAR                          */}
+      {/* ======================================================== */}
+      <div className="bg-white dark:bg-[#161922] rounded-2xl p-4 sm:p-5 border border-[#F0F2F7] dark:border-[#232738] shadow-xs transition-colors">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5">
+            <div className="w-12 h-12 rounded-2xl bg-[#EDEEFD] dark:bg-[#4E53EE]/20 text-[#4E53EE] dark:text-[#818CF8] flex items-center justify-center shadow-xs shrink-0">
+              <Calendar className="w-6 h-6 stroke-[2.2]" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="text-sm font-extrabold text-[#1E2238] dark:text-white">Date Filter</h3>
+                {datePreset !== 'all' && (
+                  <span className="px-2 py-0.5 rounded-full text-[10.5px] font-bold bg-[#E6F9F0] text-[#10B981] dark:bg-[#10B981]/20">
+                    Active Filter
+                  </span>
+                )}
+              </div>
+              <p className="text-xs text-[#8C93AB] dark:text-[#7A839E] font-medium mt-0.5">
+                {datePreset === 'all'
+                  ? 'Showing all-time records across all dashboard metrics'
+                  : `Filtering metrics between ${startDate || 'earliest'} and ${endDate || 'present'}`}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
+            {/* Presets */}
+            <div className="flex flex-wrap bg-[#F8F9FC] dark:bg-[#1F2330] p-1 rounded-xl text-xs font-bold text-[#5E6482] dark:text-[#949DB2] border border-[#F0F2F7] dark:border-[#2A3044]">
+              {(
+                [
+                  { id: 'all', label: 'All Time' },
+                  { id: 'today', label: 'Today' },
+                  { id: 'this_week', label: 'This Week' },
+                  { id: 'this_month', label: 'This Month' },
+                  { id: 'this_year', label: 'This Year' },
+                  { id: 'custom', label: 'Custom' },
+                ] as const
+              ).map((p) => (
+                <button
+                  key={p.id}
+                  onClick={() => handlePresetChange(p.id)}
+                  className={`px-3 py-1.5 rounded-lg transition text-xs font-bold cursor-pointer ${
+                    datePreset === p.id
+                      ? 'bg-[#4E53EE] text-white shadow-xs'
+                      : 'hover:text-[#1E2238] dark:hover:text-white'
+                  }`}
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Custom Range Inputs */}
+            <div className="flex items-center gap-2 bg-[#F8F9FC] dark:bg-[#1F2330] px-3 py-1.5 rounded-xl border border-[#F0F2F7] dark:border-[#2A3044]">
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] font-bold uppercase text-[#8C93AB]">From</span>
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => {
+                    setStartDate(e.target.value);
+                    setDatePreset('custom');
+                  }}
+                  className="bg-transparent text-xs font-mono font-bold text-[#1E2238] dark:text-white outline-none cursor-pointer"
+                />
+              </div>
+              <span className="text-[#8C93AB]">—</span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] font-bold uppercase text-[#8C93AB]">To</span>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => {
+                    setEndDate(e.target.value);
+                    setDatePreset('custom');
+                  }}
+                  className="bg-transparent text-xs font-mono font-bold text-[#1E2238] dark:text-white outline-none cursor-pointer"
+                />
+              </div>
+            </div>
+
+            {/* Reset Button */}
+            {datePreset !== 'all' && (
+              <button
+                onClick={() => handlePresetChange('all')}
+                className="p-2 rounded-xl text-[#8C93AB] hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition cursor-pointer"
+                title="Reset date filter"
+              >
+                <X className="w-5 h-5 stroke-[2.2]" />
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* ======================================================== */}
       {/* ROW 1: 4 STAT KPI CARDS                                  */}
       {/* ======================================================== */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -133,10 +359,10 @@ export const FinancesTab: React.FC = () => {
           <div>
             <span className="block text-xs font-semibold text-[#8C93AB] dark:text-[#7A839E]">Total Revenue</span>
             <div className="text-2xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
-              ${totals.totalIncome.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+              ${periodTotalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </div>
             <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#10B981] mt-0.5 font-mono">
-              {transactions.filter(t => t.type === 'Income').length} income records
+              {periodIncomeTransactions.length} income records
             </span>
           </div>
         </div>
@@ -149,10 +375,10 @@ export const FinancesTab: React.FC = () => {
           <div>
             <span className="block text-xs font-semibold text-[#8C93AB] dark:text-[#7A839E]">Total Orders / Projects</span>
             <div className="text-2xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
-              {projects.length.toLocaleString()}
+              {dateFilteredProjects.length.toLocaleString()}
             </div>
             <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#10B981] mt-0.5 font-mono">
-              {projects.filter(p => p.status === 'Pending').length} pending delivery
+              {periodPendingOrders} pending delivery
             </span>
           </div>
         </div>
@@ -165,10 +391,10 @@ export const FinancesTab: React.FC = () => {
           <div>
             <span className="block text-xs font-semibold text-[#8C93AB] dark:text-[#7A839E]">Total Customers</span>
             <div className="text-2xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
-              {coagents.length.toLocaleString()}
+              {periodActiveCustomers.toLocaleString()}
             </div>
             <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#10B981] mt-0.5 font-mono">
-              Active directory
+              {datePreset === 'all' ? 'Active directory' : `active of ${coagents.length} clients`}
             </span>
           </div>
         </div>
@@ -181,9 +407,7 @@ export const FinancesTab: React.FC = () => {
           <div>
             <span className="block text-xs font-semibold text-[#8C93AB] dark:text-[#7A839E]">Fulfillment Rate</span>
             <div className="text-2xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
-              {projects.length > 0
-                ? `${((projects.filter((p) => p.status === 'Transferred' || p.status === 'Invoiced').length / projects.length) * 100).toFixed(1)}%`
-                : '0.0%'}
+              {periodFulfillmentRate}%
             </div>
             <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#10B981] mt-0.5 font-mono">
               Completed ratio
@@ -202,10 +426,10 @@ export const FinancesTab: React.FC = () => {
             <div>
               <h2 className="text-sm font-extrabold text-[#1E2238] dark:text-white">Sales Overview</h2>
             </div>
-            <button className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#F0F2F7] dark:border-[#2A3044] text-xs font-semibold text-[#5E6482] dark:text-[#949DB2] hover:bg-[#F8F9FC] dark:hover:bg-[#1F2330] transition">
-              <span>This Month</span>
-              <ChevronDown className="w-3.5 h-3.5" />
-            </button>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#F0F2F7] dark:border-[#2A3044] text-xs font-semibold text-[#5E6482] dark:text-[#949DB2] bg-[#F8F9FC] dark:bg-[#1F2330]">
+              <Calendar className="w-3.5 h-3.5 text-[#4E53EE]" />
+              <span>{PRESET_LABELS[datePreset] || 'Custom Range'}</span>
+            </div>
           </div>
 
           <div className="h-56 w-full">
@@ -273,14 +497,16 @@ export const FinancesTab: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#F8F9FC] dark:divide-[#1F2330]">
-                {projects.length === 0 ? (
+                {recentOrdersList.length === 0 ? (
                   <tr>
                     <td colSpan={4} className="py-8 text-center text-xs text-[#8C93AB]">
-                      No orders or project deliverables recorded yet
+                      {datePreset !== 'all'
+                        ? 'No orders or project deliverables in this date range'
+                        : 'No orders or project deliverables recorded yet'}
                     </td>
                   </tr>
                 ) : (
-                  projects.slice(0, 5).map((p) => {
+                  recentOrdersList.map((p) => {
                     const coagent = coagents.find((c) => c.id === p.coagentId);
                     const statusColor =
                       p.status === 'Transferred'
@@ -332,35 +558,29 @@ export const FinancesTab: React.FC = () => {
           </div>
 
           <div className="space-y-3.5">
-            {projects.length === 0 ? (
+            {topDeliverables.length === 0 ? (
               <div className="py-8 text-center text-xs text-[#8C93AB]">
-                No deliverables recorded yet
+                {datePreset !== 'all'
+                  ? 'No deliverables recorded in this date range'
+                  : 'No deliverables recorded yet'}
               </div>
             ) : (
-              Object.entries(
-                projects.reduce((acc, p) => {
-                  const key = p.note || 'Service Milestone';
-                  acc[key] = (acc[key] || 0) + p.amount;
-                  return acc;
-                }, {} as Record<string, number>)
-              )
-                .slice(0, 5)
-                .map(([name, revenue], idx) => (
-                  <div key={idx} className="flex items-center justify-between text-xs py-1.5">
-                    <div className="flex items-center gap-3.5">
-                      <div className="w-12 h-12 rounded-2xl bg-[#F8F9FC] dark:bg-[#1F2330] border border-[#F0F2F7] dark:border-[#2A3044] flex items-center justify-center text-[#5E6482] dark:text-[#949DB2] shadow-2xs">
-                        <Package className="w-6.5 h-6.5" strokeWidth={2.2} />
-                      </div>
-                      <div>
-                        <span className="block font-bold text-[#1E2238] dark:text-white text-[13px]">{name}</span>
-                        <span className="block text-[11px] text-[#8C93AB] dark:text-[#7A839E] font-mono mt-0.5">Project Scope</span>
-                      </div>
+              topDeliverables.map(([name, revenue], idx) => (
+                <div key={idx} className="flex items-center justify-between text-xs py-1.5">
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-12 h-12 rounded-2xl bg-[#F8F9FC] dark:bg-[#1F2330] border border-[#F0F2F7] dark:border-[#2A3044] flex items-center justify-center text-[#5E6482] dark:text-[#949DB2] shadow-2xs">
+                      <Package className="w-6.5 h-6.5" strokeWidth={2.2} />
                     </div>
-                    <div className="font-mono font-extrabold text-[#1E2238] dark:text-white text-sm">
-                      ${revenue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                    <div>
+                      <span className="block font-bold text-[#1E2238] dark:text-white text-[13px]">{name}</span>
+                      <span className="block text-[11px] text-[#8C93AB] dark:text-[#7A839E] font-mono mt-0.5">Project Scope</span>
                     </div>
                   </div>
-                ))
+                  <div className="font-mono font-extrabold text-[#1E2238] dark:text-white text-sm">
+                    ${revenue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                  </div>
+                </div>
+              ))
             )}
           </div>
         </div>
@@ -378,50 +598,28 @@ export const FinancesTab: React.FC = () => {
           </div>
 
           <div className="space-y-4">
-            {transactions.length === 0 && projects.length === 0 && invoices.length === 0 ? (
+            {recentActivities.length === 0 ? (
               <div className="py-8 text-center text-xs text-[#8C93AB]">
-                No recent activity recorded yet
+                {datePreset !== 'all'
+                  ? 'No recent activity in this date range'
+                  : 'No recent activity recorded yet'}
               </div>
             ) : (
-              [
-                ...invoices.map((inv) => ({
-                  icon: CreditCard,
-                  color: 'bg-[#EDEEFD] dark:bg-[#4E53EE]/15 text-[#4E53EE] dark:text-[#7378FF]',
-                  title: `Invoice ${inv.invoiceNumber} (${inv.status})`,
-                  desc: `$${inv.amount.toLocaleString()} for client`,
-                  time: inv.issueDate,
-                })),
-                ...projects.map((p) => ({
-                  icon: ShoppingCart,
-                  color: 'bg-[#E6F9F0] dark:bg-[#10B981]/15 text-[#10B981]',
-                  title: `Project: ${p.note || 'Milestone'}`,
-                  desc: `$${p.amount.toLocaleString()} - ${p.status}`,
-                  time: p.date,
-                })),
-                ...transactions.map((t) => ({
-                  icon: t.type === 'Income' ? ArrowUpRight : ArrowDownLeft,
-                  color: t.type === 'Income' ? 'bg-[#E6F9F0] text-[#10B981]' : 'bg-[#FDE8E8] text-[#EF4444]',
-                  title: `${t.type}: ${t.description}`,
-                  desc: `$${t.amount.toLocaleString()} (${t.currency})`,
-                  time: t.date,
-                })),
-              ]
-                .slice(0, 4)
-                .map((act, idx) => {
-                  const Icon = act.icon;
-                  return (
-                    <div key={idx} className="flex items-start gap-3.5 text-xs">
-                      <div className={`w-11 h-11 rounded-2xl ${act.color} flex items-center justify-center shrink-0 shadow-2xs`}>
-                        <Icon className="w-6 h-6" strokeWidth={2.2} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-bold text-[#1E2238] dark:text-white leading-tight text-xs">{act.title}</p>
-                        <p className="text-[11px] text-[#8C93AB] dark:text-[#7A839E] truncate mt-0.5">{act.desc}</p>
-                      </div>
-                      <span className="text-[10px] text-[#8C93AB] dark:text-[#7A839E] shrink-0 font-mono">{act.time}</span>
+              recentActivities.map((act, idx) => {
+                const Icon = act.icon;
+                return (
+                  <div key={idx} className="flex items-start gap-3.5 text-xs">
+                    <div className={`w-11 h-11 rounded-2xl ${act.color} flex items-center justify-center shrink-0 shadow-2xs`}>
+                      <Icon className="w-6 h-6" strokeWidth={2.2} />
                     </div>
-                  );
-                })
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-[#1E2238] dark:text-white leading-tight text-xs">{act.title}</p>
+                      <p className="text-[11px] text-[#8C93AB] dark:text-[#7A839E] truncate mt-0.5">{act.desc}</p>
+                    </div>
+                    <span className="text-[10px] text-[#8C93AB] dark:text-[#7A839E] shrink-0 font-mono">{act.time}</span>
+                  </div>
+                );
+              })
             )}
           </div>
         </div>
