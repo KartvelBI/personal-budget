@@ -132,9 +132,9 @@ export const ProjectsTab: React.FC = () => {
       {/* 1. PROJECT SUBMIT FORM */}
       <section className="bg-white dark:bg-[#161922] rounded-2xl border border-[#F0F2F7] dark:border-[#232738] p-6 shadow-xs transition-colors">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-[#F0F2F7] dark:border-[#232738] gap-3">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#EDEEFD] dark:bg-[#4E53EE]/20 text-[#4E53EE] dark:text-[#7378FF] flex items-center justify-center">
-              <FolderKanban className="w-5 h-5" />
+          <div className="flex items-center gap-3.5">
+            <div className="w-14 h-14 rounded-2xl bg-[#EDEEFD] dark:bg-[#4E53EE]/20 text-[#4E53EE] dark:text-[#7378FF] flex items-center justify-center shadow-md shadow-[#4E53EE]/10 shrink-0">
+              <FolderKanban className="w-7 h-7 stroke-[2.2]" />
             </div>
             <div>
               <h2 className="text-sm font-extrabold text-[#1E2238] dark:text-white">Submit Project Work</h2>
@@ -162,7 +162,7 @@ export const ProjectsTab: React.FC = () => {
 
         {coagents.length === 0 ? (
           <div className="py-10 text-center text-xs text-[#8C93AB]">
-            <AlertCircle className="w-8 h-8 mx-auto text-[#F59E0B] mb-2" />
+            <AlertCircle className="w-10 h-10 mx-auto text-[#F59E0B] mb-2 stroke-[2]" />
             <p className="font-bold text-[#1E2238] dark:text-white">No Customers / Coagents Available</p>
             <p className="mt-1">Add a customer first before logging projects.</p>
             <button
@@ -183,8 +183,8 @@ export const ProjectsTab: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Field 1: Date */}
               <div>
-                <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5 flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-[#4E53EE]" />
+                <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5 flex items-center gap-2">
+                  <Calendar className="w-4.5 h-4.5 text-[#4E53EE] stroke-[2]" />
                   Date *
                 </label>
                 <input
@@ -198,8 +198,8 @@ export const ProjectsTab: React.FC = () => {
 
               {/* Field 2: Coagents (brought from coagents table) */}
               <div>
-                <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5 flex items-center gap-1.5">
-                  <Building2 className="w-3.5 h-3.5 text-[#4E53EE]" />
+                <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5 flex items-center gap-2">
+                  <Building2 className="w-4.5 h-4.5 text-[#4E53EE] stroke-[2]" />
                   Coagents (Customers) *
                 </label>
                 <select
@@ -218,8 +218,8 @@ export const ProjectsTab: React.FC = () => {
 
               {/* Field 3: Category (dropdown, set up in options page) */}
               <div>
-                <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5 flex items-center gap-1.5">
-                  <Tag className="w-3.5 h-3.5 text-[#4E53EE]" />
+                <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5 flex items-center gap-2">
+                  <Tag className="w-4.5 h-4.5 text-[#4E53EE] stroke-[2]" />
                   Category (from Settings) *
                 </label>
                 <select
@@ -238,8 +238,8 @@ export const ProjectsTab: React.FC = () => {
 
               {/* Field 4: Transfer date */}
               <div>
-                <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5 flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-[#4E53EE]" />
+                <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5 flex items-center gap-2">
+                  <Clock className="w-4.5 h-4.5 text-[#4E53EE] stroke-[2]" />
                   Transfer Date *
                 </label>
                 <input
@@ -255,8 +255,8 @@ export const ProjectsTab: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
               {/* Field 5: Amount */}
               <div className="sm:col-span-4">
-                <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5 flex items-center gap-1.5">
-                  <DollarSign className="w-3.5 h-3.5 text-[#4E53EE]" />
+                <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5 flex items-center gap-2">
+                  <DollarSign className="w-4.5 h-4.5 text-[#4E53EE] stroke-[2]" />
                   Amount *
                 </label>
                 <input
@@ -304,18 +304,18 @@ export const ProjectsTab: React.FC = () => {
             <div className="pt-3 border-t border-[#F0F2F7] dark:border-[#232738] flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3">
               <button
                 type="submit"
-                className="inline-flex items-center justify-center gap-1.5 px-4.5 py-2.5 font-bold text-[#5E6482] dark:text-[#949DB2] hover:text-[#1E2238] dark:hover:text-white bg-[#F8F9FC] dark:bg-[#1F2330] hover:bg-[#F0F2F7] dark:hover:bg-[#2A3044] rounded-xl transition"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 font-bold text-[#5E6482] dark:text-[#949DB2] hover:text-[#1E2238] dark:hover:text-white bg-[#F8F9FC] dark:bg-[#1F2330] hover:bg-[#F0F2F7] dark:hover:bg-[#2A3044] rounded-xl transition cursor-pointer"
               >
-                <Plus className="w-4 h-4 text-[#8C93AB]" />
+                <Plus className="w-5 h-5 text-[#8C93AB] stroke-[2.2]" />
                 Submit Project
               </button>
 
               <button
                 type="button"
                 onClick={() => handleSaveProject(true)}
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 font-bold text-white bg-[#4E53EE] hover:bg-[#4338CA] rounded-xl shadow-sm shadow-[#4E53EE]/30 transition group"
+                className="inline-flex items-center justify-center gap-2.5 px-6 py-2.5 font-bold text-white bg-[#4E53EE] hover:bg-[#4338CA] rounded-xl shadow-sm shadow-[#4E53EE]/30 transition group cursor-pointer"
               >
-                <Send className="w-4 h-4 text-white group-hover:translate-x-0.5 transition-transform" />
+                <Send className="w-5 h-5 text-white stroke-[2.2] group-hover:translate-x-0.5 transition-transform" />
                 Submit & Send Automated Invoice
               </button>
             </div>
@@ -352,13 +352,13 @@ export const ProjectsTab: React.FC = () => {
             </div>
 
             <div className="relative">
-              <Search className="w-3.5 h-3.5 text-[#8C93AB] absolute left-3 top-1/2 -translate-y-1/2" />
+              <Search className="w-4.5 h-4.5 text-[#8C93AB] absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 placeholder="Search projects..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-8.5 pr-3 py-1.5 text-xs bg-[#F8F9FC] dark:bg-[#1F2330] border border-[#F0F2F7] dark:border-[#2A3044] rounded-xl outline-none focus:border-[#4E53EE] text-[#1E2238] dark:text-white"
+                className="pl-9.5 pr-3 py-1.5 text-xs bg-[#F8F9FC] dark:bg-[#1F2330] border border-[#F0F2F7] dark:border-[#2A3044] rounded-xl outline-none focus:border-[#4E53EE] text-[#1E2238] dark:text-white"
               />
             </div>
           </div>
@@ -447,17 +447,17 @@ export const ProjectsTab: React.FC = () => {
                       {hasInvoice ? (
                         <button
                           onClick={() => p.invoiceId && handleViewInvoice(p.invoiceId)}
-                          className="inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-[#EDEEFD] dark:bg-[#4E53EE]/20 hover:bg-[#4E53EE] text-[#4E53EE] dark:text-[#7378FF] hover:text-white font-bold text-[11px] transition"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#EDEEFD] dark:bg-[#4E53EE]/20 hover:bg-[#4E53EE] text-[#4E53EE] dark:text-[#7378FF] hover:text-white font-bold text-xs transition cursor-pointer"
                         >
-                          <FileText className="w-3.5 h-3.5" />
+                          <FileText className="w-4.5 h-4.5 stroke-[2]" />
                           View Invoice
                         </button>
                       ) : (
                         <button
                           onClick={() => handleSendInvoiceForExisting(p.id)}
-                          className="inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-[#4E53EE] hover:bg-[#4338CA] text-white font-bold text-[11px] shadow-xs transition"
+                          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#4E53EE] hover:bg-[#4338CA] text-white font-bold text-xs shadow-xs transition cursor-pointer"
                         >
-                          <Send className="w-3 h-3 text-white" />
+                          <Send className="w-4 h-4 text-white stroke-[2]" />
                           Send Invoice
                         </button>
                       )}
@@ -470,10 +470,10 @@ export const ProjectsTab: React.FC = () => {
                             deleteProject(p.id);
                           }
                         }}
-                        className="p-1 text-slate-400 hover:text-rose-600 rounded transition hover:bg-rose-50 dark:hover:bg-rose-950/20"
+                        className="p-1.5 text-slate-400 hover:text-rose-600 rounded-xl transition hover:bg-rose-50 dark:hover:bg-rose-950/20 cursor-pointer"
                         title="Delete project"
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
+                        <Trash2 className="w-5 h-5 stroke-[2]" />
                       </button>
                     </td>
                   </tr>

@@ -114,9 +114,9 @@ export const OptionsTab: React.FC = () => {
     <div className="space-y-6 max-w-5xl">
       {/* 1. Category Management */}
       <section className="bg-white dark:bg-[#161926] rounded-2xl border border-[#F0F2F7] dark:border-[#232738] p-6 shadow-xs">
-        <div className="flex items-center gap-3 pb-4 border-b border-[#F0F2F7] dark:border-[#232738]">
-          <div className="w-10 h-10 rounded-xl bg-[#EDEEFD] dark:bg-[#4E53EE]/20 text-[#4E53EE] dark:text-[#818CF8] flex items-center justify-center">
-            <Tag className="w-5 h-5" />
+        <div className="flex items-center gap-3.5 pb-4 border-b border-[#F0F2F7] dark:border-[#232738]">
+          <div className="w-14 h-14 rounded-2xl bg-[#EDEEFD] dark:bg-[#4E53EE]/20 text-[#4E53EE] dark:text-[#818CF8] flex items-center justify-center shadow-md shadow-[#4E53EE]/10 shrink-0">
+            <Tag className="w-7 h-7 stroke-[2.2]" />
           </div>
           <div>
             <h2 className="text-sm font-extrabold text-[#1E2238] dark:text-white">Category Settings</h2>
@@ -174,9 +174,9 @@ export const OptionsTab: React.FC = () => {
             <div className="sm:col-span-2">
               <button
                 type="submit"
-                className="w-full inline-flex items-center justify-center gap-1.5 px-3.5 py-2 bg-[#4E53EE] hover:bg-[#4338CA] text-white rounded-xl text-xs font-bold shadow-xs transition cursor-pointer"
+                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-[#4E53EE] hover:bg-[#4338CA] text-white rounded-xl text-xs font-bold shadow-xs transition cursor-pointer"
               >
-                <Plus className="w-3.5 h-3.5" />
+                <Plus className="w-4.5 h-4.5 stroke-[2.2]" />
                 Add
               </button>
             </div>
@@ -190,10 +190,10 @@ export const OptionsTab: React.FC = () => {
             {categories.map((cat) => (
               <div
                 key={cat.id}
-                className="flex items-center justify-between p-2.5 bg-white dark:bg-[#1C2030] border border-[#F0F2F7] dark:border-[#232738] rounded-xl shadow-xs hover:border-slate-200 dark:hover:border-slate-700 transition"
+                className="flex items-center justify-between p-3 bg-white dark:bg-[#1C2030] border border-[#F0F2F7] dark:border-[#232738] rounded-xl shadow-xs hover:border-slate-200 dark:hover:border-slate-700 transition"
               >
                 <div className="flex items-center gap-2.5">
-                  <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: cat.color }} />
+                  <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: cat.color }} />
                   <div>
                     <span className="text-xs font-bold text-[#1E2238] dark:text-white block">{cat.name}</span>
                     <span
@@ -212,10 +212,10 @@ export const OptionsTab: React.FC = () => {
                       deleteCategory(cat.id);
                     }
                   }}
-                  className="p-1 text-slate-300 dark:text-slate-600 hover:text-rose-600 rounded-lg transition hover:bg-rose-50 dark:hover:bg-rose-950/30 cursor-pointer"
+                  className="p-1.5 text-slate-300 dark:text-slate-600 hover:text-rose-600 rounded-lg transition hover:bg-rose-50 dark:hover:bg-rose-950/30 cursor-pointer"
                   title="Delete category"
                 >
-                  <Trash2 className="w-3.5 h-3.5" />
+                  <Trash2 className="w-4.5 h-4.5 stroke-[2]" />
                 </button>
               </div>
             ))}
@@ -225,9 +225,9 @@ export const OptionsTab: React.FC = () => {
 
       {/* 2. Currencies */}
       <section className="bg-white dark:bg-[#161926] rounded-2xl border border-[#F0F2F7] dark:border-[#232738] p-6 shadow-xs">
-        <div className="flex items-center gap-3 pb-4 border-b border-[#F0F2F7] dark:border-[#232738]">
-          <div className="w-10 h-10 rounded-xl bg-[#E6F9F0] dark:bg-[#10B981]/20 text-[#10B981] flex items-center justify-center">
-            <DollarSign className="w-5 h-5" />
+        <div className="flex items-center gap-3.5 pb-4 border-b border-[#F0F2F7] dark:border-[#232738]">
+          <div className="w-14 h-14 rounded-2xl bg-[#E6F9F0] dark:bg-[#10B981]/20 text-[#10B981] flex items-center justify-center shadow-md shadow-[#10B981]/10 shrink-0">
+            <DollarSign className="w-7 h-7 stroke-[2.2]" />
           </div>
           <div>
             <h2 className="text-sm font-extrabold text-[#1E2238] dark:text-white">Currencies Configuration</h2>
@@ -297,9 +297,9 @@ export const OptionsTab: React.FC = () => {
 
       {/* 3. Invoice Issuer & Bank Details */}
       <section className="bg-white dark:bg-[#161926] rounded-2xl border border-[#F0F2F7] dark:border-[#232738] p-6 shadow-xs">
-        <div className="flex items-center gap-3 pb-4 border-b border-[#F0F2F7] dark:border-[#232738]">
-          <div className="w-10 h-10 rounded-xl bg-[#FEF6E7] dark:bg-[#F59E0B]/20 text-[#F59E0B] flex items-center justify-center">
-            <Building className="w-5 h-5" />
+        <div className="flex items-center gap-3.5 pb-4 border-b border-[#F0F2F7] dark:border-[#232738]">
+          <div className="w-14 h-14 rounded-2xl bg-[#FEF6E7] dark:bg-[#F59E0B]/20 text-[#F59E0B] flex items-center justify-center shadow-md shadow-[#F59E0B]/10 shrink-0">
+            <Building className="w-7 h-7 stroke-[2.2]" />
           </div>
           <div>
             <h2 className="text-sm font-extrabold text-[#1E2238] dark:text-white">Issuer & Bank Details</h2>
@@ -374,8 +374,8 @@ export const OptionsTab: React.FC = () => {
           </div>
 
           <div className="pt-2 border-t border-[#F0F2F7] dark:border-[#232738]">
-            <div className="text-xs font-bold text-[#1E2238] dark:text-white mb-2 flex items-center gap-1.5">
-              <CreditCard className="w-3.5 h-3.5 text-[#4E53EE] dark:text-[#818CF8]" />
+            <div className="text-xs font-bold text-[#1E2238] dark:text-white mb-2 flex items-center gap-2">
+              <CreditCard className="w-4.5 h-4.5 text-[#4E53EE] dark:text-[#818CF8] stroke-[2]" />
               Bank Transfer Instructions
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -411,14 +411,14 @@ export const OptionsTab: React.FC = () => {
 
           <div className="pt-2 flex items-center justify-end gap-3">
             {saveSuccess && (
-              <span className="inline-flex items-center gap-1 text-xs font-bold text-[#10B981]">
-                <Check className="w-4 h-4" />
+              <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#10B981]">
+                <Check className="w-4.5 h-4.5 stroke-[2.2]" />
                 Settings saved!
               </span>
             )}
             <button
               type="submit"
-              className="px-5 py-2 bg-[#4E53EE] hover:bg-[#4338CA] text-white rounded-xl font-bold shadow-xs shadow-[#4E53EE]/25 transition cursor-pointer"
+              className="px-5 py-2.5 bg-[#4E53EE] hover:bg-[#4338CA] text-white rounded-xl font-bold shadow-xs shadow-[#4E53EE]/25 transition cursor-pointer"
             >
               Save Invoice Settings
             </button>
@@ -428,9 +428,9 @@ export const OptionsTab: React.FC = () => {
 
       {/* 4. Backup & Reset */}
       <section className="bg-white dark:bg-[#161926] rounded-2xl border border-[#F0F2F7] dark:border-[#232738] p-6 shadow-xs">
-        <div className="flex items-center gap-3 pb-4 border-b border-[#F0F2F7] dark:border-[#232738]">
-          <div className="w-10 h-10 rounded-xl bg-[#EDEEFD] dark:bg-[#4E53EE]/20 text-[#4E53EE] dark:text-[#818CF8] flex items-center justify-center">
-            <Layers className="w-5 h-5" />
+        <div className="flex items-center gap-3.5 pb-4 border-b border-[#F0F2F7] dark:border-[#232738]">
+          <div className="w-14 h-14 rounded-2xl bg-[#EDEEFD] dark:bg-[#4E53EE]/20 text-[#4E53EE] dark:text-[#818CF8] flex items-center justify-center shadow-md shadow-[#4E53EE]/10 shrink-0">
+            <Layers className="w-7 h-7 stroke-[2.2]" />
           </div>
           <div>
             <h2 className="text-sm font-extrabold text-[#1E2238] dark:text-white">Data Backup & Reset</h2>
@@ -443,14 +443,14 @@ export const OptionsTab: React.FC = () => {
         <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3.5">
           <button
             onClick={handleDownloadBackup}
-            className="flex items-center justify-center gap-2 p-3.5 rounded-xl border border-[#F0F2F7] dark:border-[#232738] bg-[#F8F9FC] dark:bg-[#1C2030] hover:bg-slate-100 dark:hover:bg-[#252A3D] text-[#1E2238] dark:text-white text-xs font-bold transition cursor-pointer"
+            className="flex items-center justify-center gap-2.5 p-4 rounded-xl border border-[#F0F2F7] dark:border-[#232738] bg-[#F8F9FC] dark:bg-[#1C2030] hover:bg-slate-100 dark:hover:bg-[#252A3D] text-[#1E2238] dark:text-white text-xs font-bold transition cursor-pointer shadow-xs"
           >
-            <Download className="w-4 h-4 text-[#4E53EE] dark:text-[#818CF8]" />
+            <Download className="w-5 h-5 text-[#4E53EE] dark:text-[#818CF8] stroke-[2.2]" />
             Export JSON
           </button>
 
-          <label className="flex items-center justify-center gap-2 p-3.5 rounded-xl border border-[#F0F2F7] dark:border-[#232738] bg-[#F8F9FC] dark:bg-[#1C2030] hover:bg-slate-100 dark:hover:bg-[#252A3D] text-[#1E2238] dark:text-white text-xs font-bold transition cursor-pointer">
-            <Upload className="w-4 h-4 text-[#10B981]" />
+          <label className="flex items-center justify-center gap-2.5 p-4 rounded-xl border border-[#F0F2F7] dark:border-[#232738] bg-[#F8F9FC] dark:bg-[#1C2030] hover:bg-slate-100 dark:hover:bg-[#252A3D] text-[#1E2238] dark:text-white text-xs font-bold transition cursor-pointer shadow-xs">
+            <Upload className="w-5 h-5 text-[#10B981] stroke-[2.2]" />
             <span>Restore JSON</span>
             <input type="file" accept=".json" onChange={handleImportFile} className="hidden" />
           </label>
@@ -461,9 +461,9 @@ export const OptionsTab: React.FC = () => {
                 resetData();
               }
             }}
-            className="flex items-center justify-center gap-2 p-3.5 rounded-xl border border-[#FDE8E8] dark:border-rose-900/40 bg-[#FDF2F2] dark:bg-rose-950/20 hover:bg-[#FDE8E8] dark:hover:bg-rose-950/40 text-[#EF4444] text-xs font-bold transition cursor-pointer"
+            className="flex items-center justify-center gap-2.5 p-4 rounded-xl border border-[#FDE8E8] dark:border-rose-900/40 bg-[#FDF2F2] dark:bg-rose-950/20 hover:bg-[#FDE8E8] dark:hover:bg-rose-950/40 text-[#EF4444] text-xs font-bold transition cursor-pointer shadow-xs"
           >
-            <RotateCcw className="w-4 h-4 text-[#EF4444]" />
+            <RotateCcw className="w-5 h-5 text-[#EF4444] stroke-[2.2]" />
             Reset to Sample Data
           </button>
         </div>

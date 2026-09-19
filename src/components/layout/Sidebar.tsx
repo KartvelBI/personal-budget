@@ -29,7 +29,7 @@ export const Sidebar: React.FC = () => {
   const pendingProjectsCount = projects.filter((p) => p.status === 'Pending').length;
   const unpaidInvoicesCount = invoices.filter((i) => i.status === 'Sent' || i.status === 'Draft').length;
 
-  const navItems: { id: ActiveTab; label: string; icon: React.FC<{ className?: string }>; badge?: number }[] = [
+  const navItems: { id: ActiveTab; label: string; icon: React.ComponentType<{ className?: string; strokeWidth?: number }>; badge?: number }[] = [
     {
       id: 'finances',
       label: 'Dashboard',
@@ -80,16 +80,16 @@ export const Sidebar: React.FC = () => {
           onClick={() => setActiveTab('finances')}
           title="SalesPro Dashboard"
         >
-          <div className="w-9 h-9 rounded-xl bg-[#4E53EE] flex items-center justify-center text-white shrink-0 shadow-sm shadow-[#4E53EE]/30">
+          <div className="w-11 h-11 rounded-xl bg-[#4E53EE] flex items-center justify-center text-white shrink-0 shadow-sm shadow-[#4E53EE]/30">
             {/* 3 Rising bars */}
-            <div className="flex items-end gap-0.5 h-4">
-              <span className="w-1 bg-white rounded-xs h-2"></span>
-              <span className="w-1 bg-white rounded-xs h-3.5"></span>
-              <span className="w-1 bg-white rounded-xs h-4"></span>
+            <div className="flex items-end gap-1 h-5">
+              <span className="w-1.5 bg-white rounded-xs h-2.5"></span>
+              <span className="w-1.5 bg-white rounded-xs h-4"></span>
+              <span className="w-1.5 bg-white rounded-xs h-5"></span>
             </div>
           </div>
           {isSidebarExpanded && (
-            <div className="flex items-baseline font-extrabold text-lg tracking-tight">
+            <div className="flex items-baseline font-extrabold text-xl tracking-tight">
               <span className="text-[#1E2238] dark:text-white">Sales</span>
               <span className="text-[#4E53EE]">Pro</span>
             </div>
@@ -100,24 +100,24 @@ export const Sidebar: React.FC = () => {
         {isSidebarExpanded ? (
           <button
             onClick={toggleSidebar}
-            className="p-1.5 rounded-xl text-[#8C93AB] hover:text-[#1E2238] dark:hover:text-white hover:bg-[#F8F9FC] dark:hover:bg-[#1F2330] transition"
+            className="p-2 rounded-xl text-[#8C93AB] hover:text-[#1E2238] dark:hover:text-white hover:bg-[#F8F9FC] dark:hover:bg-[#1F2330] transition cursor-pointer"
             title="Collapse Sidebar"
           >
-            <ChevronLeft className="w-4 h-4" />
+            <ChevronLeft className="w-5 h-5" strokeWidth={2.5} />
           </button>
         ) : (
           <button
             onClick={toggleSidebar}
-            className="p-1 rounded-lg text-[#8C93AB] hover:text-[#1E2238] dark:hover:text-white hover:bg-[#F8F9FC] dark:hover:bg-[#1F2330] transition absolute -right-3 top-6 bg-white dark:bg-[#161922] border border-[#F0F2F7] dark:border-[#232738] shadow-xs"
+            className="p-1.5 rounded-lg text-[#8C93AB] hover:text-[#1E2238] dark:hover:text-white hover:bg-[#F8F9FC] dark:hover:bg-[#1F2330] transition absolute -right-3 top-6 bg-white dark:bg-[#161922] border border-[#F0F2F7] dark:border-[#232738] shadow-xs cursor-pointer"
             title="Expand Sidebar"
           >
-            <ChevronRight className="w-3.5 h-3.5" />
+            <ChevronRight className="w-4.5 h-4.5" strokeWidth={2.5} />
           </button>
         )}
       </div>
 
       {/* Navigation List */}
-      <div className="flex-1 px-3 py-4 space-y-1.5 overflow-y-auto overflow-x-hidden">
+      <div className="flex-1 px-3 py-4 space-y-2 overflow-y-auto overflow-x-hidden">
         {isSidebarExpanded && (
           <div className="px-3 pb-1 text-[11px] font-bold uppercase tracking-wider text-[#8C93AB]">
             Menu
@@ -133,23 +133,24 @@ export const Sidebar: React.FC = () => {
               key={item.id}
               onClick={() => setActiveTab(item.id)}
               title={!isSidebarExpanded ? item.label : undefined}
-              className={`w-full flex items-center rounded-xl text-[13.5px] font-semibold transition-all duration-150 relative group ${
+              className={`w-full flex items-center rounded-xl text-[14px] font-semibold transition-all duration-150 relative group cursor-pointer ${
                 isSidebarExpanded
-                  ? 'justify-between px-3.5 py-2.5'
-                  : 'justify-center p-2.5'
+                  ? 'justify-between px-3.5 py-3'
+                  : 'justify-center p-3'
               } ${
                 isActive
                   ? 'bg-[#EDEEFD] dark:bg-[#4E53EE]/20 text-[#4E53EE] dark:text-[#7378FF] dark:border dark:border-[#4E53EE]/30'
                   : 'text-[#5E6482] dark:text-[#949DB2] hover:text-[#1E2238] dark:hover:text-white hover:bg-[#F8F9FC] dark:hover:bg-[#1F2330]'
               }`}
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3.5">
                 <Icon
-                  className={`w-5 h-5 shrink-0 transition-colors ${
+                  className={`w-6.5 h-6.5 shrink-0 transition-colors ${
                     isActive
                       ? 'text-[#4E53EE] dark:text-[#7378FF]'
                       : 'text-[#8C93AB] group-hover:text-[#4E53EE] dark:group-hover:text-white'
                   }`}
+                  strokeWidth={2.2}
                 />
                 {isSidebarExpanded && <span>{item.label}</span>}
               </div>
@@ -170,7 +171,6 @@ export const Sidebar: React.FC = () => {
               {!isSidebarExpanded && (
                 <div className="absolute left-full ml-2 px-2.5 py-1 bg-[#1E2238] dark:bg-white text-white dark:text-[#1E2238] text-xs font-bold rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50 shadow-md whitespace-nowrap">
                   {item.label}
-                  {item.badge !== undefined && ` (${item.badge})`}
                 </div>
               )}
             </button>
@@ -181,11 +181,11 @@ export const Sidebar: React.FC = () => {
           <button
             onClick={() => setActiveTab('options')}
             title={!isSidebarExpanded ? 'Settings / Preferences' : undefined}
-            className={`w-full flex items-center rounded-xl text-[13.5px] font-semibold text-[#8C93AB] hover:text-rose-600 hover:bg-rose-50/50 dark:hover:bg-rose-950/20 transition relative group ${
-              isSidebarExpanded ? 'gap-3 px-3.5 py-2.5' : 'justify-center p-2.5'
+            className={`w-full flex items-center rounded-xl text-[14px] font-semibold text-[#8C93AB] hover:text-rose-600 hover:bg-rose-50/50 dark:hover:bg-rose-950/20 transition relative group cursor-pointer ${
+              isSidebarExpanded ? 'gap-3.5 px-3.5 py-3' : 'justify-center p-3'
             }`}
           >
-            <LogOut className="w-5 h-5 shrink-0 text-[#8C93AB]" />
+            <LogOut className="w-6.5 h-6.5 shrink-0 text-[#8C93AB]" strokeWidth={2.2} />
             {isSidebarExpanded && <span>Preferences</span>}
 
             {!isSidebarExpanded && (
@@ -199,12 +199,12 @@ export const Sidebar: React.FC = () => {
 
       {/* Professional Plan Card */}
       {isSidebarExpanded ? (
-        <div className="p-3.5 m-3 rounded-2xl bg-[#F8F9FC] dark:bg-[#1C202E] border border-[#E9ECF2] dark:border-[#2A3044] text-center">
-          <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-[#1E2238] dark:text-white">
-            <Crown className="w-4 h-4 text-[#F59E0B] fill-[#F59E0B]" />
-            <span>Professional Plan</span>
+        <div className="p-4 m-3 rounded-2xl bg-[#F8F9FC] dark:bg-[#1C202E] border border-[#E9ECF2] dark:border-[#2A3044] text-center">
+          <div className="flex items-center justify-center gap-2 text-xs font-bold text-[#1E2238] dark:text-white">
+            <Crown className="w-6 h-6 text-[#F59E0B] fill-[#F59E0B]" strokeWidth={2.2} />
+            <span className="text-sm">Professional Plan</span>
           </div>
-          <p className="text-[11px] text-[#8C93AB] mt-0.5">You're on Professional plan</p>
+          <p className="text-[11px] text-[#8C93AB] mt-1">You're on Professional plan</p>
 
           <div className="mt-2.5 px-2">
             <div className="flex justify-between text-[10px] font-bold text-[#4E53EE] dark:text-[#7378FF] mb-1">

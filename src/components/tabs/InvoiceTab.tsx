@@ -69,46 +69,46 @@ export const InvoiceTab: React.FC = () => {
     <div className="space-y-6">
       {/* 3 Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-        <div className="bg-white dark:bg-[#161926] rounded-2xl p-5 border border-[#F0F2F7] dark:border-[#232738] shadow-xs flex items-center justify-between">
+        <div className="bg-white dark:bg-[#161926] rounded-2xl p-6 border border-[#F0F2F7] dark:border-[#232738] shadow-xs flex items-center justify-between">
           <div>
             <span className="text-[11px] font-bold uppercase tracking-wider text-[#8C93AB]">Total Invoiced</span>
-            <div className="text-2xl font-extrabold text-[#1E2238] dark:text-white mt-0.5 font-mono">
+            <div className="text-2xl sm:text-3xl font-extrabold text-[#1E2238] dark:text-white mt-1 font-mono">
               ${totalInvoiced.toLocaleString()}
             </div>
-            <p className="text-[11px] text-[#8C93AB] mt-0.5">{invoices.length} invoices generated</p>
+            <p className="text-xs text-[#8C93AB] mt-1">{invoices.length} invoices generated</p>
           </div>
-          <div className="w-11 h-11 rounded-xl bg-[#EDEEFD] dark:bg-[#4E53EE]/20 text-[#4E53EE] dark:text-[#818CF8] flex items-center justify-center">
-            <FileText className="w-5 h-5" />
+          <div className="w-16 h-16 rounded-2xl bg-[#EDEEFD] dark:bg-[#4E53EE]/20 text-[#4E53EE] dark:text-[#818CF8] flex items-center justify-center shadow-md shadow-[#4E53EE]/20">
+            <FileText className="w-8 h-8" strokeWidth={2.4} />
           </div>
         </div>
 
-        <div className="bg-white dark:bg-[#161926] rounded-2xl p-5 border border-[#F0F2F7] dark:border-[#232738] shadow-xs flex items-center justify-between">
+        <div className="bg-white dark:bg-[#161926] rounded-2xl p-6 border border-[#F0F2F7] dark:border-[#232738] shadow-xs flex items-center justify-between">
           <div>
             <span className="text-[11px] font-bold uppercase tracking-wider text-[#10B981]">Collected (Paid)</span>
-            <div className="text-2xl font-extrabold text-[#10B981] mt-0.5 font-mono">
+            <div className="text-2xl sm:text-3xl font-extrabold text-[#10B981] mt-1 font-mono">
               ${totalPaid.toLocaleString()}
             </div>
-            <p className="text-[11px] text-[#8C93AB] mt-0.5">
+            <p className="text-xs text-[#8C93AB] mt-1">
               {invoices.filter((i) => i.status === 'Paid').length} paid invoices
             </p>
           </div>
-          <div className="w-11 h-11 rounded-xl bg-[#E6F9F0] dark:bg-[#10B981]/20 text-[#10B981] flex items-center justify-center">
-            <CheckCircle className="w-5 h-5" />
+          <div className="w-16 h-16 rounded-2xl bg-[#E6F9F0] dark:bg-[#10B981]/20 text-[#10B981] flex items-center justify-center shadow-md shadow-[#10B981]/20">
+            <CheckCircle className="w-8 h-8" strokeWidth={2.4} />
           </div>
         </div>
 
-        <div className="bg-white dark:bg-[#161926] rounded-2xl p-5 border border-[#F0F2F7] dark:border-[#232738] shadow-xs flex items-center justify-between">
+        <div className="bg-white dark:bg-[#161926] rounded-2xl p-6 border border-[#F0F2F7] dark:border-[#232738] shadow-xs flex items-center justify-between">
           <div>
             <span className="text-[11px] font-bold uppercase tracking-wider text-[#F59E0B]">Pending Collection</span>
-            <div className="text-2xl font-extrabold text-[#F59E0B] mt-0.5 font-mono">
+            <div className="text-2xl sm:text-3xl font-extrabold text-[#F59E0B] mt-1 font-mono">
               ${totalPending.toLocaleString()}
             </div>
-            <p className="text-[11px] text-[#8C93AB] mt-0.5">
+            <p className="text-xs text-[#8C93AB] mt-1">
               {invoices.filter((i) => i.status === 'Sent' || i.status === 'Draft').length} pending payment
             </p>
           </div>
-          <div className="w-11 h-11 rounded-xl bg-[#FEF6E7] dark:bg-[#F59E0B]/20 text-[#F59E0B] flex items-center justify-center">
-            <AlertCircle className="w-5 h-5" />
+          <div className="w-16 h-16 rounded-2xl bg-[#FEF6E7] dark:bg-[#F59E0B]/20 text-[#F59E0B] flex items-center justify-center shadow-md shadow-[#F59E0B]/20">
+            <AlertCircle className="w-8 h-8" strokeWidth={2.4} />
           </div>
         </div>
       </div>
@@ -180,8 +180,8 @@ export const InvoiceTab: React.FC = () => {
                     <td className="py-3.5 px-3 text-[#8C93AB] whitespace-nowrap font-mono">{inv.dueDate}</td>
 
                     <td className="py-3.5 px-3 font-bold text-[#1E2238] dark:text-[#EAECEF] whitespace-nowrap">
-                      <div className="flex items-center gap-1.5">
-                        <Building2 className="w-3.5 h-3.5 text-[#8C93AB]" />
+                      <div className="flex items-center gap-2">
+                        <Building2 className="w-5 h-5 text-[#8C93AB]" strokeWidth={2} />
                         <span>{coagent?.company || coagent?.name || 'Client'}</span>
                       </div>
                     </td>
@@ -195,23 +195,23 @@ export const InvoiceTab: React.FC = () => {
                     </td>
 
                     <td className="py-3.5 px-3 text-right whitespace-nowrap">
-                      <div className="flex items-center justify-end gap-1.5">
+                      <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => setSelectedInvoice(inv)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#EDEEFD] dark:bg-[#4E53EE]/20 hover:bg-[#4E53EE] text-[#4E53EE] dark:text-[#818CF8] hover:text-white font-bold text-xs transition cursor-pointer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#EDEEFD] dark:bg-[#4E53EE]/20 hover:bg-[#4E53EE] text-[#4E53EE] dark:text-[#818CF8] hover:text-white font-bold text-xs transition cursor-pointer"
                           title="Preview & Print"
                         >
-                          <Eye className="w-3.5 h-3.5" />
+                          <Eye className="w-4.5 h-4.5" strokeWidth={2.2} />
                           View
                         </button>
 
                         {inv.status !== 'Paid' && (
                           <button
                             onClick={() => updateInvoiceStatus(inv.id, 'Paid')}
-                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#E6F9F0] dark:bg-[#10B981]/20 hover:bg-[#10B981] text-[#10B981] hover:text-white font-bold text-xs transition cursor-pointer"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#E6F9F0] dark:bg-[#10B981]/20 hover:bg-[#10B981] text-[#10B981] hover:text-white font-bold text-xs transition cursor-pointer"
                             title="Mark as Paid"
                           >
-                            <CheckCircle2 className="w-3.5 h-3.5" />
+                            <CheckCircle2 className="w-4.5 h-4.5" strokeWidth={2.2} />
                             Paid
                           </button>
                         )}
@@ -222,10 +222,10 @@ export const InvoiceTab: React.FC = () => {
                               deleteInvoice(inv.id);
                             }
                           }}
-                          className="p-1 text-slate-300 dark:text-slate-600 hover:text-rose-600 rounded-lg transition hover:bg-rose-50 dark:hover:bg-rose-950/30 cursor-pointer"
+                          className="p-1.5 text-slate-300 dark:text-slate-600 hover:text-rose-600 rounded-lg transition hover:bg-rose-50 dark:hover:bg-rose-950/30 cursor-pointer"
                           title="Delete Invoice"
                         >
-                          <Trash2 className="w-3.5 h-3.5" />
+                          <Trash2 className="w-4.5 h-4.5" strokeWidth={2} />
                         </button>
                       </div>
                     </td>

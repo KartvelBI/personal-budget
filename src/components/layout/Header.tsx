@@ -32,11 +32,11 @@ export const Header: React.FC = () => {
         {/* Hamburger Menu button */}
         <button
           onClick={toggleSidebar}
-          className="p-2 rounded-xl border border-[#F0F2F7] dark:border-[#2A3044] bg-[#F8F9FC] dark:bg-[#1F2330] text-[#5E6482] dark:text-[#949DB2] hover:text-[#1E2238] dark:hover:text-white hover:bg-slate-100 transition shadow-2xs"
+          className="w-11 h-11 rounded-xl border border-[#F0F2F7] dark:border-[#2A3044] bg-[#F8F9FC] dark:bg-[#1F2330] text-[#5E6482] dark:text-[#949DB2] hover:text-[#1E2238] dark:hover:text-white hover:bg-slate-100 transition shadow-2xs flex items-center justify-center cursor-pointer"
           title="Toggle Left Menu"
           aria-label="Toggle Sidebar"
         >
-          <Menu className="w-4.5 h-4.5" />
+          <Menu className="w-6 h-6" strokeWidth={2.2} />
         </button>
 
         <div>
@@ -53,48 +53,48 @@ export const Header: React.FC = () => {
       <div className="flex items-center gap-2.5 sm:gap-3.5">
         {/* Search Input */}
         <div className="relative w-44 sm:w-60 hidden md:block">
-          <Search className="w-4 h-4 text-[#8C93AB] absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-5 h-5 text-[#8C93AB] absolute left-3.5 top-1/2 -translate-y-1/2" strokeWidth={2.2} />
           <input
             type="text"
             placeholder="Search"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9.5 pr-3.5 py-2 text-xs bg-[#F8F9FC] dark:bg-[#1F2330] border border-[#F0F2F7] dark:border-[#2A3044] rounded-xl text-[#1E2238] dark:text-white placeholder-[#8C93AB] outline-none focus:ring-2 focus:ring-[#4E53EE]/20 focus:border-[#4E53EE] transition"
+            className="w-full pl-10 pr-3.5 py-2.5 text-xs bg-[#F8F9FC] dark:bg-[#1F2330] border border-[#F0F2F7] dark:border-[#2A3044] rounded-xl text-[#1E2238] dark:text-white placeholder-[#8C93AB] outline-none focus:ring-2 focus:ring-[#4E53EE]/20 focus:border-[#4E53EE] transition"
           />
         </div>
 
         {/* Dark / White Theme Toggle Button */}
         <button
           onClick={toggleTheme}
-          className="w-9 h-9 rounded-xl border border-[#F0F2F7] dark:border-[#2A3044] bg-[#F8F9FC] dark:bg-[#1F2330] flex items-center justify-center text-[#5E6482] dark:text-[#F59E0B] hover:text-[#1E2238] dark:hover:text-white transition shadow-2xs"
+          className="w-11 h-11 rounded-xl border border-[#F0F2F7] dark:border-[#2A3044] bg-[#F8F9FC] dark:bg-[#1F2330] flex items-center justify-center text-[#5E6482] dark:text-[#F59E0B] hover:text-[#1E2238] dark:hover:text-white transition shadow-2xs cursor-pointer"
           title={theme === 'dark' ? 'Switch to White Theme' : 'Switch to Dark Theme'}
         >
-          {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          {theme === 'dark' ? <Sun className="w-6 h-6" strokeWidth={2.2} /> : <Moon className="w-6 h-6" strokeWidth={2.2} />}
         </button>
 
         {/* Apps Grid Icon */}
         <button
-          className="w-9 h-9 rounded-xl border border-[#F0F2F7] dark:border-[#2A3044] bg-[#F8F9FC] dark:bg-[#1F2330] flex items-center justify-center text-[#8C93AB] hover:text-[#1E2238] dark:hover:text-white transition shadow-2xs hidden sm:flex"
+          className="w-11 h-11 rounded-xl border border-[#F0F2F7] dark:border-[#2A3044] bg-[#F8F9FC] dark:bg-[#1F2330] flex items-center justify-center text-[#8C93AB] hover:text-[#1E2238] dark:hover:text-white transition shadow-2xs hidden sm:flex cursor-pointer"
           title="Apps"
         >
-          <LayoutGrid className="w-4 h-4" />
+          <LayoutGrid className="w-6 h-6" strokeWidth={2.2} />
         </button>
 
         {/* Notification Bell */}
         <button
-          className="relative w-9 h-9 rounded-xl border border-[#F0F2F7] dark:border-[#2A3044] bg-[#F8F9FC] dark:bg-[#1F2330] flex items-center justify-center text-[#8C93AB] hover:text-[#1E2238] dark:hover:text-white transition shadow-2xs"
+          className="relative w-11 h-11 rounded-xl border border-[#F0F2F7] dark:border-[#2A3044] bg-[#F8F9FC] dark:bg-[#1F2330] flex items-center justify-center text-[#8C93AB] hover:text-[#1E2238] dark:hover:text-white transition shadow-2xs cursor-pointer"
           title="Notifications"
         >
-          <Bell className="w-4 h-4" />
-          <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#EF4444] ring-2 ring-white dark:ring-[#161922]"></span>
+          <Bell className="w-6 h-6" strokeWidth={2.2} />
+          <span className="absolute top-2.5 right-2.5 w-2.5 h-2.5 rounded-full bg-[#EF4444] ring-2 ring-white dark:ring-[#161922]"></span>
         </button>
 
         {/* User Mini Profile */}
-        <div className="flex items-center gap-2 pl-1 cursor-pointer">
+        <div className="flex items-center gap-2.5 pl-1 cursor-pointer">
           <img
             src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80"
             alt="John Doe"
-            className="w-8 h-8 rounded-full object-cover ring-2 ring-[#F0F2F7] dark:ring-[#2E3345]"
+            className="w-9 h-9 rounded-full object-cover ring-2 ring-[#F0F2F7] dark:ring-[#2E3345]"
           />
           <span className="text-xs font-bold text-[#1E2238] dark:text-white hidden lg:block">John Doe</span>
         </div>
@@ -103,9 +103,9 @@ export const Header: React.FC = () => {
         {activeTab !== 'projects' && (
           <button
             onClick={() => setActiveTab('projects')}
-            className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#4E53EE] hover:bg-[#4338CA] text-white text-xs font-bold shadow-xs shadow-[#4E53EE]/25 transition"
+            className="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#4E53EE] hover:bg-[#4338CA] text-white text-xs font-bold shadow-xs shadow-[#4E53EE]/25 transition cursor-pointer"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-5 h-5" strokeWidth={2.5} />
             <span>New Project</span>
           </button>
         )}

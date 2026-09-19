@@ -120,13 +120,13 @@ export const FinancesTab: React.FC = () => {
       {/* ======================================================== */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1: Total Revenue */}
-        <div className="bg-white dark:bg-[#161922] rounded-2xl p-5 border border-[#F0F2F7] dark:border-[#232738] shadow-xs flex items-center gap-4 transition-colors">
-          <div className="w-11 h-11 rounded-full bg-[#4E53EE] flex items-center justify-center text-white shrink-0 shadow-sm shadow-[#4E53EE]/20">
-            <DollarSign className="w-5 h-5" />
+        <div className="bg-white dark:bg-[#161922] rounded-2xl p-5 border border-[#F0F2F7] dark:border-[#232738] shadow-xs flex items-center gap-4.5 transition-colors">
+          <div className="w-14 h-14 rounded-2xl bg-[#4E53EE] flex items-center justify-center text-white shrink-0 shadow-md shadow-[#4E53EE]/25">
+            <DollarSign className="w-8 h-8" strokeWidth={2.4} />
           </div>
           <div>
             <span className="block text-xs font-semibold text-[#8C93AB] dark:text-[#7A839E]">Total Revenue</span>
-            <div className="text-xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
+            <div className="text-2xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
               ${totals.totalIncome > 0 ? totals.totalIncome.toLocaleString() : '18,750'}
             </div>
             <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#10B981] mt-0.5 font-mono">
@@ -136,13 +136,13 @@ export const FinancesTab: React.FC = () => {
         </div>
 
         {/* Card 2: Total Orders */}
-        <div className="bg-white dark:bg-[#161922] rounded-2xl p-5 border border-[#F0F2F7] dark:border-[#232738] shadow-xs flex items-center gap-4 transition-colors">
-          <div className="w-11 h-11 rounded-full bg-[#10B981] flex items-center justify-center text-white shrink-0 shadow-sm shadow-[#10B981]/20">
-            <ShoppingCart className="w-5 h-5" />
+        <div className="bg-white dark:bg-[#161922] rounded-2xl p-5 border border-[#F0F2F7] dark:border-[#232738] shadow-xs flex items-center gap-4.5 transition-colors">
+          <div className="w-14 h-14 rounded-2xl bg-[#10B981] flex items-center justify-center text-white shrink-0 shadow-md shadow-[#10B981]/25">
+            <ShoppingCart className="w-8 h-8" strokeWidth={2.4} />
           </div>
           <div>
             <span className="block text-xs font-semibold text-[#8C93AB] dark:text-[#7A839E]">Total Orders</span>
-            <div className="text-xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
+            <div className="text-2xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
               {projects.length > 0 ? projects.length : '1,245'}
             </div>
             <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#10B981] mt-0.5 font-mono">
@@ -152,13 +152,13 @@ export const FinancesTab: React.FC = () => {
         </div>
 
         {/* Card 3: Total Customers */}
-        <div className="bg-white dark:bg-[#161922] rounded-2xl p-5 border border-[#F0F2F7] dark:border-[#232738] shadow-xs flex items-center gap-4 transition-colors">
-          <div className="w-11 h-11 rounded-full bg-[#F59E0B] flex items-center justify-center text-white shrink-0 shadow-sm shadow-[#F59E0B]/20">
-            <Users className="w-5 h-5" />
+        <div className="bg-white dark:bg-[#161922] rounded-2xl p-5 border border-[#F0F2F7] dark:border-[#232738] shadow-xs flex items-center gap-4.5 transition-colors">
+          <div className="w-14 h-14 rounded-2xl bg-[#F59E0B] flex items-center justify-center text-white shrink-0 shadow-md shadow-[#F59E0B]/25">
+            <Users className="w-8 h-8" strokeWidth={2.4} />
           </div>
           <div>
             <span className="block text-xs font-semibold text-[#8C93AB] dark:text-[#7A839E]">Total Customers</span>
-            <div className="text-xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
+            <div className="text-2xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
               {coagents.length > 0 ? coagents.length : '2,458'}
             </div>
             <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#10B981] mt-0.5 font-mono">
@@ -168,13 +168,13 @@ export const FinancesTab: React.FC = () => {
         </div>
 
         {/* Card 4: Conversion Rate */}
-        <div className="bg-white dark:bg-[#161922] rounded-2xl p-5 border border-[#F0F2F7] dark:border-[#232738] shadow-xs flex items-center gap-4 transition-colors">
-          <div className="w-11 h-11 rounded-full bg-[#6366F1] flex items-center justify-center text-white shrink-0 shadow-sm shadow-[#6366F1]/20">
-            <TrendingUp className="w-5 h-5" />
+        <div className="bg-white dark:bg-[#161922] rounded-2xl p-5 border border-[#F0F2F7] dark:border-[#232738] shadow-xs flex items-center gap-4.5 transition-colors">
+          <div className="w-14 h-14 rounded-2xl bg-[#6366F1] flex items-center justify-center text-white shrink-0 shadow-md shadow-[#6366F1]/25">
+            <TrendingUp className="w-8 h-8" strokeWidth={2.4} />
           </div>
           <div>
             <span className="block text-xs font-semibold text-[#8C93AB] dark:text-[#7A839E]">Conversion Rate</span>
-            <div className="text-xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
+            <div className="text-2xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
               3.24%
             </div>
             <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#10B981] mt-0.5 font-mono">
@@ -315,17 +315,17 @@ export const FinancesTab: React.FC = () => {
             ].map((p, idx) => {
               const Icon = p.icon;
               return (
-                <div key={idx} className="flex items-center justify-between text-xs py-1">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-[#F8F9FC] dark:bg-[#1F2330] border border-[#F0F2F7] dark:border-[#2A3044] flex items-center justify-center text-[#5E6482] dark:text-[#949DB2]">
-                      <Icon className="w-4 h-4" />
+                <div key={idx} className="flex items-center justify-between text-xs py-1.5">
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-12 h-12 rounded-2xl bg-[#F8F9FC] dark:bg-[#1F2330] border border-[#F0F2F7] dark:border-[#2A3044] flex items-center justify-center text-[#5E6482] dark:text-[#949DB2] shadow-2xs">
+                      <Icon className="w-6.5 h-6.5" strokeWidth={2.2} />
                     </div>
                     <div>
-                      <span className="block font-bold text-[#1E2238] dark:text-white">{p.name}</span>
-                      <span className="block text-[11px] text-[#8C93AB] dark:text-[#7A839E] font-mono">{p.sold}</span>
+                      <span className="block font-bold text-[#1E2238] dark:text-white text-[13px]">{p.name}</span>
+                      <span className="block text-[11px] text-[#8C93AB] dark:text-[#7A839E] font-mono mt-0.5">{p.sold}</span>
                     </div>
                   </div>
-                  <div className="font-mono font-extrabold text-[#1E2238] dark:text-white">{p.revenue}</div>
+                  <div className="font-mono font-extrabold text-[#1E2238] dark:text-white text-sm">{p.revenue}</div>
                 </div>
               );
             })}
@@ -338,7 +338,7 @@ export const FinancesTab: React.FC = () => {
             <h2 className="text-sm font-extrabold text-[#1E2238] dark:text-white">Recent Activity</h2>
             <button
               onClick={() => setActiveTab('finances')}
-              className="text-xs font-bold text-[#4E53EE] dark:text-[#7378FF] hover:underline"
+              className="text-xs font-bold text-[#4E53EE] dark:text-[#7378FF] hover:underline cursor-pointer"
             >
               View All
             </button>
@@ -377,13 +377,13 @@ export const FinancesTab: React.FC = () => {
             ].map((act, idx) => {
               const Icon = act.icon;
               return (
-                <div key={idx} className="flex items-start gap-3 text-xs">
-                  <div className={`w-8 h-8 rounded-xl ${act.color} flex items-center justify-center shrink-0`}>
-                    <Icon className="w-4 h-4" />
+                <div key={idx} className="flex items-start gap-3.5 text-xs">
+                  <div className={`w-11 h-11 rounded-2xl ${act.color} flex items-center justify-center shrink-0 shadow-2xs`}>
+                    <Icon className="w-6 h-6" strokeWidth={2.2} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-bold text-[#1E2238] dark:text-white leading-tight">{act.title}</p>
-                    <p className="text-[11px] text-[#8C93AB] dark:text-[#7A839E] truncate">{act.desc}</p>
+                    <p className="font-bold text-[#1E2238] dark:text-white leading-tight text-xs">{act.title}</p>
+                    <p className="text-[11px] text-[#8C93AB] dark:text-[#7A839E] truncate mt-0.5">{act.desc}</p>
                   </div>
                   <span className="text-[10px] text-[#8C93AB] dark:text-[#7A839E] shrink-0 font-mono">{act.time}</span>
                 </div>

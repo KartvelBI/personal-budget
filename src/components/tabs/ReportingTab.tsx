@@ -124,9 +124,9 @@ export const ReportingTab: React.FC = () => {
 
         <button
           onClick={handleExportCSV}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-[#1E2238] dark:bg-[#4E53EE] hover:bg-slate-800 dark:hover:bg-[#4338CA] text-white rounded-xl text-xs font-bold shadow-xs transition cursor-pointer"
+          className="inline-flex items-center justify-center gap-2.5 px-5 py-2.5 bg-[#1E2238] dark:bg-[#4E53EE] hover:bg-slate-800 dark:hover:bg-[#4338CA] text-white rounded-xl text-xs font-bold shadow-xs transition cursor-pointer"
         >
-          <Download className="w-3.5 h-3.5 text-[#A5B4FC]" />
+          <Download className="w-4.5 h-4.5 text-[#A5B4FC] stroke-[2.2]" />
           Export CSV Report
         </button>
       </div>
@@ -136,9 +136,9 @@ export const ReportingTab: React.FC = () => {
         {/* Income vs Expenses Chart */}
         <div className="lg:col-span-8 bg-white dark:bg-[#161926] rounded-2xl border border-[#F0F2F7] dark:border-[#232738] p-6 shadow-xs">
           <div className="flex items-center justify-between mb-5">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-[#E6F9F0] dark:bg-[#10B981]/20 text-[#10B981] flex items-center justify-center">
-                <BarChart2 className="w-5 h-5" />
+            <div className="flex items-center gap-3.5">
+              <div className="w-14 h-14 rounded-2xl bg-[#E6F9F0] dark:bg-[#10B981]/20 text-[#10B981] flex items-center justify-center shadow-md shadow-[#10B981]/10 shrink-0">
+                <BarChart2 className="w-7 h-7 stroke-[2.2]" />
               </div>
               <div>
                 <h3 className="font-extrabold text-sm text-[#1E2238] dark:text-white">Income vs Expenses</h3>
@@ -189,9 +189,9 @@ export const ReportingTab: React.FC = () => {
         {/* Expenses by Category Donut */}
         <div className="lg:col-span-4 bg-white dark:bg-[#161926] rounded-2xl border border-[#F0F2F7] dark:border-[#232738] p-6 shadow-xs flex flex-col justify-between">
           <div>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-9 h-9 rounded-xl bg-[#EDEEFD] dark:bg-[#4E53EE]/20 text-[#4E53EE] dark:text-[#818CF8] flex items-center justify-center">
-                <PieIcon className="w-5 h-5" />
+            <div className="flex items-center gap-3.5 mb-4">
+              <div className="w-14 h-14 rounded-2xl bg-[#EDEEFD] dark:bg-[#4E53EE]/20 text-[#4E53EE] dark:text-[#818CF8] flex items-center justify-center shadow-md shadow-[#4E53EE]/10 shrink-0">
+                <PieIcon className="w-7 h-7 stroke-[2.2]" />
               </div>
               <div>
                 <h3 className="font-extrabold text-sm text-[#1E2238] dark:text-white">Category Breakdown</h3>
@@ -255,9 +255,9 @@ export const ReportingTab: React.FC = () => {
 
       {/* Deliverables Breakdown */}
       <div className="bg-white dark:bg-[#161926] rounded-2xl border border-[#F0F2F7] dark:border-[#232738] p-6 shadow-xs">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-9 h-9 rounded-xl bg-[#FEF6E7] dark:bg-[#F59E0B]/20 text-[#F59E0B] flex items-center justify-center">
-            <Users className="w-5 h-5" />
+        <div className="flex items-center gap-3.5 mb-4">
+          <div className="w-14 h-14 rounded-2xl bg-[#FEF6E7] dark:bg-[#F59E0B]/20 text-[#F59E0B] flex items-center justify-center shadow-md shadow-[#F59E0B]/10 shrink-0">
+            <Users className="w-7 h-7 stroke-[2.2]" />
           </div>
           <div>
             <h3 className="font-extrabold text-sm text-[#1E2238] dark:text-white">Deliverable Volume</h3>

@@ -93,21 +93,21 @@ export const CoagentsTab: React.FC = () => {
       {/* Top Controls */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
         <div className="relative flex-1 max-w-md">
-          <Search className="w-4 h-4 text-[#8C93AB] absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-5 h-5 text-[#8C93AB] absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             placeholder="Search customers by name, company, email..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9.5 pr-4 py-2 text-xs bg-white dark:bg-[#161926] border border-[#F0F2F7] dark:border-[#232738] rounded-xl text-[#1E2238] dark:text-[#EAECEF] outline-none focus:ring-2 focus:ring-[#4E53EE]/15 focus:border-[#4E53EE] shadow-xs placeholder-[#8C93AB]"
+            className="w-full pl-11 pr-4 py-2.5 text-xs bg-white dark:bg-[#161926] border border-[#F0F2F7] dark:border-[#232738] rounded-xl text-[#1E2238] dark:text-[#EAECEF] outline-none focus:ring-2 focus:ring-[#4E53EE]/15 focus:border-[#4E53EE] shadow-xs placeholder-[#8C93AB]"
           />
         </div>
 
         <button
           onClick={openAddModal}
-          className="inline-flex items-center justify-center gap-2 bg-[#4E53EE] hover:bg-[#4338CA] text-white text-xs font-bold px-4.5 py-2 rounded-xl shadow-xs shadow-[#4E53EE]/25 transition cursor-pointer"
+          className="inline-flex items-center justify-center gap-2.5 bg-[#4E53EE] hover:bg-[#4338CA] text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-xs shadow-[#4E53EE]/25 transition cursor-pointer"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-5 h-5 stroke-[2.2]" />
           Add Customer
         </button>
       </div>
@@ -127,8 +127,8 @@ export const CoagentsTab: React.FC = () => {
             >
               <div>
                 <div className="flex items-start justify-between gap-2">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-11 h-11 rounded-xl ${avatarColor} flex items-center justify-center font-extrabold text-base shadow-xs`}>
+                  <div className="flex items-center gap-3.5">
+                    <div className={`w-14 h-14 rounded-2xl ${avatarColor} flex items-center justify-center font-black text-xl shadow-sm shrink-0`}>
                       {(coagent.company || coagent.name).charAt(0).toUpperCase()}
                     </div>
                     <div>
@@ -141,13 +141,13 @@ export const CoagentsTab: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-1 opacity-70 group-hover:opacity-100 transition">
+                  <div className="flex items-center gap-1.5 opacity-80 group-hover:opacity-100 transition">
                     <button
                       onClick={() => openEditModal(coagent)}
-                      className="p-1.5 text-[#8C93AB] hover:text-[#4E53EE] hover:bg-[#EDEEFD] dark:hover:bg-[#4E53EE]/20 rounded-lg transition"
+                      className="p-2 text-[#8C93AB] hover:text-[#4E53EE] hover:bg-[#EDEEFD] dark:hover:bg-[#4E53EE]/20 rounded-xl transition"
                       title="Edit Customer"
                     >
-                      <Edit2 className="w-3.5 h-3.5" />
+                      <Edit2 className="w-5 h-5 stroke-[2]" />
                     </button>
                     <button
                       onClick={() => {
@@ -155,39 +155,39 @@ export const CoagentsTab: React.FC = () => {
                           deleteCoagent(coagent.id);
                         }
                       }}
-                      className="p-1.5 text-[#8C93AB] hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-lg transition"
+                      className="p-2 text-[#8C93AB] hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-xl transition"
                       title="Delete Customer"
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
+                      <Trash2 className="w-5 h-5 stroke-[2]" />
                     </button>
                   </div>
                 </div>
 
-                <div className="mt-4 space-y-1.5 text-xs text-[#5E6482] dark:text-[#A0A6BF]">
+                <div className="mt-4.5 space-y-2 text-xs text-[#5E6482] dark:text-[#A0A6BF]">
                   {coagent.email && (
-                    <div className="flex items-center gap-2 truncate">
-                      <Mail className="w-3.5 h-3.5 text-[#8C93AB] shrink-0" />
+                    <div className="flex items-center gap-2.5 truncate">
+                      <Mail className="w-4.5 h-4.5 text-[#8C93AB] shrink-0 stroke-[2]" />
                       <a href={`mailto:${coagent.email}`} className="truncate hover:text-[#4E53EE] dark:hover:text-[#818CF8] font-medium transition">
                         {coagent.email}
                       </a>
                     </div>
                   )}
                   {coagent.phone && (
-                    <div className="flex items-center gap-2 truncate">
-                      <Phone className="w-3.5 h-3.5 text-[#8C93AB] shrink-0" />
+                    <div className="flex items-center gap-2.5 truncate">
+                      <Phone className="w-4.5 h-4.5 text-[#8C93AB] shrink-0 stroke-[2]" />
                       <span className="font-medium text-[#1E2238] dark:text-[#EAECEF]">{coagent.phone}</span>
                     </div>
                   )}
                   {coagent.address && (
-                    <div className="flex items-center gap-2 truncate">
-                      <MapPin className="w-3.5 h-3.5 text-[#8C93AB] shrink-0" />
+                    <div className="flex items-center gap-2.5 truncate">
+                      <MapPin className="w-4.5 h-4.5 text-[#8C93AB] shrink-0 stroke-[2]" />
                       <span className="truncate">{coagent.address}</span>
                     </div>
                   )}
                 </div>
 
                 {coagent.notes && (
-                  <p className="mt-3 text-[11px] text-[#8C93AB] italic line-clamp-2 bg-[#F8F9FC] dark:bg-[#1C2030] p-2.5 rounded-xl border border-[#F0F2F7] dark:border-[#232738]">
+                  <p className="mt-3.5 text-[11px] text-[#8C93AB] italic line-clamp-2 bg-[#F8F9FC] dark:bg-[#1C2030] p-2.5 rounded-xl border border-[#F0F2F7] dark:border-[#232738]">
                     "{coagent.notes}"
                   </p>
                 )}
@@ -196,19 +196,19 @@ export const CoagentsTab: React.FC = () => {
               {/* Bottom stats */}
               <div className="mt-5 pt-3.5 border-t border-[#F0F2F7] dark:border-[#232738] flex items-center justify-between text-xs">
                 <div>
-                  <span className="text-[10px] uppercase font-bold text-[#8C93AB] block">Total Invoiced</span>
+                  <span className="text-[10px] uppercase font-bold text-[#8C93AB] block tracking-wide">Total Invoiced</span>
                   <span className="font-extrabold text-[#1E2238] dark:text-white font-mono text-sm">
                     ${totalInvoiced.toLocaleString()}
                   </span>
                 </div>
 
-                <div className="flex items-center gap-1.5">
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-[#F8F9FC] dark:bg-[#1C2030] text-[#1E2238] dark:text-[#EAECEF] text-[11px] font-bold border border-[#F0F2F7] dark:border-[#232738]">
-                    <FolderKanban className="w-3 h-3 text-[#8C93AB]" />
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#F8F9FC] dark:bg-[#1C2030] text-[#1E2238] dark:text-[#EAECEF] text-xs font-bold border border-[#F0F2F7] dark:border-[#232738]">
+                    <FolderKanban className="w-4 h-4 text-[#8C93AB] stroke-[2]" />
                     {coagentProjects.length}
                   </span>
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-[#EDEEFD] dark:bg-[#4E53EE]/20 text-[#4E53EE] dark:text-[#818CF8] text-[11px] font-bold">
-                    <FileText className="w-3 h-3 text-[#4E53EE] dark:text-[#818CF8]" />
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#EDEEFD] dark:bg-[#4E53EE]/20 text-[#4E53EE] dark:text-[#818CF8] text-xs font-bold">
+                    <FileText className="w-4 h-4 text-[#4E53EE] dark:text-[#818CF8] stroke-[2]" />
                     {coagentInvoices.length}
                   </span>
                 </div>
@@ -228,9 +228,9 @@ export const CoagentsTab: React.FC = () => {
               </h2>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="p-1 text-[#8C93AB] hover:text-[#1E2238] dark:hover:text-white rounded-lg hover:bg-slate-200/60 dark:hover:bg-slate-700/50 transition cursor-pointer"
+                className="p-1.5 text-[#8C93AB] hover:text-[#1E2238] dark:hover:text-white rounded-xl hover:bg-slate-200/60 dark:hover:bg-slate-700/50 transition cursor-pointer"
               >
-                <X className="w-4 h-4" />
+                <X className="w-5 h-5" />
               </button>
             </div>
 
