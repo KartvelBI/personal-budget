@@ -388,7 +388,7 @@ export const ProjectsTab: React.FC = () => {
 
                 return (
                   <tr key={p.id} className="hover:bg-[#F8F9FC] dark:hover:bg-[#1F2330] transition group">
-                    <td className="py-3 px-3 font-semibold text-[#1E2238] dark:text-white whitespace-nowrap">{p.date}</td>
+                    <td className="py-3 px-3 font-semibold text-[#1E2238] dark:text-white whitespace-nowrap font-mono">{p.date}</td>
 
                     <td className="py-3 px-3 font-bold text-[#1E2238] dark:text-white whitespace-nowrap">
                       <div className="flex items-center gap-1.5">

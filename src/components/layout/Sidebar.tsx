@@ -156,7 +156,7 @@ export const Sidebar: React.FC = () => {
 
               {isSidebarExpanded && item.badge !== undefined && (
                 <span
-                  className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
+                  className={`text-[11px] font-bold font-mono px-2 py-0.5 rounded-full ${
                     isActive
                       ? 'bg-[#4E53EE] text-white'
                       : 'bg-[#F0F2F7] dark:bg-[#232738] text-[#5E6482] dark:text-[#949DB2]'
@@ -209,7 +209,7 @@ export const Sidebar: React.FC = () => {
           <div className="mt-2.5 px-2">
             <div className="flex justify-between text-[10px] font-bold text-[#4E53EE] dark:text-[#7378FF] mb-1">
               <span>Quota Usage</span>
-              <span>7/10 Users</span>
+              <span className="font-mono">7/10 Users</span>
             </div>
             <div className="w-full bg-[#E5E7EB] dark:bg-[#2A3044] rounded-full h-1.5 overflow-hidden">
               <div className="bg-[#4E53EE] dark:bg-[#7378FF] h-1.5 rounded-full w-[70%]"></div>

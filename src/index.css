@@ -2,16 +2,37 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Map all numeric digits (0-9) to Consolas */
+@font-face {
+  font-family: 'ConsolasDigits';
+  src: local('Consolas'), local('Courier New'), monospace;
+  unicode-range: U+0030-0039;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: 'ConsolasDigits', 'Lexend', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Consolas', 'Courier New', Courier, monospace;
+}
+
 @layer base {
   body {
     background-color: #F8F9FC;
     color: #1E2238;
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    font-family: 'ConsolasDigits', 'Lexend', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
   .dark body {
     background-color: #0F111A;
     color: #F1F3F9;
+  }
+
+  /* Force Consolas font on all code, mono, and number elements */
+  .font-mono,
+  input[type="number"] {
+    font-family: 'Consolas', 'Courier New', Courier, monospace !important;
+    font-variant-numeric: tabular-nums;
   }
 }
 

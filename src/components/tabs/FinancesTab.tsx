@@ -28,6 +28,7 @@ import {
   Speaker,
   Smartphone,
   Zap,
+  Search,
 } from 'lucide-react';
 
 const SALES_OVERVIEW_DATA = [
@@ -128,8 +129,8 @@ export const FinancesTab: React.FC = () => {
             <div className="text-xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
               ${totals.totalIncome > 0 ? totals.totalIncome.toLocaleString() : '18,750'}
             </div>
-            <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#10B981] mt-0.5">
-              ↑ 10.3% <span className="text-[#8C93AB] dark:text-[#7A839E] font-normal">vs last month</span>
+            <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#10B981] mt-0.5 font-mono">
+              ↑ 10.3% <span className="text-[#8C93AB] dark:text-[#7A839E] font-normal font-sans">vs last month</span>
             </span>
           </div>
         </div>
@@ -144,8 +145,8 @@ export const FinancesTab: React.FC = () => {
             <div className="text-xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
               {projects.length > 0 ? projects.length : '1,245'}
             </div>
-            <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#10B981] mt-0.5">
-              ↑ 8.2% <span className="text-[#8C93AB] dark:text-[#7A839E] font-normal">vs last month</span>
+            <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#10B981] mt-0.5 font-mono">
+              ↑ 8.2% <span className="text-[#8C93AB] dark:text-[#7A839E] font-normal font-sans">vs last month</span>
             </span>
           </div>
         </div>
@@ -160,8 +161,8 @@ export const FinancesTab: React.FC = () => {
             <div className="text-xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
               {coagents.length > 0 ? coagents.length : '2,458'}
             </div>
-            <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#10B981] mt-0.5">
-              ↑ 11.7% <span className="text-[#8C93AB] dark:text-[#7A839E] font-normal">vs last month</span>
+            <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#10B981] mt-0.5 font-mono">
+              ↑ 11.7% <span className="text-[#8C93AB] dark:text-[#7A839E] font-normal font-sans">vs last month</span>
             </span>
           </div>
         </div>
@@ -176,8 +177,8 @@ export const FinancesTab: React.FC = () => {
             <div className="text-xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
               3.24%
             </div>
-            <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#10B981] mt-0.5">
-              ↑ 5.6% <span className="text-[#8C93AB] dark:text-[#7A839E] font-normal">vs last month</span>
+            <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#10B981] mt-0.5 font-mono">
+              ↑ 5.6% <span className="text-[#8C93AB] dark:text-[#7A839E] font-normal font-sans">vs last month</span>
             </span>
           </div>
         </div>
@@ -321,7 +322,7 @@ export const FinancesTab: React.FC = () => {
                     </div>
                     <div>
                       <span className="block font-bold text-[#1E2238] dark:text-white">{p.name}</span>
-                      <span className="block text-[11px] text-[#8C93AB] dark:text-[#7A839E]">{p.sold}</span>
+                      <span className="block text-[11px] text-[#8C93AB] dark:text-[#7A839E] font-mono">{p.sold}</span>
                     </div>
                   </div>
                   <div className="font-mono font-extrabold text-[#1E2238] dark:text-white">{p.revenue}</div>
@@ -343,50 +344,48 @@ export const FinancesTab: React.FC = () => {
             </button>
           </div>
 
-          <div className="space-y-3.5 text-xs">
+          <div className="space-y-4">
             {[
               {
                 icon: ShoppingCart,
-                iconBg: 'bg-[#E6F9F0] dark:bg-[#10B981]/15 text-[#10B981]',
-                title: 'New Order Received',
-                desc: 'Order #ORD-0098 has been placed by John Smith',
+                color: 'bg-[#EDEEFD] dark:bg-[#4E53EE]/15 text-[#4E53EE] dark:text-[#7378FF]',
+                title: 'New order received',
+                desc: 'Order #ORD-001 by John Smith',
                 time: '2 mins ago',
               },
               {
                 icon: UserCheck,
-                iconBg: 'bg-[#EDEEFD] dark:bg-[#4E53EE]/15 text-[#4E53EE] dark:text-[#7378FF]',
-                title: 'New Customer Registered',
-                desc: 'Sarah Johnson has created a new account',
-                time: '15 mins ago',
+                color: 'bg-[#E6F9F0] dark:bg-[#10B981]/15 text-[#10B981]',
+                title: 'New customer registered',
+                desc: 'Sarah Lee created an account',
+                time: '1 hour ago',
               },
               {
                 icon: CreditCard,
-                iconBg: 'bg-[#FEF6E7] dark:bg-[#F59E0B]/15 text-[#F59E0B]',
-                title: 'Payment Received',
-                desc: 'Payment of $240.00 received from David Wilson',
-                time: '2 hours ago',
+                color: 'bg-[#FEF6E7] dark:bg-[#F59E0B]/15 text-[#F59E0B]',
+                title: 'Payment confirmed',
+                desc: '$240.00 received via Stripe',
+                time: '3 hours ago',
               },
               {
                 icon: Package,
-                iconBg: 'bg-[#FDE8E8] dark:bg-[#EF4444]/15 text-[#EF4444]',
-                title: 'Product Updated',
-                desc: 'Smart Watch product information updated',
-                time: '3 hours ago',
+                color: 'bg-[#FDE8E8] dark:bg-[#EF4444]/15 text-[#EF4444]',
+                title: 'Product updated',
+                desc: 'Smart Watch inventory adjusted',
+                time: '5 hours ago',
               },
             ].map((act, idx) => {
               const Icon = act.icon;
               return (
-                <div key={idx} className="flex items-start gap-3 py-0.5">
-                  <div className={`w-8 h-8 rounded-full ${act.iconBg} flex items-center justify-center shrink-0 mt-0.5`}>
+                <div key={idx} className="flex items-start gap-3 text-xs">
+                  <div className={`w-8 h-8 rounded-xl ${act.color} flex items-center justify-center shrink-0`}>
                     <Icon className="w-4 h-4" />
                   </div>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-[#1E2238] dark:text-white">{act.title}</span>
-                      <span className="text-[10px] text-[#8C93AB] dark:text-[#7A839E]">{act.time}</span>
-                    </div>
-                    <p className="text-[11px] text-[#5E6482] dark:text-[#949DB2] mt-0.5">{act.desc}</p>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-[#1E2238] dark:text-white leading-tight">{act.title}</p>
+                    <p className="text-[11px] text-[#8C93AB] dark:text-[#7A839E] truncate">{act.desc}</p>
                   </div>
+                  <span className="text-[10px] text-[#8C93AB] dark:text-[#7A839E] shrink-0 font-mono">{act.time}</span>
                 </div>
               );
             })}
@@ -395,35 +394,48 @@ export const FinancesTab: React.FC = () => {
       </div>
 
       {/* ======================================================== */}
-      {/* ROW 4: FINANCIAL LEDGER TABLE                            */}
+      {/* ROW 4: COMPLETE FINANCIAL LEDGER                          */}
       {/* ======================================================== */}
-      <section className="bg-white dark:bg-[#161922] rounded-2xl p-5.5 border border-[#F0F2F7] dark:border-[#232738] shadow-xs space-y-4 transition-colors">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+      <div className="bg-white dark:bg-[#161922] rounded-2xl border border-[#F0F2F7] dark:border-[#232738] p-6 shadow-xs transition-colors">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-5">
           <div>
-            <h3 className="text-sm font-extrabold text-[#1E2238] dark:text-white">Financial Ledger</h3>
-            <p className="text-xs text-[#8C93AB] dark:text-[#7A839E] mt-0.5">Transactions log and balance tracking</p>
+            <h2 className="text-base font-extrabold text-[#1E2238] dark:text-white">Financial Ledger</h2>
+            <p className="text-xs text-[#8C93AB] dark:text-[#7A839E] mt-0.5">
+              Live records of all income and expenses across all client projects
+            </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <div className="flex bg-[#F8F9FC] dark:bg-[#1F2330] p-1 rounded-xl text-xs font-bold text-[#5E6482] dark:text-[#949DB2] border border-[#F0F2F7] dark:border-[#2A3044]">
               {(['all', 'Income', 'Expense'] as const).map((t) => (
                 <button
                   key={t}
                   onClick={() => setTypeFilter(t)}
-                  className={`px-3 py-1 rounded-lg transition ${
+                  className={`px-3 py-1 rounded-lg transition capitalize cursor-pointer ${
                     typeFilter === t
-                      ? 'bg-white dark:bg-[#161922] text-[#1E2238] dark:text-white shadow-xs'
+                      ? 'bg-white dark:bg-[#252A3D] text-[#1E2238] dark:text-white shadow-xs'
                       : 'hover:text-[#1E2238] dark:hover:text-white'
                   }`}
                 >
-                  {t === 'all' ? 'All' : t}
+                  {t}
                 </button>
               ))}
             </div>
 
+            <div className="relative">
+              <Search className="w-3.5 h-3.5 text-[#8C93AB] absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="Search transactions..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-8.5 pr-3 py-1.5 text-xs bg-[#F8F9FC] dark:bg-[#1F2330] border border-[#F0F2F7] dark:border-[#2A3044] rounded-xl outline-none focus:border-[#4E53EE] text-[#1E2238] dark:text-white"
+              />
+            </div>
+
             <button
               onClick={() => setIsAddModalOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#4E53EE] hover:bg-[#4338CA] text-white rounded-xl text-xs font-bold shadow-xs transition shrink-0"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#4E53EE] hover:bg-[#4338CA] text-white rounded-xl text-xs font-bold shadow-xs transition shrink-0 cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               Add Entry
@@ -431,10 +443,11 @@ export const FinancesTab: React.FC = () => {
           </div>
         </div>
 
+        {/* Ledger Table */}
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr className="border-b border-[#F0F2F7] dark:border-[#232738] text-[11px] font-bold text-[#8C93AB] dark:text-[#7A839E] bg-[#F8F9FC]/60 dark:bg-[#1F2330]/40">
+              <tr className="border-b border-[#F0F2F7] dark:border-[#232738] text-[11px] font-bold text-[#8C93AB] dark:text-[#7A839E] bg-[#F8F9FC]/60 dark:bg-[#1F2330]/60">
                 <th className="py-3 px-3">Date</th>
                 <th className="py-3 px-3">Type</th>
                 <th className="py-3 px-3">Category</th>
@@ -451,7 +464,7 @@ export const FinancesTab: React.FC = () => {
 
                 return (
                   <tr key={tx.id} className="hover:bg-[#F8F9FC] dark:hover:bg-[#1F2330] transition">
-                    <td className="py-3 px-3 font-semibold text-[#1E2238] dark:text-white whitespace-nowrap">{tx.date}</td>
+                    <td className="py-3 px-3 font-semibold text-[#1E2238] dark:text-white whitespace-nowrap font-mono">{tx.date}</td>
 
                     <td className="py-3 px-3 whitespace-nowrap">
                       {tx.type === 'Income' ? (
@@ -519,7 +532,7 @@ export const FinancesTab: React.FC = () => {
             </tbody>
           </table>
         </div>
-      </section>
+      </div>
 
       {/* Record Transaction Modal */}
       {isAddModalOpen && (
