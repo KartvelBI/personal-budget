@@ -12,8 +12,6 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronDown,
-  Crown,
-  LogOut,
 } from 'lucide-react';
 
 export const Sidebar: React.FC = () => {
@@ -186,67 +184,7 @@ export const Sidebar: React.FC = () => {
             </button>
           );
         })}
-
-        <div className="pt-2">
-          <button
-            onClick={() => setActiveTab('options')}
-            title={!isSidebarExpanded ? 'Settings / Preferences' : undefined}
-            className={`w-full flex items-center rounded-xl text-[14px] font-semibold text-[#8C93AB] hover:text-rose-600 hover:bg-rose-50/50 dark:hover:bg-rose-950/20 transition relative group cursor-pointer ${
-              isSidebarExpanded ? 'gap-3.5 px-3.5 py-3' : 'justify-center p-3'
-            }`}
-          >
-            <LogOut className="w-6.5 h-6.5 shrink-0 text-[#8C93AB]" strokeWidth={2.2} />
-            {isSidebarExpanded && <span>Preferences</span>}
-
-            {!isSidebarExpanded && (
-              <div className="absolute left-full ml-2 px-2.5 py-1 bg-[#1E2238] dark:bg-white text-white dark:text-[#1E2238] text-xs font-bold rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50 shadow-md whitespace-nowrap">
-                Preferences
-              </div>
-            )}
-          </button>
-        </div>
       </div>
-
-      {/* Professional Plan Card */}
-      {isSidebarExpanded ? (
-        <div className="p-4 m-3 rounded-2xl bg-[#F8F9FC] dark:bg-[#1C202E] border border-[#E9ECF2] dark:border-[#2A3044] text-center">
-          <div className="flex items-center justify-center gap-2 text-xs font-bold text-[#1E2238] dark:text-white">
-            <Crown className="w-6 h-6 text-[#F59E0B] fill-[#F59E0B]" strokeWidth={2.2} />
-            <span className="text-sm">Professional Plan</span>
-          </div>
-          <p className="text-[11px] text-[#8C93AB] mt-1">You're on Professional plan</p>
-
-          <div className="mt-2.5 px-2">
-            <div className="flex justify-between text-[10px] font-bold text-[#4E53EE] dark:text-[#7378FF] mb-1">
-              <span>Client Quota</span>
-              <span className="font-mono">{coagents.length}/10 Active</span>
-            </div>
-            <div className="w-full bg-[#E5E7EB] dark:bg-[#2A3044] rounded-full h-1.5 overflow-hidden">
-              <div
-                className="bg-[#4E53EE] dark:bg-[#7378FF] h-1.5 rounded-full transition-all duration-300"
-                style={{ width: `${Math.min(100, Math.round((coagents.length / 10) * 100))}%` }}
-              ></div>
-            </div>
-          </div>
-
-          <button
-            onClick={() => setActiveTab('options')}
-            className="mt-3 w-full py-2 bg-[#4E53EE] hover:bg-[#4338CA] text-white text-xs font-bold rounded-xl shadow-xs shadow-[#4E53EE]/25 transition cursor-pointer"
-          >
-            Upgrade Plan
-          </button>
-        </div>
-      ) : (
-        <div className="p-3 text-center my-2">
-          <button
-            onClick={() => setActiveTab('options')}
-            className="w-10 h-10 mx-auto rounded-xl bg-[#F8F9FC] dark:bg-[#1C202E] border border-[#E9ECF2] dark:border-[#2A3044] flex items-center justify-center text-[#F59E0B] hover:bg-[#EDEEFD] transition cursor-pointer"
-            title="Professional Plan"
-          >
-            <Crown className="w-5 h-5 fill-[#F59E0B]" />
-          </button>
-        </div>
-      )}
 
       {/* User Profile at bottom */}
       <div className={`p-3.5 border-t border-[#F0F2F7] dark:border-[#232738] flex items-center ${
