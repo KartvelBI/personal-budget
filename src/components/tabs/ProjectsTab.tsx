@@ -54,6 +54,22 @@ export const ProjectsTab: React.FC = () => {
   // Success toast message
   const [successToast, setSuccessToast] = useState<string | null>(null);
 
+  // Submit Project Modal state
+  const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
+
+  const openSubmitModal = () => {
+    if (!coagentId && coagents.length > 0) {
+      setCoagentId(coagents[0].id);
+      if (coagents[0].defaultCurrency) {
+        setCurrency(coagents[0].defaultCurrency);
+      }
+    }
+    if (!categoryId && categories.length > 0) {
+      setCategoryId(categories[0].id);
+    }
+    setIsSubmitModalOpen(true);
+  };
+
   // Edit Project Modal state
   const [editingProject, setEditingProject] = useState<ProjectEntry | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -170,9 +186,10 @@ export const ProjectsTab: React.FC = () => {
       setSuccessToast('Project entry submitted successfully!');
     }
 
-    // Reset fields
+    // Reset fields & close modal
     setAmount('');
     setNote('');
+    setIsSubmitModalOpen(false);
     setTimeout(() => setSuccessToast(null), 4000);
   };
 
@@ -212,238 +229,78 @@ export const ProjectsTab: React.FC = () => {
         </div>
       )}
 
-      {/* 1. PROJECT SUBMIT FORM */}
-      <section className="bg-white dark:bg-[#161922] rounded-2xl border border-[#F0F2F7] dark:border-[#232738] p-6 shadow-xs transition-colors">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-[#F0F2F7] dark:border-[#232738] gap-3">
+      {/* FULL-PAGE PROJECTS LEDGER */}
+      <section className="bg-white dark:bg-[#161922] rounded-2xl border border-[#F0F2F7] dark:border-[#232738] p-6 shadow-xs space-y-5 transition-colors">
+        {/* Top Header Bar */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-[#F0F2F7] dark:border-[#232738]">
           <div className="flex items-center gap-3.5">
-            <div className="w-14 h-14 rounded-2xl bg-[#EDEEFD] dark:bg-[#4E53EE]/20 text-[#4E53EE] dark:text-[#7378FF] flex items-center justify-center shadow-md shadow-[#4E53EE]/10 shrink-0">
-              <FolderKanban className="w-7 h-7 stroke-[2.2]" />
+            <div className="w-13 h-13 rounded-2xl bg-[#EDEEFD] dark:bg-[#4E53EE]/20 text-[#4E53EE] dark:text-[#7378FF] flex items-center justify-center shadow-md shadow-[#4E53EE]/10 shrink-0">
+              <FolderKanban className="w-6 h-6 stroke-[2.2]" />
             </div>
             <div>
-              <h2 className="text-sm font-extrabold text-[#1E2238] dark:text-white">Submit Project Work</h2>
-              <p className="text-xs text-[#8C93AB] dark:text-[#7A839E]">
-                Record milestones and generate automated client invoices
+              <div className="flex items-center gap-2.5">
+                <h2 className="text-base font-extrabold text-[#1E2238] dark:text-white">Projects Ledger</h2>
+                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#EDEEFD] dark:bg-[#4E53EE]/20 text-[#4E53EE] dark:text-[#7378FF] font-mono">
+                  {filteredProjects.length}
+                </span>
+              </div>
+              <p className="text-xs text-[#8C93AB] dark:text-[#7A839E] mt-0.5">
+                Full-page ledger of milestone deliverables, project billing, and automated invoices
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2.5">
             <button
               onClick={() => setActiveTab('coagents')}
-              className="text-xs font-bold text-[#4E53EE] dark:text-[#7378FF] hover:bg-[#EDEEFD] dark:hover:bg-[#4E53EE]/20 px-3 py-1.5 rounded-xl transition"
+              className="text-xs font-bold text-[#5E6482] dark:text-[#949DB2] hover:text-[#1E2238] dark:hover:text-white bg-[#F8F9FC] dark:bg-[#1F2330] hover:bg-[#F0F2F7] dark:hover:bg-[#2A3044] px-3.5 py-2.5 rounded-xl transition cursor-pointer"
             >
               + Customers
             </button>
             <button
               onClick={() => setActiveTab('options')}
-              className="text-xs font-bold text-[#5E6482] dark:text-[#949DB2] hover:text-[#1E2238] dark:hover:text-white bg-[#F8F9FC] dark:bg-[#1F2330] hover:bg-[#F0F2F7] dark:hover:bg-[#2A3044] px-3 py-1.5 rounded-xl transition"
+              className="text-xs font-bold text-[#5E6482] dark:text-[#949DB2] hover:text-[#1E2238] dark:hover:text-white bg-[#F8F9FC] dark:bg-[#1F2330] hover:bg-[#F0F2F7] dark:hover:bg-[#2A3044] px-3.5 py-2.5 rounded-xl transition cursor-pointer"
             >
               Categories
+            </button>
+            <button
+              onClick={openSubmitModal}
+              className="inline-flex items-center justify-center gap-2 px-4.5 py-2.5 bg-[#4E53EE] hover:bg-[#4338CA] text-white rounded-xl text-xs font-bold shadow-sm shadow-[#4E53EE]/25 transition cursor-pointer"
+            >
+              <Plus className="w-4.5 h-4.5 stroke-[2.4]" />
+              Submit Project
             </button>
           </div>
         </div>
 
-        {coagents.length === 0 ? (
-          <div className="py-10 text-center text-xs text-[#8C93AB]">
-            <AlertCircle className="w-10 h-10 mx-auto text-[#F59E0B] mb-2 stroke-[2]" />
-            <p className="font-bold text-[#1E2238] dark:text-white">No Customers / Coagents Available</p>
-            <p className="mt-1">Add a customer first before logging projects.</p>
-            <button
-              onClick={() => setActiveTab('coagents')}
-              className="mt-3 px-4 py-2 bg-[#4E53EE] text-white rounded-xl text-xs font-bold shadow-xs shadow-[#4E53EE]/25"
-            >
-              Add Customer
-            </button>
-          </div>
-        ) : (
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSaveProject(false);
-            }}
-            className="mt-5 space-y-4 text-xs"
-          >
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {/* Field 1: Date */}
-              <div>
-                <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5 flex items-center gap-2">
-                  <Calendar className="w-4.5 h-4.5 text-[#4E53EE] stroke-[2]" />
-                  Date *
-                </label>
-                <input
-                  type="date"
-                  required
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  className="w-full px-3.5 py-2 border border-[#E5E7EB] dark:border-[#2A3044] bg-white dark:bg-[#1F2330] text-[#1E2238] dark:text-white rounded-xl outline-none focus:ring-2 focus:ring-[#4E53EE]/15 focus:border-[#4E53EE] font-medium"
-                />
-              </div>
-
-              {/* Field 2: Coagents (brought from coagents table) */}
-              <div>
-                <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5 flex items-center gap-2">
-                  <Building2 className="w-4.5 h-4.5 text-[#4E53EE] stroke-[2]" />
-                  Coagents (Customers) *
-                </label>
-                <select
-                  required
-                  value={coagentId}
-                  onChange={(e) => handleCoagentChange(e.target.value)}
-                  className="w-full px-3.5 py-2 border border-[#E5E7EB] dark:border-[#2A3044] bg-white dark:bg-[#1F2330] rounded-xl outline-none focus:ring-2 focus:ring-[#4E53EE]/15 focus:border-[#4E53EE] font-semibold text-[#1E2238] dark:text-white"
-                >
-                  {coagents.map((c) => (
-                    <option key={c.id} value={c.id} className="bg-white dark:bg-[#161922] text-[#1E2238] dark:text-white">
-                      {c.company ? `${c.company} (${c.name})` : c.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Field 3: Category (dropdown, set up in options page) */}
-              <div>
-                <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5 flex items-center gap-2">
-                  <Tag className="w-4.5 h-4.5 text-[#4E53EE] stroke-[2]" />
-                  Category (from Settings) *
-                </label>
-                <select
-                  required
-                  value={categoryId}
-                  onChange={(e) => setCategoryId(e.target.value)}
-                  className="w-full px-3.5 py-2 border border-[#E5E7EB] dark:border-[#2A3044] bg-white dark:bg-[#1F2330] rounded-xl outline-none focus:ring-2 focus:ring-[#4E53EE]/15 focus:border-[#4E53EE] font-semibold text-[#1E2238] dark:text-white"
-                >
-                  {categories.map((cat) => (
-                    <option key={cat.id} value={cat.id} className="bg-white dark:bg-[#161922] text-[#1E2238] dark:text-white">
-                      {cat.name} ({cat.type})
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Field 4: Transfer date */}
-              <div>
-                <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5 flex items-center gap-2">
-                  <Clock className="w-4.5 h-4.5 text-[#4E53EE] stroke-[2]" />
-                  Transfer Date *
-                </label>
-                <input
-                  type="date"
-                  required
-                  value={transferDate}
-                  onChange={(e) => setTransferDate(e.target.value)}
-                  className="w-full px-3.5 py-2 border border-[#E5E7EB] dark:border-[#2A3044] bg-white dark:bg-[#1F2330] text-[#1E2238] dark:text-white rounded-xl outline-none focus:ring-2 focus:ring-[#4E53EE]/15 focus:border-[#4E53EE] font-medium"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
-              {/* Field 5: Amount */}
-              <div className="sm:col-span-4">
-                <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5 flex items-center gap-2">
-                  <DollarSign className="w-4.5 h-4.5 text-[#4E53EE] stroke-[2]" />
-                  Amount *
-                </label>
-                <input
-                  type="number"
-                  step="any"
-                  min="0"
-                  required
-                  placeholder="0.00"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  className="w-full px-3.5 py-2 border border-[#E5E7EB] dark:border-[#2A3044] bg-white dark:bg-[#1F2330] text-[#1E2238] dark:text-white rounded-xl outline-none focus:ring-2 focus:ring-[#4E53EE]/15 focus:border-[#4E53EE] font-mono text-sm font-extrabold"
-                />
-              </div>
-
-              {/* Field 6: Currency */}
-              <div className="sm:col-span-3">
-                <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5">Currency *</label>
-                <select
-                  value={currency}
-                  onChange={(e) => setCurrency(e.target.value)}
-                  className="w-full px-3.5 py-2 border border-[#E5E7EB] dark:border-[#2A3044] bg-white dark:bg-[#1F2330] rounded-xl outline-none focus:ring-2 focus:ring-[#4E53EE]/15 focus:border-[#4E53EE] font-mono font-bold text-[#1E2238] dark:text-white"
-                >
-                  {settings.availableCurrencies.map((c) => (
-                    <option key={c} value={c} className="bg-white dark:bg-[#161922] text-[#1E2238] dark:text-white">
-                      {c}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Field 7: Note */}
-              <div className="sm:col-span-5">
-                <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5">Note / Deliverable Description</label>
-                <input
-                  type="text"
-                  placeholder="e.g. Design system milestone, Cloud migration"
-                  value={note}
-                  onChange={(e) => setNote(e.target.value)}
-                  className="w-full px-3.5 py-2 border border-[#E5E7EB] dark:border-[#2A3044] bg-white dark:bg-[#1F2330] text-[#1E2238] dark:text-white rounded-xl outline-none focus:ring-2 focus:ring-[#4E53EE]/15 focus:border-[#4E53EE]"
-                />
-              </div>
-            </div>
-
-            {/* ACTION BUTTONS */}
-            <div className="pt-3 border-t border-[#F0F2F7] dark:border-[#232738] flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3">
+        {/* Filters and Search Bar */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          {/* Status Filter */}
+          <div className="flex flex-wrap bg-[#F8F9FC] dark:bg-[#1F2330] p-1 rounded-xl text-xs font-bold text-[#5E6482] dark:text-[#949DB2] border border-[#F0F2F7] dark:border-[#2A3044]">
+            {(['all', 'Pending', 'Invoiced', 'Transferred', 'Paid'] as const).map((st) => (
               <button
-                type="submit"
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 font-bold text-[#5E6482] dark:text-[#949DB2] hover:text-[#1E2238] dark:hover:text-white bg-[#F8F9FC] dark:bg-[#1F2330] hover:bg-[#F0F2F7] dark:hover:bg-[#2A3044] rounded-xl transition cursor-pointer"
+                key={st}
+                onClick={() => setStatusFilter(st)}
+                className={`px-3 py-1.5 rounded-lg transition capitalize ${
+                  statusFilter === st
+                    ? 'bg-white dark:bg-[#161922] text-[#1E2238] dark:text-white shadow-xs'
+                    : 'hover:text-[#1E2238] dark:hover:text-white'
+                }`}
               >
-                <Plus className="w-5 h-5 text-[#8C93AB] stroke-[2.2]" />
-                Submit Project
+                {st}
               </button>
-
-              <button
-                type="button"
-                onClick={() => handleSaveProject(true)}
-                className="inline-flex items-center justify-center gap-2.5 px-6 py-2.5 font-bold text-white bg-[#4E53EE] hover:bg-[#4338CA] rounded-xl shadow-sm shadow-[#4E53EE]/30 transition group cursor-pointer"
-              >
-                <Send className="w-5 h-5 text-white stroke-[2.2] group-hover:translate-x-0.5 transition-transform" />
-                Submit & Send Automated Invoice
-              </button>
-            </div>
-          </form>
-        )}
-      </section>
-
-      {/* 2. SUBMITTED PROJECTS LEDGER */}
-      <section className="bg-white dark:bg-[#161922] rounded-2xl border border-[#F0F2F7] dark:border-[#232738] p-6 shadow-xs space-y-4 transition-colors">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-          <div>
-            <h3 className="text-sm font-extrabold text-[#1E2238] dark:text-white">Projects Ledger</h3>
-            <p className="text-xs text-[#8C93AB] dark:text-[#7A839E] mt-0.5">
-              {filteredProjects.length} records registered
-            </p>
+            ))}
           </div>
 
-          <div className="flex items-center gap-3">
-            {/* Status Filter */}
-            <div className="flex bg-[#F8F9FC] dark:bg-[#1F2330] p-1 rounded-xl text-xs font-bold text-[#5E6482] dark:text-[#949DB2] border border-[#F0F2F7] dark:border-[#2A3044]">
-              {(['all', 'Pending', 'Invoiced', 'Transferred'] as const).map((st) => (
-                <button
-                  key={st}
-                  onClick={() => setStatusFilter(st)}
-                  className={`px-3 py-1 rounded-lg transition capitalize ${
-                    statusFilter === st
-                      ? 'bg-white dark:bg-[#161922] text-[#1E2238] dark:text-white shadow-xs'
-                      : 'hover:text-[#1E2238] dark:hover:text-white'
-                  }`}
-                >
-                  {st}
-                </button>
-              ))}
-            </div>
-
-            <div className="relative">
-              <Search className="w-4.5 h-4.5 text-[#8C93AB] absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                placeholder="Search projects..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-9.5 pr-3 py-1.5 text-xs bg-[#F8F9FC] dark:bg-[#1F2330] border border-[#F0F2F7] dark:border-[#2A3044] rounded-xl outline-none focus:border-[#4E53EE] text-[#1E2238] dark:text-white"
-              />
-            </div>
+          <div className="relative sm:w-72">
+            <Search className="w-4.5 h-4.5 text-[#8C93AB] absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder="Search projects by client, note, category..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-9.5 pr-3 py-2 text-xs bg-[#F8F9FC] dark:bg-[#1F2330] border border-[#F0F2F7] dark:border-[#2A3044] rounded-xl outline-none focus:border-[#4E53EE] text-[#1E2238] dark:text-white"
+            />
           </div>
         </div>
 
@@ -765,6 +622,216 @@ export const ProjectsTab: React.FC = () => {
                 </div>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* SUBMIT PROJECT POP-UP MODAL */}
+      {isSubmitModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+          <div className="bg-white dark:bg-[#161922] w-full max-w-2xl rounded-2xl border border-[#F0F2F7] dark:border-[#232738] shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] flex flex-col">
+            {/* Modal Header */}
+            <div className="p-6 border-b border-[#F0F2F7] dark:border-[#232738] flex items-center justify-between">
+              <div className="flex items-center gap-3.5">
+                <div className="w-12 h-12 rounded-2xl bg-[#EDEEFD] dark:bg-[#4E53EE]/20 text-[#4E53EE] dark:text-[#7378FF] flex items-center justify-center shadow-md shadow-[#4E53EE]/10 shrink-0">
+                  <FolderKanban className="w-6 h-6 stroke-[2.2]" />
+                </div>
+                <div>
+                  <h2 className="text-sm font-extrabold text-[#1E2238] dark:text-white">Submit Project Work</h2>
+                  <p className="text-xs text-[#8C93AB] dark:text-[#7A839E]">
+                    Record milestones and generate automated client invoices
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsSubmitModalOpen(false)}
+                className="p-1.5 text-[#8C93AB] hover:text-[#1E2238] dark:hover:text-white rounded-xl hover:bg-slate-200/60 dark:hover:bg-slate-700/50 transition cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 overflow-y-auto flex-1">
+              {coagents.length === 0 ? (
+                <div className="py-10 text-center text-xs text-[#8C93AB]">
+                  <AlertCircle className="w-10 h-10 mx-auto text-[#F59E0B] mb-2 stroke-[2]" />
+                  <p className="font-bold text-[#1E2238] dark:text-white">No Customers / Coagents Available</p>
+                  <p className="mt-1">Add a customer first before logging projects.</p>
+                  <button
+                    onClick={() => {
+                      setIsSubmitModalOpen(false);
+                      setActiveTab('coagents');
+                    }}
+                    className="mt-3 px-4 py-2 bg-[#4E53EE] text-white rounded-xl text-xs font-bold shadow-xs shadow-[#4E53EE]/25 cursor-pointer"
+                  >
+                    Add Customer
+                  </button>
+                </div>
+              ) : (
+                <form
+                  id="submit-project-modal-form"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleSaveProject(false);
+                  }}
+                  className="space-y-4 text-xs"
+                >
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Field 1: Date */}
+                    <div>
+                      <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5 flex items-center gap-2">
+                        <Calendar className="w-4 h-4 text-[#4E53EE] stroke-[2]" />
+                        Date *
+                      </label>
+                      <input
+                        type="date"
+                        required
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                        className="w-full px-3.5 py-2 border border-[#E5E7EB] dark:border-[#2A3044] bg-white dark:bg-[#1F2330] text-[#1E2238] dark:text-white rounded-xl outline-none focus:ring-2 focus:ring-[#4E53EE]/15 focus:border-[#4E53EE] font-medium"
+                      />
+                    </div>
+
+                    {/* Field 2: Coagents (Customers) */}
+                    <div>
+                      <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5 flex items-center gap-2">
+                        <Building2 className="w-4 h-4 text-[#4E53EE] stroke-[2]" />
+                        Coagents (Customer) *
+                      </label>
+                      <select
+                        required
+                        value={coagentId}
+                        onChange={(e) => handleCoagentChange(e.target.value)}
+                        className="w-full px-3.5 py-2 border border-[#E5E7EB] dark:border-[#2A3044] bg-white dark:bg-[#1F2330] rounded-xl outline-none focus:ring-2 focus:ring-[#4E53EE]/15 focus:border-[#4E53EE] font-semibold text-[#1E2238] dark:text-white"
+                      >
+                        {coagents.map((c) => (
+                          <option key={c.id} value={c.id} className="bg-white dark:bg-[#161922] text-[#1E2238] dark:text-white">
+                            {c.company ? `${c.company} (${c.name})` : c.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Field 3: Category */}
+                    <div>
+                      <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5 flex items-center gap-2">
+                        <Tag className="w-4 h-4 text-[#4E53EE] stroke-[2]" />
+                        Category *
+                      </label>
+                      <select
+                        required
+                        value={categoryId}
+                        onChange={(e) => setCategoryId(e.target.value)}
+                        className="w-full px-3.5 py-2 border border-[#E5E7EB] dark:border-[#2A3044] bg-white dark:bg-[#1F2330] rounded-xl outline-none focus:ring-2 focus:ring-[#4E53EE]/15 focus:border-[#4E53EE] font-semibold text-[#1E2238] dark:text-white"
+                      >
+                        {categories.map((cat) => (
+                          <option key={cat.id} value={cat.id} className="bg-white dark:bg-[#161922] text-[#1E2238] dark:text-white">
+                            {cat.name} ({cat.type})
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Field 4: Transfer Date */}
+                    <div>
+                      <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5 flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-[#4E53EE] stroke-[2]" />
+                        Transfer Date *
+                      </label>
+                      <input
+                        type="date"
+                        required
+                        value={transferDate}
+                        onChange={(e) => setTransferDate(e.target.value)}
+                        className="w-full px-3.5 py-2 border border-[#E5E7EB] dark:border-[#2A3044] bg-white dark:bg-[#1F2330] text-[#1E2238] dark:text-white rounded-xl outline-none focus:ring-2 focus:ring-[#4E53EE]/15 focus:border-[#4E53EE] font-medium"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
+                    {/* Field 5: Amount */}
+                    <div className="sm:col-span-6">
+                      <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5 flex items-center gap-2">
+                        <DollarSign className="w-4 h-4 text-[#4E53EE] stroke-[2]" />
+                        Amount *
+                      </label>
+                      <input
+                        type="number"
+                        step="any"
+                        min="0"
+                        required
+                        placeholder="0.00"
+                        value={amount}
+                        onChange={(e) => setAmount(e.target.value)}
+                        className="w-full px-3.5 py-2 border border-[#E5E7EB] dark:border-[#2A3044] bg-white dark:bg-[#1F2330] text-[#1E2238] dark:text-white rounded-xl outline-none focus:ring-2 focus:ring-[#4E53EE]/15 focus:border-[#4E53EE] font-mono text-sm font-extrabold"
+                      />
+                    </div>
+
+                    {/* Field 6: Currency */}
+                    <div className="sm:col-span-6">
+                      <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5">Currency *</label>
+                      <select
+                        value={currency}
+                        onChange={(e) => setCurrency(e.target.value)}
+                        className="w-full px-3.5 py-2 border border-[#E5E7EB] dark:border-[#2A3044] bg-white dark:bg-[#1F2330] rounded-xl outline-none focus:ring-2 focus:ring-[#4E53EE]/15 focus:border-[#4E53EE] font-mono font-bold text-[#1E2238] dark:text-white"
+                      >
+                        {settings.availableCurrencies.map((c) => (
+                          <option key={c} value={c} className="bg-white dark:bg-[#161922] text-[#1E2238] dark:text-white">
+                            {c}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Field 7: Note */}
+                  <div>
+                    <label className="block font-bold text-[#1E2238] dark:text-white mb-1.5">Note / Deliverable Description</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Design system milestone, Cloud migration"
+                      value={note}
+                      onChange={(e) => setNote(e.target.value)}
+                      className="w-full px-3.5 py-2 border border-[#E5E7EB] dark:border-[#2A3044] bg-white dark:bg-[#1F2330] text-[#1E2238] dark:text-white rounded-xl outline-none focus:ring-2 focus:ring-[#4E53EE]/15 focus:border-[#4E53EE]"
+                    />
+                  </div>
+                </form>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            {coagents.length > 0 && (
+              <div className="p-4 sm:p-6 bg-[#F8F9FC]/80 dark:bg-[#1F2330]/50 border-t border-[#F0F2F7] dark:border-[#232738] flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setIsSubmitModalOpen(false)}
+                  className="px-4 py-2.5 font-bold text-[#8C93AB] hover:text-[#1E2238] dark:hover:text-white bg-transparent hover:bg-slate-200/50 dark:hover:bg-slate-700/40 rounded-xl transition cursor-pointer text-xs"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleSaveProject(false)}
+                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 font-bold text-[#5E6482] dark:text-[#949DB2] hover:text-[#1E2238] dark:hover:text-white bg-white dark:bg-[#161922] border border-[#E5E7EB] dark:border-[#2A3044] rounded-xl hover:bg-[#F8F9FC] dark:hover:bg-[#2A3044] transition cursor-pointer text-xs"
+                >
+                  <Plus className="w-4.5 h-4.5 text-[#8C93AB] stroke-[2.2]" />
+                  Submit Project
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleSaveProject(true)}
+                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 font-bold text-white bg-[#4E53EE] hover:bg-[#4338CA] rounded-xl shadow-sm shadow-[#4E53EE]/30 transition group cursor-pointer text-xs"
+                >
+                  <Send className="w-4 h-4 text-white stroke-[2.2] group-hover:translate-x-0.5 transition-transform" />
+                  Submit & Send Invoice
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
