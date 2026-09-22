@@ -74,6 +74,9 @@ interface BudgetContextType {
   isSidebarExpanded: boolean;
   setIsSidebarExpanded: (expanded: boolean) => void;
   toggleSidebar: () => void;
+  isAIAssistantOpen: boolean;
+  setIsAIAssistantOpen: (open: boolean) => void;
+  toggleAIAssistant: () => void;
 
   // State maintenance
   resetData: () => void;
@@ -166,6 +169,12 @@ export const BudgetProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const toggleSidebar = () => {
     setIsSidebarExpanded((prev) => !prev);
+  };
+
+  const [isAIAssistantOpen, setIsAIAssistantOpen] = useState<boolean>(false);
+
+  const toggleAIAssistant = () => {
+    setIsAIAssistantOpen((prev) => !prev);
   };
 
   useEffect(() => {
@@ -542,6 +551,9 @@ export const BudgetProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         isSidebarExpanded,
         setIsSidebarExpanded,
         toggleSidebar,
+        isAIAssistantOpen,
+        setIsAIAssistantOpen,
+        toggleAIAssistant,
         resetData,
         exportJSON,
         importJSON,

@@ -10,6 +10,7 @@ import { CRMTab } from './components/tabs/CRMTab';
 import { ReportingTab } from './components/tabs/ReportingTab';
 import { OptionsTab } from './components/tabs/OptionsTab';
 import { InvoiceModal } from './components/common/InvoiceModal';
+import { AIAssistantModal } from './components/ai/AIAssistantModal';
 
 const MainLayout: React.FC = () => {
   const { activeTab, theme } = useBudget();
@@ -36,6 +37,9 @@ const MainLayout: React.FC = () => {
 
       {/* Global Invoice Preview / Print Modal */}
       <InvoiceModal />
+
+      {/* Expandable AI Financial Assistant */}
+      <AIAssistantModal />
     </div>
   );
 };

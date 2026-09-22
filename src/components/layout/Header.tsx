@@ -8,10 +8,11 @@ import {
   Menu,
   Sun,
   Moon,
+  Sparkles,
 } from 'lucide-react';
 
 export const Header: React.FC = () => {
-  const { activeTab, setActiveTab, theme, toggleTheme, toggleSidebar } = useBudget();
+  const { activeTab, setActiveTab, theme, toggleTheme, toggleSidebar, toggleAIAssistant } = useBudget();
   const [searchTerm, setSearchTerm] = useState('');
 
   const titles: Record<string, { title: string; subtitle: string }> = {
@@ -71,6 +72,16 @@ export const Header: React.FC = () => {
           title={theme === 'dark' ? 'Switch to White Theme' : 'Switch to Dark Theme'}
         >
           {theme === 'dark' ? <Sun className="w-6 h-6" strokeWidth={2.2} /> : <Moon className="w-6 h-6" strokeWidth={2.2} />}
+        </button>
+
+        {/* AI Assistant Copilot Quick Toggle */}
+        <button
+          onClick={toggleAIAssistant}
+          className="relative w-11 h-11 rounded-xl border border-[#4E53EE]/30 bg-[#EDEEFD] dark:bg-[#4E53EE]/20 flex items-center justify-center text-[#4E53EE] dark:text-[#7378FF] hover:bg-[#4E53EE] hover:text-white transition shadow-2xs cursor-pointer group"
+          title="Open AI Financial Copilot"
+        >
+          <Sparkles className="w-5 h-5 group-hover:scale-110 transition-transform" strokeWidth={2.2} />
+          <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#10B981] ring-2 ring-white dark:ring-[#161922]"></span>
         </button>
 
         {/* Apps Grid Icon */}
