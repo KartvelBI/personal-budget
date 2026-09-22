@@ -90,7 +90,26 @@ export interface AppSettings {
   availableCurrencies: CurrencyCode[];
 }
 
-export type ActiveTab = 'coagents' | 'projects' | 'invoice' | 'finances' | 'reporting' | 'options';
+export type LeadStatus = 'New' | 'Contacted' | 'Qualified' | 'Proposal' | 'Won' | 'Lost';
+
+export interface Lead {
+  id: string;
+  name: string;
+  company: string;
+  email: string;
+  phone: string;
+  title?: string;
+  value: number;
+  currency: CurrencyCode;
+  status: LeadStatus;
+  source: string;
+  notes?: string;
+  expectedCloseDate?: string; // YYYY-MM-DD
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export type ActiveTab = 'finances' | 'crm' | 'projects' | 'coagents' | 'invoice' | 'reporting' | 'options';
 
 export type ThemeMode = 'light' | 'dark';
 

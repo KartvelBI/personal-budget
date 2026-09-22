@@ -8,6 +8,7 @@ import {
   ProjectEntry,
   FinanceTransaction,
   ActiveTab,
+  Lead,
 } from '../types';
 import {
   INITIAL_CATEGORIES,
@@ -27,6 +28,13 @@ interface BudgetContextType {
   invoices: Invoice[];
   transactions: FinanceTransaction[];
   settings: AppSettings;
+  leads: Lead[];
+
+  // CRM Lead actions
+  addLead: (lead: Omit<Lead, 'id' | 'createdAt'>) => Lead;
+  updateLead: (id: string, updated: Partial<Lead>) => void;
+  deleteLead: (id: string) => void;
+  convertLeadToCustomer: (leadId: string) => Coagent;
   
   // Coagent actions
   addCoagent: (coagent: Omit<Coagent, 'id' | 'createdAt'>) => Coagent;
@@ -89,6 +97,7 @@ const STORAGE_KEYS = {
   INVOICES: 'pb_invoices_v2',
   TRANSACTIONS: 'pb_transactions_v2',
   SETTINGS: 'pb_settings_v2',
+  LEADS: 'pb_leads_v1',
   THEME: 'pb_theme_v1',
   SIDEBAR: 'pb_sidebar_v1',
 };
@@ -134,6 +143,11 @@ export const BudgetProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [settings, setSettings] = useState<AppSettings>(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.SETTINGS);
     return saved ? JSON.parse(saved) : INITIAL_SETTINGS;
+  });
+
+  const [leads, setLeads] = useState<Lead[]>(() => {
+    const saved = localStorage.getItem(STORAGE_KEYS.LEADS);
+    return saved ? JSON.parse(saved) : [];
   });
 
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
@@ -191,6 +205,53 @@ export const BudgetProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
   }, [settings]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.LEADS, JSON.stringify(leads));
+  }, [leads]);
+
+  // CRM Lead Handlers
+  const addLead = (data: Omit<Lead, 'id' | 'createdAt'>): Lead => {
+    const newLead: Lead = {
+      ...data,
+      id: `lead-${Date.now()}`,
+      createdAt: new Date().toISOString(),
+    };
+    setLeads((prev) => [newLead, ...prev]);
+    return newLead;
+  };
+
+  const updateLead = (id: string, updated: Partial<Lead>) => {
+    setLeads((prev) =>
+      prev.map((l) => (l.id === id ? { ...l, ...updated, updatedAt: new Date().toISOString() } : l))
+    );
+  };
+
+  const deleteLead = (id: string) => {
+    setLeads((prev) => prev.filter((l) => l.id !== id));
+  };
+
+  const convertLeadToCustomer = (leadId: string): Coagent => {
+    const lead = leads.find((l) => l.id === leadId);
+    if (!lead) throw new Error('Lead not found');
+
+    const newCoagent: Coagent = {
+      id: `co-${Date.now()}`,
+      name: lead.name,
+      company: lead.company,
+      email: lead.email,
+      phone: lead.phone,
+      address: '',
+      defaultCurrency: lead.currency || settings.defaultCurrency || 'USD',
+      notes: `Converted from CRM Lead (${lead.title || lead.source || 'Direct'}) - Deal Value: $${lead.value}`,
+      createdAt: new Date().toISOString(),
+    };
+    setCoagents((prev) => [newCoagent, ...prev]);
+
+    // Mark lead status as Won
+    updateLead(leadId, { status: 'Won' });
+    return newCoagent;
+  };
 
   // Coagent Handlers
   const addCoagent = (data: Omit<Coagent, 'id' | 'createdAt'>): Coagent => {
@@ -390,6 +451,7 @@ export const BudgetProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setInvoices(INITIAL_INVOICES);
     setTransactions(INITIAL_TRANSACTIONS);
     setSettings(INITIAL_SETTINGS);
+    setLeads([]);
     localStorage.clear();
   };
 
@@ -401,6 +463,7 @@ export const BudgetProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       invoices,
       transactions,
       settings,
+      leads,
       exportedAt: new Date().toISOString(),
     };
     return JSON.stringify(data, null, 2);
@@ -415,6 +478,7 @@ export const BudgetProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       if (data.invoices) setInvoices(data.invoices);
       if (data.transactions) setTransactions(data.transactions);
       if (data.settings) setSettings(data.settings);
+      if (data.leads) setLeads(data.leads);
       return true;
     } catch (e) {
       console.error('Import failed', e);
@@ -448,6 +512,11 @@ export const BudgetProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         invoices,
         transactions,
         settings,
+        leads,
+        addLead,
+        updateLead,
+        deleteLead,
+        convertLeadToCustomer,
         addCoagent,
         updateCoagent,
         deleteCoagent,

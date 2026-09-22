@@ -3,6 +3,7 @@ import { useBudget } from '../../context/BudgetContext';
 import { ActiveTab } from '../../types';
 import {
   LayoutDashboard,
+  Target,
   FolderKanban,
   Users,
   Receipt,
@@ -22,11 +23,13 @@ export const Sidebar: React.FC = () => {
     coagents,
     projects,
     invoices,
+    leads,
     settings,
     isSidebarExpanded,
     toggleSidebar,
   } = useBudget();
 
+  const activeLeadsCount = leads.filter((l) => l.status !== 'Won' && l.status !== 'Lost').length;
   const pendingProjectsCount = projects.filter((p) => p.status === 'Pending').length;
   const unpaidInvoicesCount = invoices.filter((i) => i.status === 'Sent' || i.status === 'Draft').length;
 
@@ -35,6 +38,12 @@ export const Sidebar: React.FC = () => {
       id: 'finances',
       label: 'Dashboard',
       icon: LayoutDashboard,
+    },
+    {
+      id: 'crm',
+      label: 'CRM Leads',
+      icon: Target,
+      badge: activeLeadsCount > 0 ? activeLeadsCount : undefined,
     },
     {
       id: 'projects',

@@ -16,6 +16,7 @@ export const Header: React.FC = () => {
 
   const titles: Record<string, { title: string; subtitle: string }> = {
     finances: { title: 'Dashboard', subtitle: 'Welcome back, John Doe! 👋' },
+    crm: { title: 'CRM Leads', subtitle: 'Manage sales leads, pipeline stages, and customer conversions' },
     projects: { title: 'Projects', subtitle: 'Manage deliverables, milestones and client invoicing' },
     coagents: { title: 'Customers', subtitle: 'Manage your client directory and partnership relationships' },
     invoice: { title: 'Invoices', subtitle: 'Track issued invoices, payment status, and export documents' },

@@ -6,6 +6,7 @@ import { CoagentsTab } from './components/tabs/CoagentsTab';
 import { ProjectsTab } from './components/tabs/ProjectsTab';
 import { InvoiceTab } from './components/tabs/InvoiceTab';
 import { FinancesTab } from './components/tabs/FinancesTab';
+import { CRMTab } from './components/tabs/CRMTab';
 import { ReportingTab } from './components/tabs/ReportingTab';
 import { OptionsTab } from './components/tabs/OptionsTab';
 import { InvoiceModal } from './components/common/InvoiceModal';
@@ -23,10 +24,11 @@ const MainLayout: React.FC = () => {
         <Header />
 
         <main className="flex-1 p-6 md:p-8 max-w-7xl w-full mx-auto">
-          {activeTab === 'coagents' && <CoagentsTab />}
-          {activeTab === 'projects' && <ProjectsTab />}
-          {activeTab === 'invoice' && <InvoiceTab />}
           {activeTab === 'finances' && <FinancesTab />}
+          {activeTab === 'crm' && <CRMTab />}
+          {activeTab === 'projects' && <ProjectsTab />}
+          {activeTab === 'coagents' && <CoagentsTab />}
+          {activeTab === 'invoice' && <InvoiceTab />}
           {activeTab === 'reporting' && <ReportingTab />}
           {activeTab === 'options' && <OptionsTab />}
         </main>
