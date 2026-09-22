@@ -1,6 +1,8 @@
 import React from 'react';
 import { useBudget } from '../../context/BudgetContext';
 import { ActiveTab } from '../../types';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { MoneyReceive02Icon } from '@hugeicons/core-free-icons';
 import {
   LayoutDashboard,
   Target,
@@ -89,12 +91,7 @@ export const Sidebar: React.FC = () => {
           title="SalesPro Dashboard"
         >
           <div className="w-11 h-11 rounded-xl bg-[#4E53EE] flex items-center justify-center text-white shrink-0 shadow-sm shadow-[#4E53EE]/30">
-            {/* 3 Rising bars */}
-            <div className="flex items-end gap-1 h-5">
-              <span className="w-1.5 bg-white rounded-xs h-2.5"></span>
-              <span className="w-1.5 bg-white rounded-xs h-4"></span>
-              <span className="w-1.5 bg-white rounded-xs h-5"></span>
-            </div>
+            <HugeiconsIcon icon={MoneyReceive02Icon} size={24} className="w-6 h-6 text-white" strokeWidth={2.2} />
           </div>
           {isSidebarExpanded && (
             <div className="flex items-baseline font-extrabold text-xl tracking-tight">
