@@ -519,6 +519,77 @@ export function processAIQuery(query: string, context: AIQueryContext): AIMessag
     };
   }
 
+  // 6.5 QUERY: "P&L" / "PROFIT AND LOSS" / "მოგება ზარალი" / "NET PROFIT"
+  if (
+    normalized.includes('p&l') ||
+    normalized.includes('p and l') ||
+    normalized.includes('pnl') ||
+    normalized.includes('profit and loss') ||
+    normalized.includes('მოგება') ||
+    normalized.includes('ზარალი') ||
+    normalized.includes('net profit') ||
+    normalized.includes('profit margin')
+  ) {
+    const totalIncome = context.transactions
+      .filter((t) => t.type === 'Income')
+      .reduce((acc, t) => acc + t.amount, 0);
+
+    const totalExpense = context.transactions
+      .filter((t) => t.type === 'Expense')
+      .reduce((acc, t) => acc + t.amount, 0);
+
+    const netProfit = totalIncome - totalExpense;
+    const isProfitable = netProfit >= 0;
+    const profitMargin = totalIncome > 0 ? ((netProfit / totalIncome) * 100).toFixed(1) : '0.0';
+
+    const visual: AIVisualData = {
+      type: 'bar-chart',
+      title: 'P&L Statement (მოგება-ზარალი)',
+      subtitle: `Net Profit: ${formatCurrency(netProfit, currency)} (Margin: ${profitMargin}%)`,
+      data: [
+        { name: 'Operating Revenue', value: totalIncome, color: '#10B981' },
+        { name: 'Operating Expenses', value: totalExpense, color: '#EF4444' },
+        { name: 'Net Income', value: Math.max(0, netProfit), color: isProfitable ? '#4E53EE' : '#EF4444' },
+      ],
+      totalFormatted: formatCurrency(netProfit, currency),
+      kpiCards: [
+        {
+          label: 'Total Revenue',
+          value: formatCurrency(totalIncome, currency),
+          isPositive: true,
+          subtext: 'Operating inflows',
+        },
+        {
+          label: 'Operating Expenses',
+          value: formatCurrency(totalExpense, currency),
+          subtext: 'Operating outflows',
+        },
+        {
+          label: 'Net Profit / Margin',
+          value: `${formatCurrency(netProfit, currency)}`,
+          isPositive: isProfitable,
+          subtext: `${profitMargin}% margin`,
+        },
+      ],
+    };
+
+    return {
+      id: Date.now().toString(),
+      sender: 'assistant',
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      text: isProfitable
+        ? `Here is your **P&L Statement (Profit & Loss / მოგება-ზარალი)**:\n\n• **Operating Revenue:** ${formatCurrency(totalIncome, currency)}\n• **Operating Expenses:** ${formatCurrency(totalExpense, currency)}\n• **Net Profit:** **${formatCurrency(netProfit, currency)}** (${profitMargin}% margin).\n\nYour business is operating at a net profit! You can view the full category statement on the **P&L & Analytics** page.`
+        : `Here is your **P&L Statement (Profit & Loss / მოგება-ზარალი)**:\n\n• **Operating Revenue:** ${formatCurrency(totalIncome, currency)}\n• **Operating Expenses:** ${formatCurrency(totalExpense, currency)}\n• **Net Loss:** **-${formatCurrency(Math.abs(netProfit), currency)}** (${profitMargin}% margin).\n\nExpenses currently exceed revenue in recorded transactions.`,
+      visual,
+      suggestions: [
+        'Show expense breakdown',
+        'Who is my biggest client?',
+        'What was my income last week?',
+        'Summarize pending invoices',
+      ],
+    };
+  }
+
   // 7. QUERY: "FINANCIAL SUMMARY" / "OVERVIEW" / "HOW AM I DOING?"
   if (
     normalized.includes('summary') ||

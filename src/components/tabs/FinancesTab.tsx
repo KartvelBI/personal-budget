@@ -31,7 +31,9 @@ import {
   Search,
   Calendar,
   Filter,
+  FileSpreadsheet,
 } from 'lucide-react';
+import { RecordExpenseModal } from '../common/RecordExpenseModal';
 
 type DatePreset = 'all' | 'today' | 'this_week' | 'this_month' | 'this_year' | 'custom';
 
@@ -90,6 +92,7 @@ export const FinancesTab: React.FC = () => {
   const [typeFilter, setTypeFilter] = useState<'all' | 'Income' | 'Expense'>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
 
   // Date Filter State
   const [datePreset, setDatePreset] = useState<DatePreset>('all');
@@ -665,6 +668,25 @@ export const FinancesTab: React.FC = () => {
               />
             </div>
 
+            {/* Record Expense Button */}
+            <button
+              onClick={() => setIsExpenseModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#EF4444] hover:bg-[#DC2626] text-white rounded-xl text-xs font-bold shadow-xs transition shrink-0 cursor-pointer"
+            >
+              <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.4]" />
+              Record Expense
+            </button>
+
+            {/* P&L Statement Button */}
+            <button
+              onClick={() => setActiveTab('reporting')}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#F8F9FC] dark:bg-[#1F2330] hover:bg-[#EDEEFD] dark:hover:bg-[#4E53EE]/20 text-[#4E53EE] dark:text-[#7378FF] border border-[#F0F2F7] dark:border-[#2A3044] rounded-xl text-xs font-bold transition shrink-0 cursor-pointer"
+              title="Open Profit & Loss Statement"
+            >
+              <FileSpreadsheet className="w-3.5 h-3.5" />
+              P&L Statement
+            </button>
+
             <button
               onClick={() => setIsAddModalOpen(true)}
               className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#4E53EE] hover:bg-[#4338CA] text-white rounded-xl text-xs font-bold shadow-xs transition shrink-0 cursor-pointer"
@@ -914,6 +936,12 @@ export const FinancesTab: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Record Expense Modal */}
+      <RecordExpenseModal
+        isOpen={isExpenseModalOpen}
+        onClose={() => setIsExpenseModalOpen(false)}
+      />
     </div>
   );
 };

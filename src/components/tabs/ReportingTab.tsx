@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useBudget } from '../../context/BudgetContext';
+import { PLStatement } from './PLStatement';
 import {
   BarChart,
   Bar,
@@ -17,12 +18,14 @@ import {
   Download,
   PieChart as PieIcon,
   Users,
+  FileSpreadsheet,
 } from 'lucide-react';
 
 const SALESPRO_COLORS = ['#4E53EE', '#10B981', '#F59E0B', '#6366F1', '#EC4899', '#3B82F6', '#1E2238'];
 
 export const ReportingTab: React.FC = () => {
   const { transactions, categories, totals, projects, theme } = useBudget();
+  const [activeView, setActiveView] = useState<'pl' | 'charts'>('pl');
   const isDark = theme === 'dark';
 
   // 1. Group Monthly Data for BarChart
@@ -111,23 +114,49 @@ export const ReportingTab: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Top action row */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-sm font-extrabold text-[#1E2238] dark:text-white">Analytics & Reports</h2>
-          <p className="text-xs text-[#8C93AB] mt-0.5">
-            Cashflow performance, category distributions, and project deliverables
-          </p>
+      {/* Top View Switcher: Profit & Loss (P&L) vs Visual Analytics */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pb-2 border-b border-[#F0F2F7] dark:border-[#232738]">
+        <div className="flex bg-[#F8F9FC] dark:bg-[#161922] p-1.5 rounded-2xl border border-[#F0F2F7] dark:border-[#232738] w-fit shadow-2xs">
+          <button
+            onClick={() => setActiveView('pl')}
+            className={`flex items-center gap-2 px-4.5 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
+              activeView === 'pl'
+                ? 'bg-[#4E53EE] text-white shadow-xs'
+                : 'text-[#5E6482] dark:text-[#949DB2] hover:text-[#1E2238] dark:hover:text-white'
+            }`}
+          >
+            <FileSpreadsheet className="w-4 h-4" />
+            <span>Profit & Loss (P&L)</span>
+          </button>
+
+          <button
+            onClick={() => setActiveView('charts')}
+            className={`flex items-center gap-2 px-4.5 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
+              activeView === 'charts'
+                ? 'bg-[#4E53EE] text-white shadow-xs'
+                : 'text-[#5E6482] dark:text-[#949DB2] hover:text-[#1E2238] dark:hover:text-white'
+            }`}
+          >
+            <BarChart2 className="w-4 h-4" />
+            <span>Charts & Trends</span>
+          </button>
         </div>
 
-        <button
-          onClick={handleExportCSV}
-          className="inline-flex items-center justify-center gap-2.5 px-5 py-2.5 bg-[#1E2238] dark:bg-[#4E53EE] hover:bg-slate-800 dark:hover:bg-[#4338CA] text-white rounded-xl text-xs font-bold shadow-xs transition cursor-pointer"
-        >
-          <Download className="w-4.5 h-4.5 text-[#A5B4FC] stroke-[2.2]" />
-          Export CSV Report
-        </button>
+        {activeView === 'charts' && (
+          <button
+            onClick={handleExportCSV}
+            className="inline-flex items-center justify-center gap-2.5 px-4.5 py-2 bg-[#1E2238] dark:bg-[#4E53EE] hover:bg-slate-800 dark:hover:bg-[#4338CA] text-white rounded-xl text-xs font-bold shadow-xs transition cursor-pointer"
+          >
+            <Download className="w-4 h-4 text-[#A5B4FC] stroke-[2.2]" />
+            Export CSV
+          </button>
+        )}
       </div>
+
+      {activeView === 'pl' ? (
+        <PLStatement />
+      ) : (
+        <div className="space-y-6">
 
       {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -291,5 +320,7 @@ export const ReportingTab: React.FC = () => {
         </div>
       </div>
     </div>
-  );
+  )}
+</div>
+);
 };

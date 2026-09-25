@@ -21,7 +21,7 @@ export const Header: React.FC = () => {
     projects: { title: 'Projects', subtitle: 'Manage deliverables, milestones and client invoicing' },
     coagents: { title: 'Customers', subtitle: 'Manage your client directory and partnership relationships' },
     invoice: { title: 'Invoices', subtitle: 'Track issued invoices, payment status, and export documents' },
-    reporting: { title: 'Analytics', subtitle: 'Detailed revenue growth, cashflow trends, and performance' },
+    reporting: { title: 'P&L & Analytics', subtitle: 'Profit and loss statement, net profit margins, cashflow and distributions' },
     options: { title: 'Settings', subtitle: 'Configure categories, currencies, and invoice templates' },
   };
 
