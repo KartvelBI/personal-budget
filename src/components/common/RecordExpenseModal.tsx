@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { useBudget } from '../../context/BudgetContext';
 import {
-  X,
-  ArrowUpRight,
-  Calendar,
-  Tag,
-  DollarSign,
-  FileText,
-  Building2,
-  Hash,
-  CheckCircle2,
-} from 'lucide-react';
+  CloseCircleIcon as X,
+  ArrowRightUpIcon as ArrowUpRight,
+  CalendarIcon as Calendar,
+  TagIcon as Tag,
+  DollarIcon as DollarSign,
+  FileTextIcon as FileText,
+  Buildings2Icon as Building2,
+  HashtagIcon as Hash,
+  CheckCircleIcon as CheckCircle2,
+} from '@solar-icons/react/bold-duotone';
 
 interface Props {
   isOpen: boolean;

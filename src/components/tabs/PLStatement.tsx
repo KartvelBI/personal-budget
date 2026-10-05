@@ -2,20 +2,20 @@ import React, { useState } from 'react';
 import { useBudget } from '../../context/BudgetContext';
 import { RecordExpenseModal } from '../common/RecordExpenseModal';
 import {
-  TrendingUp,
-  TrendingDown,
-  Calendar,
-  Download,
-  Printer,
-  Plus,
-  ArrowUpRight,
-  ArrowDownLeft,
-  ChevronDown,
-  ChevronRight,
-  FileSpreadsheet,
-  PieChart as PieIcon,
-  CheckCircle2,
-} from 'lucide-react';
+  GraphNewUpIcon as TrendingUp,
+  GraphDownNewIcon as TrendingDown,
+  CalendarIcon as Calendar,
+  FileDownloadIcon as Download,
+  PrinterIcon as Printer,
+  AddCircleIcon as Plus,
+  ArrowRightUpIcon as ArrowUpRight,
+  ArrowLeftDownIcon as ArrowDownLeft,
+  AltArrowDownIcon as ChevronDown,
+  AltArrowRightIcon as ChevronRight,
+  FileSpreadsheetIcon as FileSpreadsheet,
+  PieChart2Icon as PieIcon,
+  CheckCircleIcon as CheckCircle2,
+} from '@solar-icons/react/bold-duotone';
 
 type DatePreset = 'this_month' | 'last_month' | 'this_quarter' | 'this_year' | 'all' | 'custom';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles } from 'lucide-react';
+import { StarsIcon as Sparkles } from '@solar-icons/react/bold-duotone';
 
 interface Props {
   suggestions: string[];

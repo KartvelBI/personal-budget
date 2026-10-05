@@ -1,20 +1,19 @@
 import React from 'react';
 import { useBudget } from '../../context/BudgetContext';
 import { ActiveTab } from '../../types';
-import { HugeiconsIcon } from '@hugeicons/react';
-import { MoneyReceive02Icon } from '@hugeicons/core-free-icons';
 import {
-  LayoutDashboard,
-  Target,
-  FolderKanban,
-  Users,
-  Receipt,
-  BarChart2,
-  Settings,
-  ChevronLeft,
-  ChevronRight,
-  ChevronDown,
-} from 'lucide-react';
+  Widget4Icon,
+  TargetIcon,
+  Folder2Icon,
+  UsersGroupRoundedIcon,
+  BillListIcon,
+  ChartSquareIcon,
+  SettingsIcon,
+  AltArrowLeftIcon,
+  AltArrowRightIcon,
+  AltArrowDownIcon,
+  CardReceiveIcon,
+} from '@solar-icons/react/bold-duotone';
 
 export const Sidebar: React.FC = () => {
   const {
@@ -33,45 +32,45 @@ export const Sidebar: React.FC = () => {
   const pendingProjectsCount = projects.filter((p) => p.status === 'Pending').length;
   const unpaidInvoicesCount = invoices.filter((i) => i.status === 'Sent' || i.status === 'Draft').length;
 
-  const navItems: { id: ActiveTab; label: string; icon: React.ComponentType<{ className?: string; strokeWidth?: number }>; badge?: number }[] = [
+  const navItems: { id: ActiveTab; label: string; icon: React.ComponentType<{ className?: string }>; badge?: number }[] = [
     {
       id: 'finances',
       label: 'Dashboard',
-      icon: LayoutDashboard,
+      icon: Widget4Icon,
     },
     {
       id: 'crm',
       label: 'CRM Leads',
-      icon: Target,
+      icon: TargetIcon,
       badge: activeLeadsCount > 0 ? activeLeadsCount : undefined,
     },
     {
       id: 'projects',
       label: 'Projects',
-      icon: FolderKanban,
+      icon: Folder2Icon,
       badge: pendingProjectsCount > 0 ? pendingProjectsCount : undefined,
     },
     {
       id: 'coagents',
       label: 'Customers',
-      icon: Users,
+      icon: UsersGroupRoundedIcon,
       badge: coagents.length,
     },
     {
       id: 'invoice',
       label: 'Invoices',
-      icon: Receipt,
+      icon: BillListIcon,
       badge: unpaidInvoicesCount > 0 ? unpaidInvoicesCount : undefined,
     },
     {
       id: 'reporting',
       label: 'P&L & Analytics',
-      icon: BarChart2,
+      icon: ChartSquareIcon,
     },
     {
       id: 'options',
       label: 'Settings',
-      icon: Settings,
+      icon: SettingsIcon,
     },
   ];
 
@@ -91,7 +90,7 @@ export const Sidebar: React.FC = () => {
           title="SalesPro Dashboard"
         >
           <div className="w-11 h-11 rounded-xl bg-[#4E53EE] flex items-center justify-center text-white shrink-0 shadow-sm shadow-[#4E53EE]/30">
-            <HugeiconsIcon icon={MoneyReceive02Icon} size={24} className="w-6 h-6 text-white" strokeWidth={2.2} />
+            <CardReceiveIcon className="w-6.5 h-6.5 text-white" />
           </div>
           {isSidebarExpanded && (
             <div className="flex items-baseline font-extrabold text-xl tracking-tight">
@@ -108,7 +107,7 @@ export const Sidebar: React.FC = () => {
             className="p-2 rounded-xl text-[#8C93AB] hover:text-[#1E2238] dark:hover:text-white hover:bg-[#F8F9FC] dark:hover:bg-[#1F2330] transition cursor-pointer"
             title="Collapse Sidebar"
           >
-            <ChevronLeft className="w-5 h-5" strokeWidth={2.5} />
+            <AltArrowLeftIcon className="w-5 h-5" />
           </button>
         ) : (
           <button
@@ -116,7 +115,7 @@ export const Sidebar: React.FC = () => {
             className="p-1.5 rounded-lg text-[#8C93AB] hover:text-[#1E2238] dark:hover:text-white hover:bg-[#F8F9FC] dark:hover:bg-[#1F2330] transition absolute -right-3 top-6 bg-white dark:bg-[#161922] border border-[#F0F2F7] dark:border-[#232738] shadow-xs cursor-pointer"
             title="Expand Sidebar"
           >
-            <ChevronRight className="w-4.5 h-4.5" strokeWidth={2.5} />
+            <AltArrowRightIcon className="w-4.5 h-4.5" />
           </button>
         )}
       </div>
@@ -155,7 +154,6 @@ export const Sidebar: React.FC = () => {
                       ? 'text-[#4E53EE] dark:text-[#7378FF]'
                       : 'text-[#8C93AB] group-hover:text-[#4E53EE] dark:group-hover:text-white'
                   }`}
-                  strokeWidth={2.2}
                 />
                 {isSidebarExpanded && <span>{item.label}</span>}
               </div>
@@ -200,7 +198,7 @@ export const Sidebar: React.FC = () => {
             </div>
           )}
         </div>
-        {isSidebarExpanded && <ChevronDown className="w-3.5 h-3.5 text-[#8C93AB]" />}
+        {isSidebarExpanded && <AltArrowDownIcon className="w-3.5 h-3.5 text-[#8C93AB]" />}
       </div>
     </aside>
   );

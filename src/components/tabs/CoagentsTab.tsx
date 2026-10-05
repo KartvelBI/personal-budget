@@ -2,18 +2,18 @@ import React, { useState } from 'react';
 import { useBudget } from '../../context/BudgetContext';
 import { Coagent } from '../../types';
 import {
-  Users,
-  Plus,
-  Search,
-  Mail,
-  Phone,
-  MapPin,
-  Edit2,
-  Trash2,
-  FileText,
-  FolderKanban,
-  X,
-} from 'lucide-react';
+  UsersGroupRoundedIcon as Users,
+  AddCircleIcon as Plus,
+  MagnifierIcon as Search,
+  LetterIcon as Mail,
+  PhoneCallingIcon as Phone,
+  MapPointIcon as MapPin,
+  Pen2Icon as Edit2,
+  TrashBinTrashIcon as Trash2,
+  FileTextIcon as FileText,
+  Folder2Icon as FolderKanban,
+  CloseCircleIcon as X,
+} from '@solar-icons/react/bold-duotone';
 
 const AVATAR_BG_COLORS = [
   'bg-[#EDEEFD] text-[#4E53EE]',

@@ -2,7 +2,12 @@ import React from 'react';
 import { AIMessage } from './aiTypes';
 import { AIVisualRenderer } from './AIVisualRenderer';
 import { AIPromptChips } from './AIPromptChips';
-import { Sparkles, User, Copy, Check } from 'lucide-react';
+import {
+  StarsIcon as Sparkles,
+  UserCircleIcon as User,
+  CopyIcon as Copy,
+  CheckSquareIcon as Check,
+} from '@solar-icons/react/bold-duotone';
 
 interface Props {
   message: AIMessage;

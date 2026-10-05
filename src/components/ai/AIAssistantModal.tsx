@@ -5,16 +5,16 @@ import { processAIQuery } from './aiEngine';
 import { AIChatMessage } from './AIChatMessage';
 import { AIPromptChips } from './AIPromptChips';
 import {
-  Sparkles,
-  X,
-  Maximize2,
-  Minimize2,
-  Minus,
-  Send,
-  Trash2,
-  Bot,
-  MessageSquare,
-} from 'lucide-react';
+  StarsIcon as Sparkles,
+  CloseCircleIcon as X,
+  MaximizeSquareIcon as Maximize2,
+  MinimizeSquareIcon as Minimize2,
+  MinusIcon as Minus,
+  SendSquareIcon as Send,
+  TrashBinTrashIcon as Trash2,
+  BotIcon as Bot,
+  ChatRoundDotsIcon as MessageSquare,
+} from '@solar-icons/react/bold-duotone';
 
 export const AIAssistantModal: React.FC = () => {
   const {

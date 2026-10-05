@@ -12,7 +12,11 @@ import {
   Cell,
 } from 'recharts';
 import { AIVisualData } from './aiTypes';
-import { TrendingUp, TrendingDown, Sparkles } from 'lucide-react';
+import {
+  GraphNewUpIcon as TrendingUp,
+  GraphDownNewIcon as TrendingDown,
+  StarsIcon as Sparkles,
+} from '@solar-icons/react/bold-duotone';
 
 interface Props {
   visual: AIVisualData;

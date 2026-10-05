@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { useBudget } from '../../context/BudgetContext';
 import {
-  Tag,
-  Plus,
-  Trash2,
-  Building,
-  CreditCard,
-  Download,
-  Upload,
-  RotateCcw,
-  Check,
-  DollarSign,
-  Layers,
-} from 'lucide-react';
+  TagIcon as Tag,
+  AddCircleIcon as Plus,
+  TrashBinTrashIcon as Trash2,
+  BuildingsIcon as Building,
+  CardIcon as CreditCard,
+  FileDownloadIcon as Download,
+  UploadIcon as Upload,
+  RestartIcon as RotateCcw,
+  CheckCircleIcon as Check,
+  DollarIcon as DollarSign,
+  LayersIcon as Layers,
+} from '@solar-icons/react/bold-duotone';
 
 const PRESET_COLORS = [
   '#4E53EE', // Indigo

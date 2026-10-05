@@ -2,22 +2,22 @@ import React, { useState } from 'react';
 import { useBudget } from '../../context/BudgetContext';
 import { ProjectEntry, ProjectStatus } from '../../types';
 import {
-  FolderKanban,
-  Calendar,
-  Building2,
-  Tag,
-  DollarSign,
-  FileText,
-  Send,
-  Plus,
-  Search,
-  CheckCircle2,
-  Clock,
-  Trash2,
-  AlertCircle,
-  Edit2,
-  X,
-} from 'lucide-react';
+  Folder2Icon as FolderKanban,
+  CalendarIcon as Calendar,
+  Buildings2Icon as Building2,
+  TagIcon as Tag,
+  DollarIcon as DollarSign,
+  FileTextIcon as FileText,
+  SendSquareIcon as Send,
+  AddCircleIcon as Plus,
+  MagnifierIcon as Search,
+  CheckCircleIcon as CheckCircle2,
+  ClockCircleIcon as Clock,
+  TrashBinTrashIcon as Trash2,
+  DangerCircleIcon as AlertCircle,
+  Pen2Icon as Edit2,
+  CloseCircleIcon as X,
+} from '@solar-icons/react/bold-duotone';
 
 export const ProjectsTab: React.FC = () => {
   const {

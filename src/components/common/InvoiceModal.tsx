@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 import { useBudget } from '../../context/BudgetContext';
-import { Printer, CheckCircle, Mail, X, Calendar, Building2, User, CreditCard } from 'lucide-react';
+import {
+  PrinterIcon as Printer,
+  CheckCircleIcon as CheckCircle,
+  LetterIcon as Mail,
+  CloseCircleIcon as X,
+  CalendarIcon as Calendar,
+  Buildings2Icon as Building2,
+  UserCircleIcon as User,
+  CardIcon as CreditCard,
+} from '@solar-icons/react/bold-duotone';
 
 export const InvoiceModal: React.FC = () => {
   const { selectedInvoice, setSelectedInvoice, updateInvoiceStatus, coagents, settings } = useBudget();

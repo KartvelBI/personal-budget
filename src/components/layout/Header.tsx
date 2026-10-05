@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { useBudget } from '../../context/BudgetContext';
 import {
-  Search,
-  Bell,
-  LayoutGrid,
-  Plus,
-  Menu,
-  Sun,
-  Moon,
-  Sparkles,
-} from 'lucide-react';
+  MagnifierIcon,
+  BellIcon,
+  Widget3Icon,
+  AddCircleIcon,
+  HamburgerMenuIcon,
+  SunIcon,
+  MoonStarsIcon,
+  StarsIcon,
+} from '@solar-icons/react/bold-duotone';
 
 export const Header: React.FC = () => {
   const { activeTab, setActiveTab, theme, toggleTheme, toggleSidebar, toggleAIAssistant } = useBudget();
@@ -38,7 +38,7 @@ export const Header: React.FC = () => {
           title="Toggle Left Menu"
           aria-label="Toggle Sidebar"
         >
-          <Menu className="w-6 h-6" strokeWidth={2.2} />
+          <HamburgerMenuIcon className="w-6 h-6" />
         </button>
 
         <div>
@@ -55,7 +55,7 @@ export const Header: React.FC = () => {
       <div className="flex items-center gap-2.5 sm:gap-3.5">
         {/* Search Input */}
         <div className="relative w-44 sm:w-60 hidden md:block">
-          <Search className="w-5 h-5 text-[#8C93AB] absolute left-3.5 top-1/2 -translate-y-1/2" strokeWidth={2.2} />
+          <MagnifierIcon className="w-5 h-5 text-[#8C93AB] absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             placeholder="Search"
@@ -71,7 +71,7 @@ export const Header: React.FC = () => {
           className="w-11 h-11 rounded-xl border border-[#F0F2F7] dark:border-[#2A3044] bg-[#F8F9FC] dark:bg-[#1F2330] flex items-center justify-center text-[#5E6482] dark:text-[#F59E0B] hover:text-[#1E2238] dark:hover:text-white transition shadow-2xs cursor-pointer"
           title={theme === 'dark' ? 'Switch to White Theme' : 'Switch to Dark Theme'}
         >
-          {theme === 'dark' ? <Sun className="w-6 h-6" strokeWidth={2.2} /> : <Moon className="w-6 h-6" strokeWidth={2.2} />}
+          {theme === 'dark' ? <SunIcon className="w-6 h-6" /> : <MoonStarsIcon className="w-6 h-6" />}
         </button>
 
         {/* AI Assistant Copilot Quick Toggle */}
@@ -80,7 +80,7 @@ export const Header: React.FC = () => {
           className="relative w-11 h-11 rounded-xl border border-[#4E53EE]/30 bg-[#EDEEFD] dark:bg-[#4E53EE]/20 flex items-center justify-center text-[#4E53EE] dark:text-[#7378FF] hover:bg-[#4E53EE] hover:text-white transition shadow-2xs cursor-pointer group"
           title="Open AI Financial Copilot"
         >
-          <Sparkles className="w-5 h-5 group-hover:scale-110 transition-transform" strokeWidth={2.2} />
+          <StarsIcon className="w-5 h-5 group-hover:scale-110 transition-transform" />
           <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#10B981] ring-2 ring-white dark:ring-[#161922]"></span>
         </button>
 
@@ -89,7 +89,7 @@ export const Header: React.FC = () => {
           className="w-11 h-11 rounded-xl border border-[#F0F2F7] dark:border-[#2A3044] bg-[#F8F9FC] dark:bg-[#1F2330] flex items-center justify-center text-[#8C93AB] hover:text-[#1E2238] dark:hover:text-white transition shadow-2xs hidden sm:flex cursor-pointer"
           title="Apps"
         >
-          <LayoutGrid className="w-6 h-6" strokeWidth={2.2} />
+          <Widget3Icon className="w-6 h-6" />
         </button>
 
         {/* Notification Bell */}
@@ -97,7 +97,7 @@ export const Header: React.FC = () => {
           className="relative w-11 h-11 rounded-xl border border-[#F0F2F7] dark:border-[#2A3044] bg-[#F8F9FC] dark:bg-[#1F2330] flex items-center justify-center text-[#8C93AB] hover:text-[#1E2238] dark:hover:text-white transition shadow-2xs cursor-pointer"
           title="Notifications"
         >
-          <Bell className="w-6 h-6" strokeWidth={2.2} />
+          <BellIcon className="w-6 h-6" />
           <span className="absolute top-2.5 right-2.5 w-2.5 h-2.5 rounded-full bg-[#EF4444] ring-2 ring-white dark:ring-[#161922]"></span>
         </button>
 
@@ -117,7 +117,7 @@ export const Header: React.FC = () => {
             onClick={() => setActiveTab('projects')}
             className="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#4E53EE] hover:bg-[#4338CA] text-white text-xs font-bold shadow-xs shadow-[#4E53EE]/25 transition cursor-pointer"
           >
-            <Plus className="w-5 h-5" strokeWidth={2.5} />
+            <AddCircleIcon className="w-5 h-5" />
             <span>New Project</span>
           </button>
         )}

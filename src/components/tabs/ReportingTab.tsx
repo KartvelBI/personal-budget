@@ -14,12 +14,12 @@ import {
   Cell,
 } from 'recharts';
 import {
-  BarChart2,
-  Download,
-  PieChart as PieIcon,
-  Users,
-  FileSpreadsheet,
-} from 'lucide-react';
+  ChartSquareIcon as BarChart2,
+  FileDownloadIcon as Download,
+  PieChart2Icon as PieIcon,
+  UsersGroupRoundedIcon as Users,
+  FileSpreadsheetIcon as FileSpreadsheet,
+} from '@solar-icons/react/bold-duotone';
 
 const SALESPRO_COLORS = ['#4E53EE', '#10B981', '#F59E0B', '#6366F1', '#EC4899', '#3B82F6', '#1E2238'];
 

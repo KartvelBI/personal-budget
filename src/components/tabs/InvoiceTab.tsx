@@ -2,20 +2,20 @@ import React, { useState } from 'react';
 import { useBudget } from '../../context/BudgetContext';
 import { Invoice, InvoiceStatus } from '../../types';
 import {
-  FileText,
-  Search,
-  CheckCircle2,
-  Clock,
-  Trash2,
-  Eye,
-  Building2,
-  CheckCircle,
-  AlertCircle,
-  Edit2,
-  X,
-  Calendar,
-  DollarSign,
-} from 'lucide-react';
+  FileTextIcon as FileText,
+  MagnifierIcon as Search,
+  CheckCircleIcon as CheckCircle2,
+  ClockCircleIcon as Clock,
+  TrashBinTrashIcon as Trash2,
+  EyeIcon as Eye,
+  Buildings2Icon as Building2,
+  CheckCircleIcon as CheckCircle,
+  DangerCircleIcon as AlertCircle,
+  Pen2Icon as Edit2,
+  CloseCircleIcon as X,
+  CalendarIcon as Calendar,
+  DollarIcon as DollarSign,
+} from '@solar-icons/react/bold-duotone';
 
 export const InvoiceTab: React.FC = () => {
   const {
