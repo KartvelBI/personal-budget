@@ -13,6 +13,8 @@ import {
   FileTextIcon as FileText,
   Folder2Icon as FolderKanban,
   CloseCircleIcon as X,
+  Widget3Icon as LayoutGrid,
+  ListIcon as List,
 } from '@solar-icons/react/bold-duotone';
 
 const AVATAR_BG_COLORS = [
@@ -25,6 +27,7 @@ const AVATAR_BG_COLORS = [
 export const CoagentsTab: React.FC = () => {
   const { coagents, addCoagent, updateCoagent, deleteCoagent, projects, invoices, settings } = useBudget();
   const [searchTerm, setSearchTerm] = useState('');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCoagent, setEditingCoagent] = useState<Coagent | null>(null);
 
@@ -103,134 +106,315 @@ export const CoagentsTab: React.FC = () => {
           />
         </div>
 
-        <button
-          onClick={openAddModal}
-          className="inline-flex items-center justify-center gap-2.5 bg-[#4E53EE] hover:bg-[#4338CA] text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-xs shadow-[#4E53EE]/25 transition cursor-pointer"
-        >
-          <Plus className="w-5 h-5 stroke-[2.2]" />
-          Add Customer
-        </button>
-      </div>
-
-      {/* Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {filteredCoagents.length === 0 && (
-          <div className="col-span-full py-16 text-center text-xs text-[#8C93AB] bg-white dark:bg-[#161926] rounded-2xl border border-[#F0F2F7] dark:border-[#232738] p-8">
-            <Users className="w-12 h-12 mx-auto text-[#8C93AB]/40 mb-3 stroke-[2]" />
-            <h3 className="font-extrabold text-[#1E2238] dark:text-white text-sm">No Customers Found</h3>
-            <p className="mt-1">Add your first client or organization to get started.</p>
+        <div className="flex items-center gap-3">
+          {/* View Mode Toggle: Grid vs List */}
+          <div className="flex bg-[#F8F9FC] dark:bg-[#1F2330] p-1 rounded-xl border border-[#F0F2F7] dark:border-[#2A3044]">
             <button
-              onClick={openAddModal}
-              className="mt-4 inline-flex items-center gap-2 bg-[#4E53EE] text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-xs shadow-[#4E53EE]/25 cursor-pointer"
+              onClick={() => setViewMode('grid')}
+              className={`p-2 rounded-lg transition cursor-pointer ${
+                viewMode === 'grid'
+                  ? 'bg-white dark:bg-[#252A3D] text-[#4E53EE] dark:text-white shadow-xs'
+                  : 'text-[#8C93AB] hover:text-[#1E2238] dark:hover:text-white'
+              }`}
+              title="Grid View"
+              aria-label="Grid View"
             >
-              <Plus className="w-4.5 h-4.5 stroke-[2.2]" />
-              Add Customer
+              <LayoutGrid className="w-5 h-5 stroke-[2.2]" />
+            </button>
+            <button
+              onClick={() => setViewMode('list')}
+              className={`p-2 rounded-lg transition cursor-pointer ${
+                viewMode === 'list'
+                  ? 'bg-white dark:bg-[#252A3D] text-[#4E53EE] dark:text-white shadow-xs'
+                  : 'text-[#8C93AB] hover:text-[#1E2238] dark:hover:text-white'
+              }`}
+              title="List View"
+              aria-label="List View"
+            >
+              <List className="w-5 h-5 stroke-[2.2]" />
             </button>
           </div>
-        )}
-        {filteredCoagents.map((coagent, idx) => {
-          const coagentProjects = projects.filter((p) => p.coagentId === coagent.id);
-          const coagentInvoices = invoices.filter((i) => i.coagentId === coagent.id);
-          const totalInvoiced = coagentInvoices.reduce((sum, i) => sum + i.amount, 0);
-          const avatarColor = AVATAR_BG_COLORS[idx % AVATAR_BG_COLORS.length];
 
-          return (
-            <div
-              key={coagent.id}
-              className="bg-white dark:bg-[#161926] rounded-2xl border border-[#F0F2F7] dark:border-[#232738] p-5.5 shadow-xs hover:shadow-md transition-all duration-150 flex flex-col justify-between group"
-            >
-              <div>
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex items-center gap-3.5">
-                    <div className={`w-14 h-14 rounded-2xl ${avatarColor} flex items-center justify-center font-black text-xl shadow-sm shrink-0`}>
-                      {(coagent.company || coagent.name).charAt(0).toUpperCase()}
-                    </div>
-                    <div>
-                      <h3 className="font-extrabold text-[#1E2238] dark:text-white text-sm leading-snug">
-                        {coagent.company || coagent.name}
-                      </h3>
-                      {coagent.name && coagent.name !== coagent.company && (
-                        <p className="text-xs text-[#8C93AB] font-medium">{coagent.name}</p>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-1.5 opacity-80 group-hover:opacity-100 transition">
-                    <button
-                      onClick={() => openEditModal(coagent)}
-                      className="p-2 text-[#8C93AB] hover:text-[#4E53EE] hover:bg-[#EDEEFD] dark:hover:bg-[#4E53EE]/20 rounded-xl transition"
-                      title="Edit Customer"
-                    >
-                      <Edit2 className="w-5 h-5 stroke-[2]" />
-                    </button>
-                    <button
-                      onClick={() => {
-                        if (confirm(`Delete customer "${coagent.name || coagent.company}"?`)) {
-                          deleteCoagent(coagent.id);
-                        }
-                      }}
-                      className="p-2 text-[#8C93AB] hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-xl transition"
-                      title="Delete Customer"
-                    >
-                      <Trash2 className="w-5 h-5 stroke-[2]" />
-                    </button>
-                  </div>
-                </div>
-
-                <div className="mt-4.5 space-y-2 text-xs text-[#5E6482] dark:text-[#A0A6BF]">
-                  {coagent.email && (
-                    <div className="flex items-center gap-2.5 truncate">
-                      <Mail className="w-4.5 h-4.5 text-[#8C93AB] shrink-0 stroke-[2]" />
-                      <a href={`mailto:${coagent.email}`} className="truncate hover:text-[#4E53EE] dark:hover:text-[#818CF8] font-medium transition">
-                        {coagent.email}
-                      </a>
-                    </div>
-                  )}
-                  {coagent.phone && (
-                    <div className="flex items-center gap-2.5 truncate">
-                      <Phone className="w-4.5 h-4.5 text-[#8C93AB] shrink-0 stroke-[2]" />
-                      <span className="font-medium text-[#1E2238] dark:text-[#EAECEF]">{coagent.phone}</span>
-                    </div>
-                  )}
-                  {coagent.address && (
-                    <div className="flex items-center gap-2.5 truncate">
-                      <MapPin className="w-4.5 h-4.5 text-[#8C93AB] shrink-0 stroke-[2]" />
-                      <span className="truncate">{coagent.address}</span>
-                    </div>
-                  )}
-                </div>
-
-                {coagent.notes && (
-                  <p className="mt-3.5 text-[11px] text-[#8C93AB] italic line-clamp-2 bg-[#F8F9FC] dark:bg-[#1C2030] p-2.5 rounded-xl border border-[#F0F2F7] dark:border-[#232738]">
-                    "{coagent.notes}"
-                  </p>
-                )}
-              </div>
-
-              {/* Bottom stats */}
-              <div className="mt-5 pt-3.5 border-t border-[#F0F2F7] dark:border-[#232738] flex items-center justify-between text-xs">
-                <div>
-                  <span className="text-[10px] uppercase font-bold text-[#8C93AB] block tracking-wide">Total Invoiced</span>
-                  <span className="font-extrabold text-[#1E2238] dark:text-white font-mono text-sm">
-                    ${totalInvoiced.toLocaleString()}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#F8F9FC] dark:bg-[#1C2030] text-[#1E2238] dark:text-[#EAECEF] text-xs font-bold border border-[#F0F2F7] dark:border-[#232738]">
-                    <FolderKanban className="w-4 h-4 text-[#8C93AB] stroke-[2]" />
-                    {coagentProjects.length}
-                  </span>
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#EDEEFD] dark:bg-[#4E53EE]/20 text-[#4E53EE] dark:text-[#818CF8] text-xs font-bold">
-                    <FileText className="w-4 h-4 text-[#4E53EE] dark:text-[#818CF8] stroke-[2]" />
-                    {coagentInvoices.length}
-                  </span>
-                </div>
-              </div>
-            </div>
-          );
-        })}
+          <button
+            onClick={openAddModal}
+            className="inline-flex items-center justify-center gap-2.5 bg-[#4E53EE] hover:bg-[#4338CA] text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-xs shadow-[#4E53EE]/25 transition cursor-pointer whitespace-nowrap active:scale-95"
+          >
+            <Plus className="w-5 h-5 stroke-[2.2]" />
+            Add Customer
+          </button>
+        </div>
       </div>
+
+      {/* View Content: Grid vs List */}
+      {viewMode === 'grid' ? (
+        /* CARDS GRID VIEW */
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {filteredCoagents.length === 0 && (
+            <div className="col-span-full py-16 text-center text-xs text-[#8C93AB] bg-white dark:bg-[#161926] rounded-2xl border border-[#F0F2F7] dark:border-[#232738] p-8">
+              <Users className="w-12 h-12 mx-auto text-[#8C93AB]/40 mb-3 stroke-[2]" />
+              <h3 className="font-extrabold text-[#1E2238] dark:text-white text-sm">No Customers Found</h3>
+              <p className="mt-1">Add your first client or organization to get started.</p>
+              <button
+                onClick={openAddModal}
+                className="mt-4 inline-flex items-center gap-2 bg-[#4E53EE] text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-xs shadow-[#4E53EE]/25 cursor-pointer"
+              >
+                <Plus className="w-4.5 h-4.5 stroke-[2.2]" />
+                Add Customer
+              </button>
+            </div>
+          )}
+          {filteredCoagents.map((coagent, idx) => {
+            const coagentProjects = projects.filter((p) => p.coagentId === coagent.id);
+            const coagentInvoices = invoices.filter((i) => i.coagentId === coagent.id);
+            const totalInvoiced = coagentInvoices.reduce((sum, i) => sum + i.amount, 0);
+            const avatarColor = AVATAR_BG_COLORS[idx % AVATAR_BG_COLORS.length];
+
+            return (
+              <div
+                key={coagent.id}
+                className="bg-white dark:bg-[#161926] rounded-2xl border border-[#F0F2F7] dark:border-[#232738] p-5.5 shadow-xs hover:shadow-md transition-all duration-150 flex flex-col justify-between group"
+              >
+                <div>
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-3.5">
+                      <div className={`w-14 h-14 rounded-2xl ${avatarColor} flex items-center justify-center font-black text-xl shadow-sm shrink-0`}>
+                        {(coagent.company || coagent.name).charAt(0).toUpperCase()}
+                      </div>
+                      <div>
+                        <h3 className="font-extrabold text-[#1E2238] dark:text-white text-sm leading-snug">
+                          {coagent.company || coagent.name}
+                        </h3>
+                        {coagent.name && coagent.name !== coagent.company && (
+                          <p className="text-xs text-[#8C93AB] font-medium">{coagent.name}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-1.5 opacity-80 group-hover:opacity-100 transition">
+                      <button
+                        onClick={() => openEditModal(coagent)}
+                        className="p-2 text-[#8C93AB] hover:text-[#4E53EE] hover:bg-[#EDEEFD] dark:hover:bg-[#4E53EE]/20 rounded-xl transition cursor-pointer"
+                        title="Edit Customer"
+                      >
+                        <Edit2 className="w-5 h-5 stroke-[2]" />
+                      </button>
+                      <button
+                        onClick={() => {
+                          if (confirm(`Delete customer "${coagent.name || coagent.company}"?`)) {
+                            deleteCoagent(coagent.id);
+                          }
+                        }}
+                        className="p-2 text-[#8C93AB] hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-xl transition cursor-pointer"
+                        title="Delete Customer"
+                      >
+                        <Trash2 className="w-5 h-5 stroke-[2]" />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="mt-4.5 space-y-2 text-xs text-[#5E6482] dark:text-[#A0A6BF]">
+                    {coagent.email && (
+                      <div className="flex items-center gap-2.5 truncate">
+                        <Mail className="w-4.5 h-4.5 text-[#8C93AB] shrink-0 stroke-[2]" />
+                        <a href={`mailto:${coagent.email}`} className="truncate hover:text-[#4E53EE] dark:hover:text-[#818CF8] font-medium transition">
+                          {coagent.email}
+                        </a>
+                      </div>
+                    )}
+                    {coagent.phone && (
+                      <div className="flex items-center gap-2.5 truncate">
+                        <Phone className="w-4.5 h-4.5 text-[#8C93AB] shrink-0 stroke-[2]" />
+                        <span className="font-medium text-[#1E2238] dark:text-[#EAECEF]">{coagent.phone}</span>
+                      </div>
+                    )}
+                    {coagent.address && (
+                      <div className="flex items-center gap-2.5 truncate">
+                        <MapPin className="w-4.5 h-4.5 text-[#8C93AB] shrink-0 stroke-[2]" />
+                        <span className="truncate">{coagent.address}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {coagent.notes && (
+                    <p className="mt-3.5 text-[11px] text-[#8C93AB] italic line-clamp-2 bg-[#F8F9FC] dark:bg-[#1C2030] p-2.5 rounded-xl border border-[#F0F2F7] dark:border-[#232738]">
+                      "{coagent.notes}"
+                    </p>
+                  )}
+                </div>
+
+                {/* Bottom stats */}
+                <div className="mt-5 pt-3.5 border-t border-[#F0F2F7] dark:border-[#232738] flex items-center justify-between text-xs">
+                  <div>
+                    <span className="text-[10px] uppercase font-bold text-[#8C93AB] block tracking-wide">Total Invoiced</span>
+                    <span className="font-extrabold text-[#1E2238] dark:text-white font-mono text-sm">
+                      ${totalInvoiced.toLocaleString()}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#F8F9FC] dark:bg-[#1C2030] text-[#1E2238] dark:text-[#EAECEF] text-xs font-bold border border-[#F0F2F7] dark:border-[#232738]">
+                      <FolderKanban className="w-4 h-4 text-[#8C93AB] stroke-[2]" />
+                      {coagentProjects.length}
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#EDEEFD] dark:bg-[#4E53EE]/20 text-[#4E53EE] dark:text-[#818CF8] text-xs font-bold">
+                      <FileText className="w-4 h-4 text-[#4E53EE] dark:text-[#818CF8] stroke-[2]" />
+                      {coagentInvoices.length}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        /* TABLE / LIST VIEW */
+        <div className="bg-white dark:bg-[#161922] rounded-2xl border border-[#F0F2F7] dark:border-[#232738] p-5 sm:p-6 shadow-xs transition-colors">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="border-b border-[#F0F2F7] dark:border-[#232738] text-[11px] font-bold text-[#8C93AB] bg-[#F8F9FC]/60 dark:bg-[#1C2030]/60">
+                  <th className="py-3.5 px-4 rounded-l-xl">Customer / Organization</th>
+                  <th className="py-3.5 px-4">Contact Info</th>
+                  <th className="py-3.5 px-4">Location</th>
+                  <th className="py-3.5 px-4 text-center">Projects</th>
+                  <th className="py-3.5 px-4 text-center">Invoices</th>
+                  <th className="py-3.5 px-4 text-right">Total Invoiced</th>
+                  <th className="py-3.5 px-4 text-right rounded-r-xl">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#F8F9FC] dark:divide-[#232738]">
+                {filteredCoagents.map((coagent, idx) => {
+                  const coagentProjects = projects.filter((p) => p.coagentId === coagent.id);
+                  const coagentInvoices = invoices.filter((i) => i.coagentId === coagent.id);
+                  const totalInvoiced = coagentInvoices.reduce((sum, i) => sum + i.amount, 0);
+                  const avatarColor = AVATAR_BG_COLORS[idx % AVATAR_BG_COLORS.length];
+
+                  return (
+                    <tr
+                      key={coagent.id}
+                      className="hover:bg-[#F8F9FC] dark:hover:bg-[#1C2030]/50 transition group"
+                    >
+                      {/* Customer / Company */}
+                      <td className="py-4 px-4 whitespace-nowrap">
+                        <div className="flex items-center gap-3.5">
+                          <div className={`w-10 h-10 rounded-xl ${avatarColor} flex items-center justify-center font-bold text-sm shadow-xs shrink-0`}>
+                            {(coagent.company || coagent.name).charAt(0).toUpperCase()}
+                          </div>
+                          <div>
+                            <p className="font-extrabold text-[#1E2238] dark:text-white text-xs leading-snug">
+                              {coagent.company || coagent.name}
+                            </p>
+                            {coagent.name && coagent.name !== coagent.company && (
+                              <p className="text-[11px] text-[#8C93AB] font-medium">{coagent.name}</p>
+                            )}
+                            {coagent.notes && (
+                              <p className="text-[10px] text-[#8C93AB] italic line-clamp-1 max-w-[200px] mt-0.5">
+                                "{coagent.notes}"
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* Contact Info (Email & Phone) */}
+                      <td className="py-4 px-4 whitespace-nowrap">
+                        <div className="space-y-1">
+                          {coagent.email ? (
+                            <div className="flex items-center gap-1.5 text-xs">
+                              <Mail className="w-3.5 h-3.5 text-[#8C93AB] shrink-0" />
+                              <a
+                                href={`mailto:${coagent.email}`}
+                                className="text-[#5E6482] dark:text-[#A0A6BF] hover:text-[#4E53EE] dark:hover:text-[#818CF8] font-medium transition"
+                              >
+                                {coagent.email}
+                              </a>
+                            </div>
+                          ) : (
+                            <span className="text-[#8C93AB] text-[11px] italic">No email</span>
+                          )}
+                          {coagent.phone && (
+                            <div className="flex items-center gap-1.5 text-[11px] text-[#8C93AB]">
+                              <Phone className="w-3.5 h-3.5 text-[#8C93AB] shrink-0" />
+                              <span>{coagent.phone}</span>
+                            </div>
+                          )}
+                        </div>
+                      </td>
+
+                      {/* Address / Location */}
+                      <td className="py-4 px-4 whitespace-nowrap">
+                        {coagent.address ? (
+                          <div className="flex items-center gap-1.5 text-xs text-[#5E6482] dark:text-[#A0A6BF] max-w-[200px] truncate">
+                            <MapPin className="w-3.5 h-3.5 text-[#8C93AB] shrink-0" />
+                            <span className="truncate">{coagent.address}</span>
+                          </div>
+                        ) : (
+                          <span className="text-[#8C93AB] text-[11px]">—</span>
+                        )}
+                      </td>
+
+                      {/* Projects count badge */}
+                      <td className="py-4 px-4 text-center whitespace-nowrap">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-[#F8F9FC] dark:bg-[#1C2030] text-[#1E2238] dark:text-[#EAECEF] text-xs font-bold border border-[#F0F2F7] dark:border-[#232738]">
+                          <FolderKanban className="w-3.5 h-3.5 text-[#8C93AB]" />
+                          {coagentProjects.length}
+                        </span>
+                      </td>
+
+                      {/* Invoices count badge */}
+                      <td className="py-4 px-4 text-center whitespace-nowrap">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-[#EDEEFD] dark:bg-[#4E53EE]/20 text-[#4E53EE] dark:text-[#818CF8] text-xs font-bold">
+                          <FileText className="w-3.5 h-3.5 text-[#4E53EE] dark:text-[#818CF8]" />
+                          {coagentInvoices.length}
+                        </span>
+                      </td>
+
+                      {/* Total Invoiced */}
+                      <td className="py-4 px-4 text-right whitespace-nowrap">
+                        <span className="font-extrabold text-[#1E2238] dark:text-white font-mono text-sm">
+                          ${totalInvoiced.toLocaleString()}
+                        </span>
+                      </td>
+
+                      {/* Actions */}
+                      <td className="py-4 px-4 text-right whitespace-nowrap">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <button
+                            onClick={() => openEditModal(coagent)}
+                            className="p-2 text-[#8C93AB] hover:text-[#4E53EE] hover:bg-[#EDEEFD] dark:hover:bg-[#4E53EE]/20 rounded-xl transition cursor-pointer"
+                            title="Edit Customer"
+                          >
+                            <Edit2 className="w-4.5 h-4.5 stroke-[2]" />
+                          </button>
+                          <button
+                            onClick={() => {
+                              if (confirm(`Delete customer "${coagent.name || coagent.company}"?`)) {
+                                deleteCoagent(coagent.id);
+                              }
+                            }}
+                            className="p-2 text-[#8C93AB] hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-xl transition cursor-pointer"
+                            title="Delete Customer"
+                          >
+                            <Trash2 className="w-4.5 h-4.5 stroke-[2]" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+
+                {filteredCoagents.length === 0 && (
+                  <tr>
+                    <td colSpan={7} className="py-12 text-center text-xs text-[#8C93AB] italic">
+                      No customers match your search criteria.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
 
       {/* Add / Edit Modal */}
       {isModalOpen && (
