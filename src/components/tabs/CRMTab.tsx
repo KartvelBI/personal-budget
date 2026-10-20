@@ -291,69 +291,57 @@ export const CRMTab: React.FC = () => {
       )}
 
       {/* ======================================================== */}
-      {/* ROW 1: 4 CRM KPI STAT CARDS                              */}
+      {/* ROW 1: 4 CRM KPI STAT CARDS (Fixora Style)               */}
       {/* ======================================================== */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 px-1 pt-0.5 pb-1">
         {/* Card 1: Total Leads */}
-        <div className="bg-white dark:bg-[#161922] rounded-2xl p-5 border border-[#F0F2F7] dark:border-[#232738] shadow-xs flex items-center gap-4.5 transition-colors">
-          <div className="w-14 h-14 rounded-2xl bg-[#4E53EE] flex items-center justify-center text-white shrink-0 shadow-md shadow-[#4E53EE]/25">
-            <Target className="w-8 h-8" strokeWidth={2.4} />
-          </div>
-          <div>
-            <span className="block text-xs font-semibold text-[#8C93AB] dark:text-[#7A839E]">Total Leads</span>
-            <div className="text-2xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
+        <div className="bg-white dark:bg-[#161922] rounded-[18px] p-4.5 border border-[#E8E7E2] dark:border-[#232738] shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex flex-col justify-between">
+          <span className="text-[11.5px] font-medium text-[#7D7C78] dark:text-[#8E8D89] mb-1">Total Leads</span>
+          <div className="flex items-baseline gap-2.5">
+            <span className="text-[26px] font-normal text-[#171717] dark:text-white tracking-[-0.02em] leading-none font-mono">
               {totalLeadsCount.toLocaleString()}
-            </div>
-            <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#4E53EE] dark:text-[#818CF8] mt-0.5 font-mono">
-              {activeLeads.length} active opportunities
+            </span>
+            <span className="inline-flex items-center gap-1 bg-[#EBF2FC] text-[#2B70C9] text-[10.5px] font-medium px-2 py-[2px] rounded-full">
+              {activeLeads.length} active
             </span>
           </div>
         </div>
 
         {/* Card 2: Pipeline Value */}
-        <div className="bg-white dark:bg-[#161922] rounded-2xl p-5 border border-[#F0F2F7] dark:border-[#232738] shadow-xs flex items-center gap-4.5 transition-colors">
-          <div className="w-14 h-14 rounded-2xl bg-[#F59E0B] flex items-center justify-center text-white shrink-0 shadow-md shadow-[#F59E0B]/25">
-            <DollarSign className="w-8 h-8" strokeWidth={2.4} />
-          </div>
-          <div>
-            <span className="block text-xs font-semibold text-[#8C93AB] dark:text-[#7A839E]">Active Pipeline Value</span>
-            <div className="text-2xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
-              ${activePipelineValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-            </div>
-            <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#F59E0B] mt-0.5 font-mono">
-              In open stages
+        <div className="bg-white dark:bg-[#161922] rounded-[18px] p-4.5 border border-[#E8E7E2] dark:border-[#232738] shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex flex-col justify-between">
+          <span className="text-[11.5px] font-medium text-[#7D7C78] dark:text-[#8E8D89] mb-1">Pipeline Value</span>
+          <div className="flex items-baseline gap-2.5">
+            <span className="text-[26px] font-normal text-[#171717] dark:text-white tracking-[-0.02em] leading-none font-mono">
+              ${activePipelineValue.toLocaleString(undefined, { minimumFractionDigits: 0 })}
+            </span>
+            <span className="inline-flex items-center gap-1 bg-[#FFFDFB] border border-[#F5D0C8] text-[#D97338] text-[10.5px] font-medium px-2 py-[2px] rounded-full">
+              Open deals
             </span>
           </div>
         </div>
 
         {/* Card 3: Closed Won Deals */}
-        <div className="bg-white dark:bg-[#161922] rounded-2xl p-5 border border-[#F0F2F7] dark:border-[#232738] shadow-xs flex items-center gap-4.5 transition-colors">
-          <div className="w-14 h-14 rounded-2xl bg-[#10B981] flex items-center justify-center text-white shrink-0 shadow-md shadow-[#10B981]/25">
-            <CheckCircle2 className="w-8 h-8" strokeWidth={2.4} />
-          </div>
-          <div>
-            <span className="block text-xs font-semibold text-[#8C93AB] dark:text-[#7A839E]">Won Deals Value</span>
-            <div className="text-2xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
-              ${wonTotalValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-            </div>
-            <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#10B981] mt-0.5 font-mono">
-              {wonLeads.length} deals closed won
+        <div className="bg-white dark:bg-[#161922] rounded-[18px] p-4.5 border border-[#E8E7E2] dark:border-[#232738] shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex flex-col justify-between">
+          <span className="text-[11.5px] font-medium text-[#7D7C78] dark:text-[#8E8D89] mb-1">Won Revenue</span>
+          <div className="flex items-baseline gap-2.5">
+            <span className="text-[26px] font-normal text-[#171717] dark:text-white tracking-[-0.02em] leading-none font-mono">
+              ${wonTotalValue.toLocaleString(undefined, { minimumFractionDigits: 0 })}
+            </span>
+            <span className="inline-flex items-center gap-1 bg-[#E7F6ED] text-[#1D8848] text-[10.5px] font-medium px-2 py-[2px] rounded-full">
+              {wonLeads.length} closed won
             </span>
           </div>
         </div>
 
         {/* Card 4: Win Rate */}
-        <div className="bg-white dark:bg-[#161922] rounded-2xl p-5 border border-[#F0F2F7] dark:border-[#232738] shadow-xs flex items-center gap-4.5 transition-colors">
-          <div className="w-14 h-14 rounded-2xl bg-[#8B5CF6] flex items-center justify-center text-white shrink-0 shadow-md shadow-[#8B5CF6]/25">
-            <TrendingUp className="w-8 h-8" strokeWidth={2.4} />
-          </div>
-          <div>
-            <span className="block text-xs font-semibold text-[#8C93AB] dark:text-[#7A839E]">Conversion Win Rate</span>
-            <div className="text-2xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
+        <div className="bg-white dark:bg-[#161922] rounded-[18px] p-4.5 border border-[#E8E7E2] dark:border-[#232738] shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex flex-col justify-between">
+          <span className="text-[11.5px] font-medium text-[#7D7C78] dark:text-[#8E8D89] mb-1">Win Rate</span>
+          <div className="flex items-baseline gap-2.5">
+            <span className="text-[26px] font-normal text-[#171717] dark:text-white tracking-[-0.02em] leading-none font-mono">
               {winRate}%
-            </div>
-            <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#8B5CF6] mt-0.5 font-mono">
-              {closedCount} deals resolved
+            </span>
+            <span className="inline-flex items-center gap-1 bg-[#EBF2FC] text-[#2B70C9] text-[10.5px] font-medium px-2 py-[2px] rounded-full">
+              Conversion
             </span>
           </div>
         </div>
@@ -362,28 +350,28 @@ export const CRMTab: React.FC = () => {
       {/* ======================================================== */}
       {/* ROW 2: CONTROLS & PIPELINE TOOLBAR                       */}
       {/* ======================================================== */}
-      <div className="bg-white dark:bg-[#161922] rounded-2xl p-4 sm:p-5 border border-[#F0F2F7] dark:border-[#232738] shadow-xs transition-colors flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+      <div className="bg-white dark:bg-[#161922] rounded-[18px] p-4 border border-[#E8E7E2] dark:border-[#232738] shadow-[0_1px_2px_rgba(0,0,0,0.02)] transition-colors flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
         {/* Left: Search input */}
         <div className="relative flex-1 max-w-md">
-          <Search className="w-5 h-5 text-[#8C93AB] absolute left-3.5 top-1/2 -translate-y-1/2 stroke-[2.2]" />
+          <Search className="w-4 h-4 text-[#8E8D89] absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             placeholder="Search leads by contact, company, title..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-11 pr-4 py-2.5 text-xs bg-[#F8F9FC] dark:bg-[#10121C] border border-[#F0F2F7] dark:border-[#232738] rounded-xl text-[#1E2238] dark:text-[#EAECEF] outline-none focus:ring-2 focus:ring-[#4E53EE]/15 focus:border-[#4E53EE] placeholder-[#8C93AB]"
+            className="w-full pl-10 pr-4 py-2 text-xs bg-[#FAF9F6] dark:bg-[#10121C] border border-[#E6E5E0] dark:border-[#232738] rounded-full text-[#171717] dark:text-[#EAECEF] outline-none focus:border-[#2B70C9] placeholder-[#8E8D89]"
           />
         </div>
 
         {/* Right: Stage Filter, View Mode Switcher, and Add Lead button */}
-        <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
           {/* Stage Filter Dropdown */}
-          <div className="flex items-center gap-1.5 bg-[#F8F9FC] dark:bg-[#1F2330] px-3 py-2 rounded-xl border border-[#F0F2F7] dark:border-[#2A3044] text-xs">
-            <Layers className="w-4.5 h-4.5 text-[#8C93AB] stroke-[2]" />
+          <div className="flex items-center gap-1.5 bg-[#FAF9F6] dark:bg-[#1F2330] px-3 py-1.5 rounded-full border border-[#E6E5E0] dark:border-[#2A3044] text-[11.5px]">
+            <Layers className="w-3.5 h-3.5 text-[#8E8D89]" />
             <select
               value={stageFilter}
               onChange={(e) => setStageFilter(e.target.value)}
-              className="bg-transparent font-bold text-[#1E2238] dark:text-white outline-none cursor-pointer"
+              className="bg-transparent font-medium text-[#171717] dark:text-white outline-none cursor-pointer"
             >
               <option value="all">All Stages ({leads.length})</option>
               {STAGES.map((s) => (
@@ -395,38 +383,38 @@ export const CRMTab: React.FC = () => {
           </div>
 
           {/* View Mode Toggle: Kanban vs Table */}
-          <div className="flex bg-[#F8F9FC] dark:bg-[#1F2330] p-1 rounded-xl border border-[#F0F2F7] dark:border-[#2A3044]">
+          <div className="flex bg-[#F6F5F1] dark:bg-[#1F2330] p-1 rounded-full border border-[#E6E5E0] dark:border-[#2A3044]">
             <button
               onClick={() => setViewMode('kanban')}
-              className={`p-2 rounded-lg transition cursor-pointer ${
+              className={`p-1.5 rounded-full transition cursor-pointer ${
                 viewMode === 'kanban'
-                  ? 'bg-white dark:bg-[#252A3D] text-[#4E53EE] dark:text-white shadow-xs'
-                  : 'text-[#8C93AB] hover:text-[#1E2238] dark:hover:text-white'
+                  ? 'bg-white dark:bg-[#252A3D] text-[#191919] dark:text-white shadow-xs'
+                  : 'text-[#8E8D89] hover:text-[#171717] dark:hover:text-white'
               }`}
               title="Kanban Board View"
             >
-              <LayoutGrid className="w-5 h-5 stroke-[2.2]" />
+              <LayoutGrid className="w-4 h-4" />
             </button>
             <button
               onClick={() => setViewMode('table')}
-              className={`p-2 rounded-lg transition cursor-pointer ${
+              className={`p-1.5 rounded-full transition cursor-pointer ${
                 viewMode === 'table'
-                  ? 'bg-white dark:bg-[#252A3D] text-[#4E53EE] dark:text-white shadow-xs'
-                  : 'text-[#8C93AB] hover:text-[#1E2238] dark:hover:text-white'
+                  ? 'bg-white dark:bg-[#252A3D] text-[#191919] dark:text-white shadow-xs'
+                  : 'text-[#8E8D89] hover:text-[#171717] dark:hover:text-white'
               }`}
               title="Table View"
             >
-              <List className="w-5 h-5 stroke-[2.2]" />
+              <List className="w-4 h-4" />
             </button>
           </div>
 
           {/* Add Lead CTA Button */}
           <button
             onClick={() => setIsAddModalOpen(true)}
-            className="inline-flex items-center justify-center gap-2 bg-[#4E53EE] hover:bg-[#4338CA] text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-xs shadow-[#4E53EE]/25 transition cursor-pointer active:scale-95"
+            className="inline-flex items-center justify-center gap-1.5 bg-[#191919] hover:bg-[#2E2E2E] dark:bg-white dark:text-[#191919] text-white text-[12px] font-medium px-3.5 py-1.5 rounded-full shadow-xs cursor-pointer transition-colors active:scale-95"
           >
-            <Plus className="w-5 h-5 stroke-[2.4]" />
-            Add Lead
+            <Plus className="w-3.5 h-3.5" />
+            <span>Add Lead</span>
           </button>
         </div>
       </div>

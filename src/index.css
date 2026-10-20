@@ -12,15 +12,15 @@
 }
 
 @theme {
-  --font-sans: 'ConsolasDigits', 'Lexend', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: 'ConsolasDigits', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'Consolas', 'Courier New', Courier, monospace;
 }
 
 @layer base {
   body {
-    background-color: #F8F9FC;
-    color: #1E2238;
-    font-family: 'ConsolasDigits', 'Lexend', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #D5D7DC;
+    color: #171717;
+    font-family: 'ConsolasDigits', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
   .dark body {

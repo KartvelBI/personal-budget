@@ -255,24 +255,24 @@ export const FinancesTab: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* ======================================================== */}
-      {/* ROW 0: DATE FILTER CONTROLS BAR                          */}
+      {/* ROW 0: DATE FILTER CONTROLS BAR (TestCRM Pill Aesthetic) */}
       {/* ======================================================== */}
-      <div className="bg-white dark:bg-[#161922] rounded-2xl p-4 sm:p-5 border border-[#F0F2F7] dark:border-[#232738] shadow-xs transition-colors">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-[#EDEEFD] dark:bg-[#4E53EE]/20 text-[#4E53EE] dark:text-[#818CF8] flex items-center justify-center shadow-xs shrink-0">
-              <Calendar className="w-6 h-6 stroke-[2.2]" />
+      <div className="bg-white dark:bg-[#161922] rounded-[18px] p-4 border border-[#E8E7E2] dark:border-[#232738] shadow-[0_1px_2px_rgba(0,0,0,0.02)] transition-colors">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-[9px] bg-[#FAF9F6] dark:bg-[#1F2330] border border-[#EAE9E4] dark:border-[#2A3044] text-[#171717] dark:text-white flex items-center justify-center shrink-0">
+              <Calendar className="w-4 h-4" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-sm font-extrabold text-[#1E2238] dark:text-white">Date Filter</h3>
+                <h3 className="text-[13px] font-semibold text-[#171717] dark:text-white">Date Range</h3>
                 {datePreset !== 'all' && (
-                  <span className="px-2 py-0.5 rounded-full text-[10.5px] font-bold bg-[#E6F9F0] text-[#10B981] dark:bg-[#10B981]/20">
-                    Active Filter
+                  <span className="inline-flex items-center bg-[#E7F6ED] text-[#1D8848] text-[10.5px] font-medium px-2 py-[2px] rounded-full">
+                    Active
                   </span>
                 )}
               </div>
-              <p className="text-xs text-[#8C93AB] dark:text-[#7A839E] font-medium mt-0.5">
+              <p className="text-[11px] text-[#7D7C78] dark:text-[#8E8D89]">
                 {datePreset === 'all'
                   ? 'Showing all-time records across all dashboard metrics'
                   : `Filtering metrics between ${startDate || 'earliest'} and ${endDate || 'present'}`}
@@ -280,26 +280,26 @@ export const FinancesTab: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
+          <div className="flex flex-wrap items-center gap-2">
             {/* Presets */}
-            <div className="flex flex-wrap bg-[#F8F9FC] dark:bg-[#1F2330] p-1 rounded-xl text-xs font-bold text-[#5E6482] dark:text-[#949DB2] border border-[#F0F2F7] dark:border-[#2A3044]">
+            <div className="flex flex-wrap bg-[#F6F5F1] dark:bg-[#1F2330] p-1 rounded-full border border-[#E6E5E0] dark:border-[#2A3044]">
               {(
                 [
                   { id: 'all', label: 'All Time' },
                   { id: 'today', label: 'Today' },
-                  { id: 'this_week', label: 'This Week' },
-                  { id: 'this_month', label: 'This Month' },
-                  { id: 'this_year', label: 'This Year' },
+                  { id: 'this_week', label: 'Week' },
+                  { id: 'this_month', label: 'Month' },
+                  { id: 'this_year', label: 'Year' },
                   { id: 'custom', label: 'Custom' },
                 ] as const
               ).map((p) => (
                 <button
                   key={p.id}
                   onClick={() => handlePresetChange(p.id)}
-                  className={`px-3 py-1.5 rounded-lg transition text-xs font-bold cursor-pointer ${
+                  className={`px-3 py-1 rounded-full text-[11.5px] font-medium transition cursor-pointer ${
                     datePreset === p.id
-                      ? 'bg-[#4E53EE] text-white shadow-xs'
-                      : 'hover:text-[#1E2238] dark:hover:text-white'
+                      ? 'bg-[#191919] dark:bg-[#252A3D] text-white shadow-xs'
+                      : 'text-[#4A4A46] dark:text-[#A0A6BF] hover:text-[#171717] dark:hover:text-white'
                   }`}
                 >
                   {p.label}
@@ -308,9 +308,9 @@ export const FinancesTab: React.FC = () => {
             </div>
 
             {/* Custom Range Inputs */}
-            <div className="flex items-center gap-2 bg-[#F8F9FC] dark:bg-[#1F2330] px-3 py-1.5 rounded-xl border border-[#F0F2F7] dark:border-[#2A3044]">
-              <div className="flex items-center gap-1.5">
-                <span className="text-[10px] font-bold uppercase text-[#8C93AB]">From</span>
+            <div className="flex items-center gap-1.5 bg-white dark:bg-[#1F2330] px-3 py-1 rounded-full border border-[#E6E5E0] dark:border-[#2A3044] text-[11.5px]">
+              <div className="flex items-center gap-1">
+                <span className="text-[10px] text-[#8E8D89] uppercase">From</span>
                 <input
                   type="date"
                   value={startDate}
@@ -318,12 +318,12 @@ export const FinancesTab: React.FC = () => {
                     setStartDate(e.target.value);
                     setDatePreset('custom');
                   }}
-                  className="bg-transparent text-xs font-mono font-bold text-[#1E2238] dark:text-white outline-none cursor-pointer"
+                  className="bg-transparent text-[11.5px] font-mono font-medium text-[#171717] dark:text-white outline-none cursor-pointer"
                 />
               </div>
-              <span className="text-[#8C93AB]">—</span>
-              <div className="flex items-center gap-1.5">
-                <span className="text-[10px] font-bold uppercase text-[#8C93AB]">To</span>
+              <span className="text-[#8E8D89]">·</span>
+              <div className="flex items-center gap-1">
+                <span className="text-[10px] text-[#8E8D89] uppercase">To</span>
                 <input
                   type="date"
                   value={endDate}
@@ -331,7 +331,7 @@ export const FinancesTab: React.FC = () => {
                     setEndDate(e.target.value);
                     setDatePreset('custom');
                   }}
-                  className="bg-transparent text-xs font-mono font-bold text-[#1E2238] dark:text-white outline-none cursor-pointer"
+                  className="bg-transparent text-[11.5px] font-mono font-medium text-[#171717] dark:text-white outline-none cursor-pointer"
                 />
               </div>
             </div>
@@ -340,10 +340,10 @@ export const FinancesTab: React.FC = () => {
             {datePreset !== 'all' && (
               <button
                 onClick={() => handlePresetChange('all')}
-                className="p-2 rounded-xl text-[#8C93AB] hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition cursor-pointer"
+                className="w-7 h-7 rounded-full border border-[#EAE9E4] hover:border-[#D0CFC9] flex items-center justify-center text-[#4A4A46] hover:text-[#171717] cursor-pointer transition-colors"
                 title="Reset date filter"
               >
-                <X className="w-5 h-5 stroke-[2.2]" />
+                <X className="w-3.5 h-3.5" />
               </button>
             )}
           </div>
@@ -351,68 +351,56 @@ export const FinancesTab: React.FC = () => {
       </div>
 
       {/* ======================================================== */}
-      {/* ROW 1: 4 STAT KPI CARDS                                  */}
+      {/* ROW 1: 4 STAT KPI SUMMARY CARDS (Fixora Style)           */}
       {/* ======================================================== */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 px-1 pt-0.5 pb-1">
         {/* Card 1: Total Revenue */}
-        <div className="bg-white dark:bg-[#161922] rounded-2xl p-5 border border-[#F0F2F7] dark:border-[#232738] shadow-xs flex items-center gap-4.5 transition-colors">
-          <div className="w-14 h-14 rounded-2xl bg-[#4E53EE] flex items-center justify-center text-white shrink-0 shadow-md shadow-[#4E53EE]/25">
-            <DollarSign className="w-8 h-8" strokeWidth={2.4} />
-          </div>
-          <div>
-            <span className="block text-xs font-semibold text-[#8C93AB] dark:text-[#7A839E]">Total Revenue</span>
-            <div className="text-2xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
-              ${periodTotalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-            </div>
-            <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#10B981] mt-0.5 font-mono">
-              {periodIncomeTransactions.length} income records
+        <div className="bg-white dark:bg-[#161922] rounded-[18px] p-4.5 border border-[#E8E7E2] dark:border-[#232738] shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex flex-col justify-between">
+          <div className="text-[11.5px] text-[#7D7C78] dark:text-[#8E8D89] mb-1 font-medium">Total Revenue</div>
+          <div className="flex items-baseline gap-2.5">
+            <span className="text-[26px] font-normal text-[#171717] dark:text-white tracking-[-0.02em] leading-none font-mono">
+              ${periodTotalRevenue.toLocaleString(undefined, { minimumFractionDigits: 0 })}
+            </span>
+            <span className="inline-flex items-center gap-1 bg-[#E7F6ED] text-[#1D8848] text-[10.5px] font-medium px-2 py-[2px] rounded-full">
+              {periodIncomeTransactions.length} records
             </span>
           </div>
         </div>
 
         {/* Card 2: Total Orders */}
-        <div className="bg-white dark:bg-[#161922] rounded-2xl p-5 border border-[#F0F2F7] dark:border-[#232738] shadow-xs flex items-center gap-4.5 transition-colors">
-          <div className="w-14 h-14 rounded-2xl bg-[#10B981] flex items-center justify-center text-white shrink-0 shadow-md shadow-[#10B981]/25">
-            <ShoppingCart className="w-8 h-8" strokeWidth={2.4} />
-          </div>
-          <div>
-            <span className="block text-xs font-semibold text-[#8C93AB] dark:text-[#7A839E]">Total Orders / Projects</span>
-            <div className="text-2xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
-              {dateFilteredProjects.length.toLocaleString()}
-            </div>
-            <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#10B981] mt-0.5 font-mono">
-              {periodPendingOrders} pending delivery
+        <div className="bg-white dark:bg-[#161922] rounded-[18px] p-4.5 border border-[#E8E7E2] dark:border-[#232738] shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex flex-col justify-between">
+          <div className="text-[11.5px] text-[#7D7C78] dark:text-[#8E8D89] mb-1 font-medium">Open Deliverables</div>
+          <div className="flex items-baseline gap-2.5">
+            <span className="text-[26px] font-normal text-[#171717] dark:text-white tracking-[-0.02em] leading-none font-mono">
+              {dateFilteredProjects.length}
+            </span>
+            <span className="inline-flex items-center gap-1 bg-[#FCECE9] text-[#D93829] text-[10.5px] font-medium px-2 py-[2px] rounded-full">
+              {periodPendingOrders} pending
             </span>
           </div>
         </div>
 
         {/* Card 3: Total Customers */}
-        <div className="bg-white dark:bg-[#161922] rounded-2xl p-5 border border-[#F0F2F7] dark:border-[#232738] shadow-xs flex items-center gap-4.5 transition-colors">
-          <div className="w-14 h-14 rounded-2xl bg-[#F59E0B] flex items-center justify-center text-white shrink-0 shadow-md shadow-[#F59E0B]/25">
-            <Users className="w-8 h-8" strokeWidth={2.4} />
-          </div>
-          <div>
-            <span className="block text-xs font-semibold text-[#8C93AB] dark:text-[#7A839E]">Total Customers</span>
-            <div className="text-2xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
-              {periodActiveCustomers.toLocaleString()}
-            </div>
-            <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#10B981] mt-0.5 font-mono">
-              {datePreset === 'all' ? 'Active directory' : `active of ${coagents.length} clients`}
+        <div className="bg-white dark:bg-[#161922] rounded-[18px] p-4.5 border border-[#E8E7E2] dark:border-[#232738] shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex flex-col justify-between">
+          <div className="text-[11.5px] text-[#7D7C78] dark:text-[#8E8D89] mb-1 font-medium">Clients & Coagents</div>
+          <div className="flex items-baseline gap-2.5">
+            <span className="text-[26px] font-normal text-[#171717] dark:text-white tracking-[-0.02em] leading-none font-mono">
+              {periodActiveCustomers}
+            </span>
+            <span className="text-[11px] font-medium text-[#4A4A46] dark:text-[#A0A6BF]">
+              {coagents.length} directory total
             </span>
           </div>
         </div>
 
-        {/* Card 4: Conversion Rate */}
-        <div className="bg-white dark:bg-[#161922] rounded-2xl p-5 border border-[#F0F2F7] dark:border-[#232738] shadow-xs flex items-center gap-4.5 transition-colors">
-          <div className="w-14 h-14 rounded-2xl bg-[#6366F1] flex items-center justify-center text-white shrink-0 shadow-md shadow-[#6366F1]/25">
-            <TrendingUp className="w-8 h-8" strokeWidth={2.4} />
-          </div>
-          <div>
-            <span className="block text-xs font-semibold text-[#8C93AB] dark:text-[#7A839E]">Fulfillment Rate</span>
-            <div className="text-2xl font-extrabold text-[#1E2238] dark:text-white tracking-tight font-mono mt-0.5">
+        {/* Card 4: Fulfillment Rate */}
+        <div className="bg-white dark:bg-[#161922] rounded-[18px] p-4.5 border border-[#E8E7E2] dark:border-[#232738] shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex flex-col justify-between">
+          <div className="text-[11.5px] text-[#7D7C78] dark:text-[#8E8D89] mb-1 font-medium">Fulfillment Rate</div>
+          <div className="flex items-baseline gap-2.5">
+            <span className="text-[26px] font-normal text-[#171717] dark:text-white tracking-[-0.02em] leading-none font-mono">
               {periodFulfillmentRate}%
-            </div>
-            <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-[#10B981] mt-0.5 font-mono">
+            </span>
+            <span className="inline-flex items-center gap-1 bg-[#EBF2FC] text-[#2B70C9] text-[10.5px] font-medium px-2 py-[2px] rounded-full">
               Completed ratio
             </span>
           </div>
@@ -422,15 +410,15 @@ export const FinancesTab: React.FC = () => {
       {/* ======================================================== */}
       {/* ROW 2: SALES OVERVIEW + RECENT ORDERS                     */}
       {/* ======================================================== */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Sales Overview Area Chart */}
-        <div className="lg:col-span-7 bg-white dark:bg-[#161922] rounded-2xl p-5.5 border border-[#F0F2F7] dark:border-[#232738] shadow-xs flex flex-col justify-between transition-colors">
+        <div className="lg:col-span-7 bg-white dark:bg-[#161922] rounded-[18px] p-5 border border-[#E8E7E2] dark:border-[#232738] shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex flex-col justify-between transition-colors">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-sm font-extrabold text-[#1E2238] dark:text-white">Sales Overview</h2>
+              <h2 className="text-[14px] font-semibold text-[#171717] dark:text-white">Sales Overview</h2>
             </div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#F0F2F7] dark:border-[#2A3044] text-xs font-semibold text-[#5E6482] dark:text-[#949DB2] bg-[#F8F9FC] dark:bg-[#1F2330]">
-              <Calendar className="w-3.5 h-3.5 text-[#4E53EE]" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[#E6E5E0] dark:border-[#2A3044] text-[11.5px] font-medium text-[#7D7C78] dark:text-[#949DB2] bg-[#FAF9F6] dark:bg-[#1F2330]">
+              <Calendar className="w-3.5 h-3.5 text-[#2B70C9]" />
               <span>{PRESET_LABELS[datePreset] || 'Custom Range'}</span>
             </div>
           </div>
@@ -440,25 +428,25 @@ export const FinancesTab: React.FC = () => {
               <AreaChart data={salesOverviewData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="salesGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#4E53EE" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#4E53EE" stopOpacity={0.0} />
+                    <stop offset="5%" stopColor="#2B70C9" stopOpacity={0.25} />
+                    <stop offset="95%" stopColor="#2B70C9" stopOpacity={0.0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={theme === 'dark' ? '#232738' : '#F0F2F7'} />
-                <XAxis dataKey="date" tickLine={false} axisLine={false} tick={{ fontSize: 10, fill: '#8C93AB' }} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={theme === 'dark' ? '#232738' : '#F0EFEA'} />
+                <XAxis dataKey="date" tickLine={false} axisLine={false} tick={{ fontSize: 10.5, fill: '#8E8D89' }} />
                 <YAxis
                   tickLine={false}
                   axisLine={false}
-                  tick={{ fontSize: 10, fill: '#8C93AB' }}
+                  tick={{ fontSize: 10.5, fill: '#8E8D89' }}
                   tickFormatter={(val) => `$${val / 1000}k`}
                 />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: theme === 'dark' ? '#161922' : '#FFFFFF',
                     borderRadius: '12px',
-                    border: theme === 'dark' ? '1px solid #2A3044' : 'none',
-                    color: theme === 'dark' ? '#FFFFFF' : '#1E2238',
-                    boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
+                    border: theme === 'dark' ? '1px solid #2A3044' : '1px solid #E8E7E2',
+                    color: theme === 'dark' ? '#FFFFFF' : '#171717',
+                    boxShadow: '0 4px 16px rgba(0,0,0,0.06)',
                     fontSize: '11px',
                   }}
                   formatter={(val: any) => [`$${Number(val).toLocaleString()}`, 'Revenue']}
@@ -466,11 +454,11 @@ export const FinancesTab: React.FC = () => {
                 <Area
                   type="natural"
                   dataKey="sales"
-                  stroke="#4E53EE"
-                  strokeWidth={2.5}
+                  stroke="#2B70C9"
+                  strokeWidth={2}
                   fillOpacity={1}
                   fill="url(#salesGrad)"
-                  dot={{ r: 3, fill: '#4E53EE', strokeWidth: 2, stroke: theme === 'dark' ? '#161922' : '#FFFFFF' }}
+                  dot={{ r: 3, fill: '#2B70C9', strokeWidth: 2, stroke: theme === 'dark' ? '#161922' : '#FFFFFF' }}
                 />
               </AreaChart>
             </ResponsiveContainer>
@@ -478,12 +466,12 @@ export const FinancesTab: React.FC = () => {
         </div>
 
         {/* Recent Orders Table */}
-        <div className="lg:col-span-5 bg-white dark:bg-[#161922] rounded-2xl p-5.5 border border-[#F0F2F7] dark:border-[#232738] shadow-xs flex flex-col justify-between transition-colors">
+        <div className="lg:col-span-5 bg-white dark:bg-[#161922] rounded-[18px] p-5 border border-[#E8E7E2] dark:border-[#232738] shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex flex-col justify-between transition-colors">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-extrabold text-[#1E2238] dark:text-white">Recent Orders</h2>
+            <h2 className="text-[14px] font-semibold text-[#171717] dark:text-white">Recent Orders</h2>
             <button
               onClick={() => setActiveTab('projects')}
-              className="text-xs font-bold text-[#4E53EE] dark:text-[#7378FF] hover:underline cursor-pointer"
+              className="text-[11.5px] font-medium text-[#2B70C9] hover:underline cursor-pointer"
             >
               View All
             </button>

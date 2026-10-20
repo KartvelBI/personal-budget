@@ -76,129 +76,152 @@ export const Sidebar: React.FC = () => {
 
   return (
     <aside
-      className={`no-print bg-white dark:bg-[#161922] text-[#5E6482] dark:text-[#949DB2] flex flex-col flex-shrink-0 h-screen sticky top-0 border-r border-[#F0F2F7] dark:border-[#232738] z-30 transition-all duration-300 ease-in-out ${
-        isSidebarExpanded ? 'w-64' : 'w-20'
+      className={`no-print bg-[#F5F4F0] dark:bg-[#141721] text-[#474744] dark:text-[#949DB2] flex flex-col justify-between py-4 px-3 border-r border-[#E6E5E0] dark:border-[#232738] shrink-0 transition-all duration-200 select-none ${
+        isSidebarExpanded ? 'w-[218px]' : 'w-[68px]'
       }`}
     >
-      {/* Brand Header */}
-      <div className={`py-5 flex items-center border-b border-[#F0F2F7] dark:border-[#232738] ${
-        isSidebarExpanded ? 'px-6 justify-between' : 'px-0 justify-center'
-      }`}>
-        <div
-          className="flex items-center gap-3 cursor-pointer"
-          onClick={() => setActiveTab('finances')}
-          title="SalesPro Dashboard"
-        >
-          <div className="w-11 h-11 rounded-xl bg-[#4E53EE] flex items-center justify-center text-white shrink-0 shadow-sm shadow-[#4E53EE]/30">
-            <CardReceiveIcon className="w-6.5 h-6.5 text-white" />
-          </div>
-          {isSidebarExpanded && (
-            <div className="flex items-baseline font-extrabold text-xl tracking-tight">
-              <span className="text-[#1E2238] dark:text-white">Sales</span>
-              <span className="text-[#4E53EE]">Pro</span>
+      <div>
+        {/* Brand Header */}
+        <div className="flex items-center justify-between px-1.5 mb-5">
+          <div
+            className="flex items-center gap-2.5 cursor-pointer"
+            onClick={() => setActiveTab('finances')}
+            title="SalesPro Dashboard"
+          >
+            <div className="w-[30px] h-[30px] rounded-[8px] bg-[#191919] dark:bg-[#2A2E3D] flex items-center justify-center shrink-0 shadow-xs">
+              <span className="text-white font-bold text-[15px] tracking-tight leading-none flex items-baseline">
+                S<span className="w-[4px] h-[4px] rounded-full bg-[#E86A33] ml-[1px] inline-block"></span>
+              </span>
             </div>
+            {isSidebarExpanded && (
+              <div className="leading-tight">
+                <div className="text-[13.5px] font-semibold text-[#171717] dark:text-white tracking-[-0.01em]">
+                  SalesPro
+                </div>
+                <div className="text-[11px] text-[#7D7C78] dark:text-[#8E8D89] truncate max-w-[125px]">
+                  {settings.businessName || 'Workspace'}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Expand / Collapse toggle button */}
+          {isSidebarExpanded ? (
+            <button
+              onClick={toggleSidebar}
+              className="text-[#7D7C78] hover:text-[#171717] dark:hover:text-white p-1 rounded-md hover:bg-[#EAE9E4]/70 dark:hover:bg-[#1F2330] transition-colors cursor-pointer"
+              title="Collapse sidebar"
+            >
+              <AltArrowLeftIcon className="w-[15px] h-[15px]" />
+            </button>
+          ) : (
+            <button
+              onClick={toggleSidebar}
+              className="text-[#7D7C78] hover:text-[#171717] dark:hover:text-white p-1 rounded-md hover:bg-[#EAE9E4]/70 dark:hover:bg-[#1F2330] transition-colors cursor-pointer mx-auto mt-2"
+              title="Expand sidebar"
+            >
+              <AltArrowRightIcon className="w-[15px] h-[15px]" />
+            </button>
           )}
         </div>
 
-        {/* Expand / Collapse toggle button */}
-        {isSidebarExpanded ? (
-          <button
-            onClick={toggleSidebar}
-            className="p-2 rounded-xl text-[#8C93AB] hover:text-[#1E2238] dark:hover:text-white hover:bg-[#F8F9FC] dark:hover:bg-[#1F2330] transition cursor-pointer"
-            title="Collapse Sidebar"
-          >
-            <AltArrowLeftIcon className="w-5 h-5" />
-          </button>
-        ) : (
-          <button
-            onClick={toggleSidebar}
-            className="p-1.5 rounded-lg text-[#8C93AB] hover:text-[#1E2238] dark:hover:text-white hover:bg-[#F8F9FC] dark:hover:bg-[#1F2330] transition absolute -right-3 top-6 bg-white dark:bg-[#161922] border border-[#F0F2F7] dark:border-[#232738] shadow-xs cursor-pointer"
-            title="Expand Sidebar"
-          >
-            <AltArrowRightIcon className="w-4.5 h-4.5" />
-          </button>
-        )}
-      </div>
+        {/* Section: Operations */}
+        <div className="mb-4">
+          {isSidebarExpanded && (
+            <div className="px-3 mb-1.5 text-[11px] font-normal text-[#8E8D89] uppercase tracking-wider">
+              Operations
+            </div>
+          )}
 
-      {/* Navigation List */}
-      <div className="flex-1 px-3 py-4 space-y-2 overflow-y-auto overflow-x-hidden">
-        {isSidebarExpanded && (
-          <div className="px-3 pb-1 text-[11px] font-bold uppercase tracking-wider text-[#8C93AB]">
-            Menu
-          </div>
-        )}
+          <nav className="space-y-0.5">
+            {navItems.slice(0, 5).map((item) => {
+              const Icon = item.icon;
+              const isActive = activeTab === item.id;
 
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = activeTab === item.id;
-
-          return (
-            <button
-              key={item.id}
-              onClick={() => setActiveTab(item.id)}
-              title={!isSidebarExpanded ? item.label : undefined}
-              className={`w-full flex items-center rounded-xl text-[14px] font-semibold transition-all duration-150 relative group cursor-pointer ${
-                isSidebarExpanded
-                  ? 'justify-between px-3.5 py-3'
-                  : 'justify-center p-3'
-              } ${
-                isActive
-                  ? 'bg-[#EDEEFD] dark:bg-[#4E53EE]/20 text-[#4E53EE] dark:text-[#7378FF] dark:border dark:border-[#4E53EE]/30'
-                  : 'text-[#5E6482] dark:text-[#949DB2] hover:text-[#1E2238] dark:hover:text-white hover:bg-[#F8F9FC] dark:hover:bg-[#1F2330]'
-              }`}
-            >
-              <div className="flex items-center gap-3.5">
-                <Icon
-                  className={`w-6.5 h-6.5 shrink-0 transition-colors ${
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveTab(item.id)}
+                  title={!isSidebarExpanded ? item.label : undefined}
+                  className={`w-full flex items-center justify-between px-3 py-[7px] rounded-full text-[12.5px] transition-all cursor-pointer select-none ${
                     isActive
-                      ? 'text-[#4E53EE] dark:text-[#7378FF]'
-                      : 'text-[#8C93AB] group-hover:text-[#4E53EE] dark:group-hover:text-white'
-                  }`}
-                />
-                {isSidebarExpanded && <span>{item.label}</span>}
-              </div>
-
-              {isSidebarExpanded && item.badge !== undefined && (
-                <span
-                  className={`text-[11px] font-bold font-mono px-2 py-0.5 rounded-full ${
-                    isActive
-                      ? 'bg-[#4E53EE] text-white'
-                      : 'bg-[#F0F2F7] dark:bg-[#232738] text-[#5E6482] dark:text-[#949DB2]'
+                      ? 'bg-[#191919] dark:bg-[#252A3D] text-white font-medium shadow-xs'
+                      : 'text-[#474744] dark:text-[#A0A6BF] hover:bg-[#EAE9E4]/70 dark:hover:bg-[#1F2330] font-normal'
                   }`}
                 >
-                  {item.badge}
-                </span>
-              )}
+                  <span className="flex items-center gap-2.5">
+                    <Icon className="w-[15px] h-[15px] shrink-0" />
+                    {isSidebarExpanded && <span>{item.label}</span>}
+                  </span>
 
-              {/* Tooltip in collapsed mode */}
-              {!isSidebarExpanded && (
-                <div className="absolute left-full ml-2 px-2.5 py-1 bg-[#1E2238] dark:bg-white text-white dark:text-[#1E2238] text-xs font-bold rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50 shadow-md whitespace-nowrap">
-                  {item.label}
-                </div>
-              )}
-            </button>
-          );
-        })}
+                  {isSidebarExpanded && item.badge !== undefined && (
+                    <span
+                      className={`text-[10.5px] font-medium font-mono px-2 py-[1px] rounded-full ${
+                        isActive
+                          ? 'bg-white/20 text-white'
+                          : 'bg-[#EAE9E4] dark:bg-[#232738] text-[#4A4A46] dark:text-[#A0A6BF]'
+                      }`}
+                    >
+                      {item.badge}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </nav>
+        </div>
+
+        {/* Section: Analytics & Settings */}
+        <div>
+          {isSidebarExpanded && (
+            <div className="px-3 mb-1.5 text-[11px] font-normal text-[#8E8D89] uppercase tracking-wider">
+              Analytics & Config
+            </div>
+          )}
+
+          <nav className="space-y-0.5">
+            {navItems.slice(5).map((item) => {
+              const Icon = item.icon;
+              const isActive = activeTab === item.id;
+
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveTab(item.id)}
+                  title={!isSidebarExpanded ? item.label : undefined}
+                  className={`w-full flex items-center justify-between px-3 py-[7px] rounded-full text-[12.5px] transition-all cursor-pointer select-none ${
+                    isActive
+                      ? 'bg-[#191919] dark:bg-[#252A3D] text-white font-medium shadow-xs'
+                      : 'text-[#474744] dark:text-[#A0A6BF] hover:bg-[#EAE9E4]/70 dark:hover:bg-[#1F2330] font-normal'
+                  }`}
+                >
+                  <span className="flex items-center gap-2.5">
+                    <Icon className="w-[15px] h-[15px] shrink-0" />
+                    {isSidebarExpanded && <span>{item.label}</span>}
+                  </span>
+                </button>
+              );
+            })}
+          </nav>
+        </div>
       </div>
 
       {/* User Profile at bottom */}
-      <div className={`p-3.5 border-t border-[#F0F2F7] dark:border-[#232738] flex items-center ${
-        isSidebarExpanded ? 'justify-between mx-3 mb-3' : 'justify-center my-2'
-      }`}>
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-full bg-[#4E53EE] text-white flex items-center justify-center font-black text-xs ring-2 ring-[#EDEEFD] dark:ring-[#2E3345]">
+      <div className="pt-3 border-t border-[#E6E5E0] dark:border-[#232738] flex items-center justify-between px-1">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="w-[28px] h-[28px] rounded-full bg-[#191919] dark:bg-[#2A2E3D] text-white flex items-center justify-center font-bold text-xs shrink-0">
             {(settings.businessName || 'A').charAt(0).toUpperCase()}
           </div>
           {isSidebarExpanded && (
-            <div className="leading-tight text-left min-w-0 max-w-[120px]">
-              <span className="block text-xs font-bold text-[#1E2238] dark:text-white truncate">
+            <div className="leading-tight text-left min-w-0">
+              <span className="block text-[12px] font-medium text-[#171717] dark:text-white truncate">
                 {settings.businessName || 'Workspace'}
               </span>
-              <span className="block text-[10px] font-medium text-[#8C93AB]">Administrator</span>
+              <span className="block text-[10.5px] text-[#7D7C78] dark:text-[#8E8D89]">Administrator</span>
             </div>
           )}
         </div>
-        {isSidebarExpanded && <AltArrowDownIcon className="w-3.5 h-3.5 text-[#8C93AB]" />}
+        {isSidebarExpanded && <AltArrowDownIcon className="w-3.5 h-3.5 text-[#7D7C78]" />}
       </div>
     </aside>
   );
